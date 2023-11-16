@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <include file="/db/changelog/changes/16-11-2023--1-create-course-ref-table.xml"/>
+    <include file="/db/changelog/changes/16-11-2023--2-create-subject-jn-table.xml"/>
+    <include file="/db/changelog/changes/16-11-2023--3-create-resource-jn-table.xml"/>
+    <include file="/db/changelog/changes/16-11-2023--4-create-content-jn-table.xml"/>
+    <include file="/db/changelog/changes/16-11-2023--5-create-comment-jn-table.xml"/>
+    <include file="/db/changelog/changes/16-11-2023--6-create-sequence-comment.xml"/>
+    <include file="/db/changelog/changes/16-11-2023--7-create-sequence-content.xml"/>
+    <include file="/db/changelog/changes/16-11-2023--8-create-sequence-resource.xml"/>
+    <include file="/db/changelog/changes/16-11-2023--9-create-sequence-subject.xml"/>
+</databaseChangeLog>

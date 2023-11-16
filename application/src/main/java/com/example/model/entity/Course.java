@@ -12,16 +12,15 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "course_jn")
-@SequenceGenerator(name = "course_seq", sequenceName = "course_jn_seq", allocationSize = 1)
+@Table(name = "course_ref")
 public class Course {
 
     @Id
-    @GeneratedValue(generator = "course_seq")
     private Long id;
 
     private String name;
 
     @Enumerated(value = EnumType.STRING)
-    private DegreeType degree;
+    @Column(name = "degree_type")
+    private DegreeType degreeType;
 }

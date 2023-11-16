@@ -34,7 +34,8 @@ public class Resource {
     private String author;
 
     @Enumerated(value = EnumType.STRING)
-    private ResourceType type;
+    @Column(name = "resource_type")
+    private ResourceType resourceType;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.MERGE})
     private Subject subject;
