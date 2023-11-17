@@ -12,4 +12,5 @@
     <include file="/db/changelog/changes/16-11-2023--7-create-sequence-content.xml"/>
     <include file="/db/changelog/changes/16-11-2023--8-create-sequence-resource.xml"/>
     <include file="/db/changelog/changes/16-11-2023--9-create-sequence-subject.xml"/>
+    <include file="/db/changelog/changes/17-11-2023--1-fill-course-table-with-entities.xml"/>
 </databaseChangeLog>
