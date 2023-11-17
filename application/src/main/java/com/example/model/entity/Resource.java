@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 public class Resource {
 
     @Id
-    @GeneratedValue(generator = "subject_seq")
+    @GeneratedValue(generator = "resource_seq")
     private Long id;
 
     private String name;

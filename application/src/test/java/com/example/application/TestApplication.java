@@ -1,5 +1,6 @@
 package com.example.application;
 
+import com.example.Application;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;

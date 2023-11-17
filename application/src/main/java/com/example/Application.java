@@ -1,4 +1,4 @@
-package com.example.application;
+package com.example;
 
 import com.example.controller.CourseController;
 import org.springframework.boot.SpringApplication;
