@@ -25,7 +25,7 @@
                 <constraints
                         nullable="false"/>
             </column>
-            <column name="subject" type="BIGINT">
+            <column name="subject_id" type="BIGINT">
                 <constraints
                         nullable="false"
                         foreignKeyName="resource_jn_subject_fkey" references="subject_jn(id)"/>
