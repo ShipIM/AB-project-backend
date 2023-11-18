@@ -38,10 +38,12 @@ public class Resource {
     @Column(name = "resource_type")
     private ResourceType resourceType;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY)
     private Subject subject;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "resource_id")
+    @OneToMany(mappedBy = "resource", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Content> contents;
+
+    @OneToMany(mappedBy = "resource", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Comment> comments;
 }

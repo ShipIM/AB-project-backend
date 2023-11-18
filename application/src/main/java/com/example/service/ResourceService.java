@@ -1,7 +1,9 @@
 package com.example.service;
 
+import com.example.dto.resource.CreateResourceRequestDto;
 import com.example.model.entity.Resource;
 import com.example.repository.ResourceRepository;
+import com.example.repository.SubjectRepository;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,8 @@ public class ResourceService {
     }
 
     public Resource createResource(Resource resource) {
+        resource.getContents().forEach(content -> content.setResource(resource));
+
         return resourceRepository.save(resource);
     }
 }
