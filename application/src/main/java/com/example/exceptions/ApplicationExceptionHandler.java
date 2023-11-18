@@ -1,6 +1,5 @@
 package com.example.exceptions;
 
-import com.example.exceptions.customExceptions.ArgumentNotValid;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -20,18 +19,6 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class ApplicationExceptionHandler  extends ResponseEntityExceptionHandler {
-    /**
-     * Обработка ошибок связанных с валидностью переданных данных обработанных без @Valid
-     */
-    @ExceptionHandler({ArgumentNotValid.class})
-    protected final ResponseEntity<Object> ArgumentNotValidHandler(Exception ex) throws Exception {
-        if (ex instanceof ArgumentNotValid exception) {
-            return getDefaultErrorResponse(exception.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
-        }
-
-        throw ex;
-    }
-
     /**
      * Обработка ошибок связанных с запросами несуществующих сущностей
      */
@@ -59,7 +46,7 @@ public class ApplicationExceptionHandler  extends ResponseEntityExceptionHandler
     }
 
     /**
-     * Обработка ошибок связанных с валидностью переданных данных обработанных при помощи @Valid
+     * Обработка ошибок связанных с валидностью переданных данных
      */
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
