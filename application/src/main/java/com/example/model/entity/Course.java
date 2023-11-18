@@ -13,9 +13,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "course_ref")
+@SequenceGenerator(name = "course_seq", sequenceName = "course_ref_seq", allocationSize = 1)
 public class Course {
 
     @Id
+    @GeneratedValue(generator = "course_seq")
     private Long id;
 
     private String name;

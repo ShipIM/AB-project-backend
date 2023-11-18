@@ -1,5 +1,6 @@
 package com.example.model.entity;
 
+import com.example.model.enumeration.ContentType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,8 +24,9 @@ public class Content {
 
     private byte[] bytes;
 
+    @Enumerated(value = EnumType.STRING)
     @Column(name = "content_type")
-    private String contentType;
+    private ContentType contentType;
 
     private long size;
 
