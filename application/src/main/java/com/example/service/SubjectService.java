@@ -19,7 +19,7 @@ public class SubjectService {
 
     public List<Subject> findAll(Predicate predicate)
     {
-        var sort = Sort.by(Sort.Order.asc("name"));
+        var sort = Sort.by(Sort.Order.desc("name"));
         List<Subject> result = new ArrayList<>();
         subjectRepository.findAll(predicate, sort).forEach(result::add);
         return result;
