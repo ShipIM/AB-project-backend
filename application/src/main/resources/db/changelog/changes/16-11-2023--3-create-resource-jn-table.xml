@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet author="ShipIM" id="16-11-2023--4-create-resource-jn-table">
+        <createTable tableName="resource_jn">
+            <column name="id" type="BIGINT">
+                <constraints
+                        primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(30)">
+                <constraints
+                        nullable="false"/>
+            </column>
+            <column name="created_date" type="TIMESTAMP">
+                <constraints
+                        nullable="false"/>
+            </column>
+            <column defaultValue="anonymous" name="author" type="VARCHAR(30)"/>
+            <column name="resource_type" type="VARCHAR(30)">
+                <constraints
+                        nullable="false"/>
+            </column>
+            <column name="subject_id" type="BIGINT">
+                <constraints
+                        nullable="false"
+                        foreignKeyName="resource_jn_subject_fkey" references="subject_jn(id)"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="resource_jn"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
