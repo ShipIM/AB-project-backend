@@ -10,6 +10,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -39,4 +40,8 @@ public class Resource {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.MERGE})
     private Subject subject;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "resource_id")
+    private List<Content> contents;
 }
