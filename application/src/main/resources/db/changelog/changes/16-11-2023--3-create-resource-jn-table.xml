@@ -17,10 +17,7 @@
                 <constraints
                         nullable="false"/>
             </column>
-            <column name="author" type="VARCHAR(30)">
-                <constraints
-                        nullable="true"/>
-            </column>
+            <column defaultValue="anonymous" name="author" type="VARCHAR(30)"/>
             <column name="resource_type" type="VARCHAR(30)">
                 <constraints
                         nullable="false"/>
