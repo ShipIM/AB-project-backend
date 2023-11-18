@@ -21,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/subjects")
-@Tag(name = "subjects", description = "Controller for working with courses")
+@Tag(name = "subjects", description = "Controller for working with subjects")
 @RequiredArgsConstructor
 @Validated
 public class SubjectController {
