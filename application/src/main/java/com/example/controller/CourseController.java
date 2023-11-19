@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/courses")
-@Tag(name = "courses", description = "Controller for working with courses")
+@Tag(name = "courses", description = "Контроллер для работы с курсами")
 @RequiredArgsConstructor
 public class CourseController {
 
@@ -23,7 +23,7 @@ public class CourseController {
     private final CourseMapper courseMapper;
 
     @GetMapping
-    @Operation(description = "To get all existing courses")
+    @Operation(description = "Получить все существующие курсы")
     public List<CourseResponseDto> getCourses() {
         List<Course> courses = courseService.getCourses();
 

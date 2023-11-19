@@ -1,9 +1,8 @@
 package com.example.service;
 
-import com.example.dto.resource.CreateResourceRequestDto;
+import com.example.exception.ResourceNotFoundException;
 import com.example.model.entity.Resource;
 import com.example.repository.ResourceRepository;
-import com.example.repository.SubjectRepository;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,8 @@ public class ResourceService {
     private final ResourceRepository resourceRepository;
 
     public Resource getResourceById(long id) {
-        return resourceRepository.getReferenceById(id);
+        return resourceRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Ресурса с таким идентификатором не существует"));
     }
 
     public List<Resource> getResources(Predicate predicate) {

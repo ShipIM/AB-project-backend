@@ -1,5 +1,6 @@
 package com.example.dto.content;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,8 +9,12 @@ import lombok.Setter;
 public class ContentResponseDto {
 
     private String filename;
+
     private byte[] bytes;
+
+    @JsonProperty("content_type")
     private String contentType;
+
     private long size;
 
 }
