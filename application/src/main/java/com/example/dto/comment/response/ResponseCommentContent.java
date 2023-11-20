@@ -10,7 +10,9 @@ import java.time.LocalDateTime;
 @Setter
 public class ResponseCommentContent {
     private String author;
+
     private String text;
+
     @JsonProperty("created_date")
     private LocalDateTime createdDate;
 }

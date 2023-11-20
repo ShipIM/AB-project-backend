@@ -1,10 +1,7 @@
 package com.example.dto.comment.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,8 +15,8 @@ public class CreateComment {
     @Size(min = 255, message = "Текст комментария не может быть длиннее 255 символов")
     private String text;
 
-    @NotNull(message = "Id предмета не может быть null")
-    @Min(value = 1, message = "Id предмета не может быть меньше 1")
+    @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
+            message = "Идентификатор ресурса должен быть положительным числом типа long")
     @JsonProperty("resource_id")
-    private Long resourceId;
+    private String resourceId;
 }
