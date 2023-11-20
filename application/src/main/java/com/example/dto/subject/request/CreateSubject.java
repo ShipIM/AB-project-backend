@@ -1,10 +1,7 @@
 package com.example.dto.subject.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,7 +14,7 @@ public class CreateSubject {
     private String name;
 
     @JsonProperty("course_id")
-    @Min(value = 1, message = "Id курса не может быть меньше 1")
-    @NotNull(message = "Id курса не может быть null")
-    private Long courseId;
+    @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
+            message = "Идентификатор курса должен быть положительным числом типа long")
+    private String courseId;
 }
