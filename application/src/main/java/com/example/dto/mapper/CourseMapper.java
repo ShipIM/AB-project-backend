@@ -1,6 +1,6 @@
 package com.example.dto.mapper;
 
-import com.example.dto.course.CourseResponseDto;
+import com.example.dto.course.response.CourseResponseDto;
 import com.example.model.entity.Course;
 import org.mapstruct.Mapper;
 

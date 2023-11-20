@@ -3,6 +3,7 @@ package com.example.service;
 import com.example.model.entity.Subject;
 import com.example.repository.SubjectRepository;
 import com.querydsl.core.types.Predicate;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -16,22 +17,21 @@ public class SubjectService {
     private final SubjectRepository subjectRepository;
     private final CourseService courseService;
 
-    public List<Subject> findAll(Predicate predicate)
-    {
+    public List<Subject> findAll(Predicate predicate) {
         var sort = Sort.by(Sort.Order.desc("name"));
         List<Subject> result = new ArrayList<>();
         subjectRepository.findAll(predicate, sort).forEach(result::add);
         return result;
     }
 
-    public Subject create(Subject subject)
-    {
+    public Subject create(Subject subject) {
         subject.setCourse(courseService.getById(subject.getCourse().getId()));
 
         return subjectRepository.save(subject);
     }
-  
+
     public Subject getSubjectById(long id) {
-        return subjectRepository.getReferenceById(id);
+        return subjectRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Предмета с таким идентификатором не существует"));
     }
 }
