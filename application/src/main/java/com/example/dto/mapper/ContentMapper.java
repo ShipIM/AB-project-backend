@@ -1,7 +1,7 @@
 package com.example.dto.mapper;
 
-import com.example.dto.content.ContentResponseDto;
-import com.example.dto.content.CreateContentRequestDto;
+import com.example.dto.content.request.CreateContentRequestDto;
+import com.example.dto.content.response.ContentResponseDto;
 import com.example.model.entity.Content;
 import org.mapstruct.Mapper;
 

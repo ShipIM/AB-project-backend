@@ -1,24 +1,25 @@
-package com.example.exceptions;
+package com.example.exception.handler;
 
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestControllerAdvice
-public class ApplicationExceptionHandler  extends ResponseEntityExceptionHandler {
+public class ApplicationExceptionHandler {
     /**
      * Обработка ошибок связанных с запросами несуществующих сущностей
      */
@@ -48,24 +49,35 @@ public class ApplicationExceptionHandler  extends ResponseEntityExceptionHandler
     /**
      * Обработка ошибок связанных с валидностью переданных данных
      */
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-                                                                  HttpHeaders headers, HttpStatusCode status,
-                                                                  WebRequest request) {
-        {
-            Map<String, Object> body = new HashMap<>();
-            body.put("errors",
-                    ex.getAllErrors().stream()
-                            .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                            .map(message -> status + " - " + message)
-                            .filter(s -> !s.isBlank())
-                            .toList());
+    @ExceptionHandler(value = ConstraintViolationException.class)
+    protected final ResponseEntity<Map<String, List<String>>> handleConstraintViolationException
+    (ConstraintViolationException e) {
+        Map<String, List<String>> body = new HashMap<>();
+        body.put("errors",
+                e.getConstraintViolations().stream()
+                        .map(ConstraintViolation::getMessage)
+                        .filter(Objects::nonNull)
+                        .filter(s -> !s.isBlank())
+                        .toList());
 
-            return new ResponseEntity<>(body, status);
-        }
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
-    protected ResponseEntity<Object> getDefaultErrorResponse(String message, HttpStatusCode statusCode) {
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    protected final ResponseEntity<Map<String, List<String>>> handleMethodArgumentNotValidException
+            (MethodArgumentNotValidException exception) {
+        Map<String, List<String>> body = new HashMap<>();
+        body.put("errors",
+                exception.getBindingResult().getAllErrors().stream()
+                        .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                        .filter(Objects::nonNull)
+                        .filter(s -> !s.isBlank())
+                        .toList());
+
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    protected final ResponseEntity<Object> getDefaultErrorResponse(String message, HttpStatusCode statusCode) {
         var body = new HashMap<String, Object>();
         body.put("errors", statusCode.toString() + " - " + message);
         return new ResponseEntity<>(body, statusCode);

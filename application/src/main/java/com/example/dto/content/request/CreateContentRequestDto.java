@@ -1,11 +1,13 @@
-package com.example.dto.content;
+package com.example.dto.content.request;
 
 import com.example.constraint.ContentTypeConstraint;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
 
+@Getter
 public class CreateContentRequestDto {
 
     @NotBlank

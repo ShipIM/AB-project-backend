@@ -22,6 +22,7 @@ public class CourseService {
     }
 
     public Course getById(long id) {
-        return courseRepository.findById(id).orElseThrow(()->new EntityNotFoundException("Курса с таким id не существует"));
+        return courseRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Курса с таким id не существует"));
     }
 }
