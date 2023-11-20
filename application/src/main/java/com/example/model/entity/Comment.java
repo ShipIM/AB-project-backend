@@ -32,6 +32,6 @@ public class Comment {
 
     private String text;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY)
     private Resource resource;
 }

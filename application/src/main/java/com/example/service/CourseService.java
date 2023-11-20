@@ -4,6 +4,7 @@ import com.example.model.entity.Course;
 import com.example.repository.CourseRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +16,9 @@ public class CourseService {
     private final CourseRepository courseRepository;
 
     public List<Course> getCourses() {
-        return courseRepository.findAll();
+        Sort sort = Sort.by(Sort.Order.desc("name"));
+
+        return courseRepository.findAll(sort);
     }
 
     public Course getById(long id) {

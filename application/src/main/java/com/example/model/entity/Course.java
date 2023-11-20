@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -25,4 +27,7 @@ public class Course {
     @Enumerated(value = EnumType.STRING)
     @Column(name = "degree_type")
     private DegreeType degreeType;
+
+    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Subject> subjects;
 }

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Service
 @RequiredArgsConstructor
 public class SubjectService {
@@ -30,5 +29,9 @@ public class SubjectService {
         subject.setCourse(courseService.getById(subject.getCourse().getId()));
 
         return subjectRepository.save(subject);
+    }
+  
+    public Subject getSubjectById(long id) {
+        return subjectRepository.getReferenceById(id);
     }
 }
