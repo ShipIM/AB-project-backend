@@ -3,7 +3,6 @@ package com.example.dto.mapper.decorator;
 import com.example.dto.mapper.ResourceMapper;
 import com.example.dto.resource.CreateResourceRequestDto;
 import com.example.dto.resource.ResourceResponseDto;
-import com.example.dto.resource.ResourceViewResponseDto;
 import com.example.model.entity.Resource;
 import com.example.service.SubjectService;
 import lombok.NoArgsConstructor;
@@ -45,12 +44,12 @@ public class ResourceMapperDecorator implements ResourceMapper {
     }
 
     @Override
-    public ResourceViewResponseDto mapToResourceViewDto(Resource resource) {
+    public ResourceResponseDto mapToResourceViewDto(Resource resource) {
         return delegate.mapToResourceViewDto(resource);
     }
 
     @Override
-    public List<ResourceViewResponseDto> mapResourceListToViewDtoList(List<Resource> resources) {
+    public List<ResourceResponseDto> mapResourceListToViewDtoList(List<Resource> resources) {
         return delegate.mapResourceListToViewDtoList(resources);
     }
 }

@@ -42,7 +42,7 @@ public class CommentController {
     @PostMapping("/comments")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(description = "Создать комментарий")
-    public ResponseComment CreateSubject(@RequestBody @Valid CreateComment createComment) {
+    public ResponseComment createSubject(@RequestBody @Valid CreateComment createComment) {
         var comment = commentMapper.ToCommentEntity(createComment);
 
         var responseComment = commentService.create(comment);

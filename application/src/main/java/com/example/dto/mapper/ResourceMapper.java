@@ -3,13 +3,12 @@ package com.example.dto.mapper;
 import com.example.dto.mapper.decorator.ResourceMapperDecorator;
 import com.example.dto.resource.CreateResourceRequestDto;
 import com.example.dto.resource.ResourceResponseDto;
-import com.example.dto.resource.ResourceViewResponseDto;
 import com.example.model.entity.Resource;
 import org.mapstruct.*;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {ContentMapper.class})
+@Mapper(componentModel = "spring")
 @DecoratedWith(ResourceMapperDecorator.class)
 public interface ResourceMapper {
 
@@ -21,9 +20,9 @@ public interface ResourceMapper {
     List<ResourceResponseDto> mapResourceListToDtoList(List<Resource> resources);
 
     @Named(value = "viewMapping")
-    ResourceViewResponseDto mapToResourceViewDto(Resource resource);
+    ResourceResponseDto mapToResourceViewDto(Resource resource);
 
     @IterableMapping(qualifiedByName = "viewMapping")
-    List<ResourceViewResponseDto> mapResourceListToViewDtoList(List<Resource> resources);
+    List<ResourceResponseDto> mapResourceListToViewDtoList(List<Resource> resources);
 
 }

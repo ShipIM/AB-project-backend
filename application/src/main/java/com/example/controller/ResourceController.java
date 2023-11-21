@@ -4,7 +4,6 @@ import com.example.constraint.ResourceTypeConstraint;
 import com.example.dto.mapper.ResourceMapper;
 import com.example.dto.resource.CreateResourceRequestDto;
 import com.example.dto.resource.ResourceResponseDto;
-import com.example.dto.resource.ResourceViewResponseDto;
 import com.example.model.entity.QResource;
 import com.example.model.entity.Resource;
 import com.example.model.enumeration.ResourceType;
@@ -59,7 +58,7 @@ public class ResourceController {
 
     @GetMapping("/subjects/{id}/resources")
     @Operation(description = "Получить все существующие ресурсы")
-    public List<ResourceViewResponseDto> getResources(
+    public List<ResourceResponseDto> getResources(
             @PathVariable
             @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
                     message = "Идентификатор предмета должен быть положительным числом типа long")

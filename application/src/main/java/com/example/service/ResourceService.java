@@ -31,8 +31,6 @@ public class ResourceService {
     }
 
     public Resource createResource(Resource resource) {
-        resource.getContents().forEach(content -> content.setResource(resource));
-
         return resourceRepository.save(resource);
     }
 }
