@@ -17,7 +17,7 @@ public class CommentService {
     private final ResourceService resourceService;
 
     public List<Comment> findAll(Predicate predicate) {
-        var sort = Sort.by(Sort.Order.asc("creation_date"));
+        var sort = Sort.by(Sort.Order.asc("createdDate"));
 
         List<Comment> result = new ArrayList<>();
         commentRepository.findAll(predicate, sort).forEach(result::add);
