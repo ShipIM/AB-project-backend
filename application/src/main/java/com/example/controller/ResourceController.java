@@ -73,6 +73,6 @@ public class ResourceController {
                         QResource.resource.resourceType.eq(ResourceType.valueOf(resourceType)))
         );
 
-        return resourceMapper.mapResourceListToViewDtoList(resources);
+        return resourceMapper.mapResourceListToDtoList(resources);
     }
 }

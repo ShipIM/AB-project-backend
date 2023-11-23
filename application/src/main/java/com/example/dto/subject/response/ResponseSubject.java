@@ -1,6 +1,6 @@
 package com.example.dto.subject.response;
 
-import com.example.dto.course.CourseResponseDto;
+import com.example.dto.course.response.CourseResponseDto;
 import lombok.Getter;
 import lombok.Setter;
 

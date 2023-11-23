@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.example.dto.content.ContentResponseDto;
+import com.example.dto.content.response.ContentResponseDto;
 import com.example.dto.mapper.ContentMapper;
 import com.example.model.entity.Content;
 import com.example.model.entity.QContent;

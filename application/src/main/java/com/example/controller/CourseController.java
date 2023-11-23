@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.example.dto.course.CourseResponseDto;
+import com.example.dto.course.response.CourseResponseDto;
 import com.example.dto.mapper.CourseMapper;
 import com.example.model.entity.Course;
 import com.example.service.CourseService;

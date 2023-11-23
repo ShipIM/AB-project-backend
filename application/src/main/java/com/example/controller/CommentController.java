@@ -28,7 +28,7 @@ public class CommentController {
 
     @GetMapping("/resources/{resourceId}/comments")
     @Operation(description = "Получить все комментарии по id ресурса")
-    public List<ResponseCommentContent> getCourseSubjects(
+    public List<ResponseCommentContent> getComments(
             @PathVariable
             @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
                     message = "Идентификатор комментария должен быть положительным числом типа long")
@@ -42,7 +42,8 @@ public class CommentController {
     @PostMapping("/comments")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(description = "Создать комментарий")
-    public ResponseComment createSubject(@RequestBody @Valid CreateComment createComment) {
+    public ResponseComment createComment(@RequestBody @Valid CreateComment createComment) {
+
         var comment = commentMapper.ToCommentEntity(createComment);
 
         var responseComment = commentService.create(comment);

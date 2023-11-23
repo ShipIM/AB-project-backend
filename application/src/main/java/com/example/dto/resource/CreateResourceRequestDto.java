@@ -18,10 +18,11 @@ public class CreateResourceRequestDto {
     private String author;
 
     @JsonAlias(value = {"resourceType", "resource_type"})
-    @ResourceTypeConstraint
+    @ResourceTypeConstraint(message = "Неизвестный тип ресурса")
     private String resourceType;
 
+    @JsonAlias(value = {"subject", "subjectId", "subject_id"})
     @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
             message = "Идентификатор предмета должен быть положительным числом типа long")
-    private String subject;
+    private String subjectId;
 }

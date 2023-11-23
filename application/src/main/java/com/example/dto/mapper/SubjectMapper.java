@@ -1,10 +1,8 @@
 package com.example.dto.mapper;
 
-import com.example.dto.course.CourseResponseDto;
 import com.example.dto.subject.request.CreateSubject;
 import com.example.dto.subject.response.ResponseSubject;
 import com.example.dto.subject.response.ResponseSubjectWithoutCourse;
-import com.example.model.entity.Course;
 import com.example.model.entity.Subject;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
