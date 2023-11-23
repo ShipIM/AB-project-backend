@@ -42,10 +42,7 @@ public class SubjectController {
     @PostMapping("/subjects")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(description = "Создание предмета")
-    public ResponseSubject CreateSubject(
-            @RequestBody
-            @Valid
-            CreateSubject createSubject) {
+    public ResponseSubject createSubject(@RequestBody @Valid CreateSubject createSubject) {
         var subject = subjectMapper.ToSubjectEntity(createSubject);
 
         var responseSubject = subjectService.create(subject);

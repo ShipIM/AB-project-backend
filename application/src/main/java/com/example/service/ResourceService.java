@@ -33,7 +33,6 @@ public class ResourceService {
 
     public Resource createResource(Resource resource) {
         resource.setSubject(subjectService.getSubjectById(resource.getSubject().getId()));
-        resource.getContents().forEach(content -> content.setResource(resource));
 
         return resourceRepository.save(resource);
     }

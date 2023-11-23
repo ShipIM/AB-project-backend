@@ -1,15 +1,11 @@
 package com.example.dto.resource;
 
 import com.example.constraint.ResourceTypeConstraint;
-import com.example.dto.content.request.CreateContentRequestDto;
 import com.fasterxml.jackson.annotation.JsonAlias;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
-
-import java.util.List;
 
 @Getter
 public class CreateResourceRequestDto {
@@ -24,9 +20,6 @@ public class CreateResourceRequestDto {
     @JsonAlias(value = {"resourceType", "resource_type"})
     @ResourceTypeConstraint(message = "Неизвестный тип ресурса")
     private String resourceType;
-
-    @Valid
-    private List<CreateContentRequestDto> contents;
 
     @JsonAlias(value = {"subject", "subjectId", "subject_id"})
     @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
