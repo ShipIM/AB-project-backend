@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Generated;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -16,12 +17,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(name = "comment_jn")
-@SequenceGenerator(name = "comment_seq", sequenceName = "comment_jn_seq", allocationSize = 1)
 @EntityListeners(AuditingEntityListener.class)
 public class Comment {
 
     @Id
-    @GeneratedValue(generator = "comment_seq")
+    @Generated
     private Long id;
 
     private String author;

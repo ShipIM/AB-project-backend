@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Generated;
 
 @Getter
 @Setter
@@ -13,11 +14,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "content_jn")
-@SequenceGenerator(name = "content_seq", sequenceName = "content_jn_seq", allocationSize = 1)
 public class Content {
 
     @Id
-    @GeneratedValue(generator = "content_seq")
+    @Generated
     private Long id;
 
     private String filename;

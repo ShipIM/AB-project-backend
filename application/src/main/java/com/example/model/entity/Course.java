@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Generated;
 
 import java.util.List;
 
@@ -15,11 +16,10 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "course_ref")
-@SequenceGenerator(name = "course_seq", sequenceName = "course_ref_seq", allocationSize = 1)
 public class Course {
 
     @Id
-    @GeneratedValue(generator = "course_seq")
+    @Generated
     private Long id;
 
     private String name;

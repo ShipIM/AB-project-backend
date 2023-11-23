@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Generated;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -18,12 +19,11 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "resource_jn")
-@SequenceGenerator(name = "resource_seq", sequenceName = "resource_jn_seq", allocationSize = 1)
 @EntityListeners(AuditingEntityListener.class)
 public class Resource {
 
     @Id
-    @GeneratedValue(generator = "resource_seq")
+    @Generated
     private Long id;
 
     private String name;

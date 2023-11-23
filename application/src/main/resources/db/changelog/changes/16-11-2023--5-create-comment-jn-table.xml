@@ -5,16 +5,16 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
     <changeSet author="ShipIM" id="16-11-2023--1-create-comment-jn-table">
         <createTable tableName="comment_jn">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints
                         primaryKey="true"/>
             </column>
-            <column defaultValue="anonymous" name="author" type="VARCHAR(30)"/>
+            <column defaultValue="anonymous" name="author" type="VARCHAR"/>
             <column name="created_date" type="TIMESTAMP">
                 <constraints
                         nullable="false"/>
             </column>
-            <column name="text" type="VARCHAR(255)">
+            <column name="text" type="VARCHAR">
                 <constraints
                         nullable="false"/>
             </column>

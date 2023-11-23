@@ -5,11 +5,11 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
     <changeSet author="ShipIM" id="16-11-2023--5-create-subject-jn-table">
         <createTable tableName="subject_jn">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints
                         primaryKey="true"/>
             </column>
-            <column name="name" type="VARCHAR(30)">
+            <column name="name" type="VARCHAR">
                 <constraints
                         nullable="false"/>
             </column>
@@ -19,6 +19,10 @@
                         foreignKeyName="subject_jn_course_fkey" references="course_ref(id)"/>
             </column>
         </createTable>
+        <addUniqueConstraint
+                columnNames="course_id, name"
+                constraintName="course_subject_name_constraint"
+                tableName="subject_jn"/>
         <rollback>
             <dropTable tableName="subject_jn"/>
         </rollback>
