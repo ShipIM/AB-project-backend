@@ -16,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ResourceService {
     private final ResourceRepository resourceRepository;
+    private final SubjectService subjectService;
 
     public Resource getResourceById(long id) {
         return resourceRepository.findById(id).orElseThrow(() ->
@@ -31,6 +32,8 @@ public class ResourceService {
     }
 
     public Resource createResource(Resource resource) {
+        resource.setSubject(subjectService.getSubjectById(resource.getSubject().getId()));
+
         return resourceRepository.save(resource);
     }
 }
