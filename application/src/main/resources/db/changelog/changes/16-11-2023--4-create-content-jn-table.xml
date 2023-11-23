@@ -31,6 +31,10 @@
                         foreignKeyName="content_jn_resource_fkey" references="resource_jn(id)"/>
             </column>
         </createTable>
+        <createIndex indexName="content_resource_fk_index"
+                     tableName="content_jn">
+            <column name="resource_id"/>
+        </createIndex>
         <rollback>
             <dropTable tableName="content_jn"/>
         </rollback>

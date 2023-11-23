@@ -24,6 +24,10 @@
                         foreignKeyName="comment_jn_resource_fkey" references="resource_jn(id)"/>
             </column>
         </createTable>
+        <createIndex indexName="comment_resource_fk_index"
+                     tableName="comment_jn">
+            <column name="resource_id"/>
+        </createIndex>
         <rollback>
             <dropTable tableName="comment_jn"/>
         </rollback>

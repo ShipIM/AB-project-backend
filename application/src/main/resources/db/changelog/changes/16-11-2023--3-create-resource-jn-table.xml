@@ -32,6 +32,10 @@
                 columnNames="subject_id, name"
                 constraintName="subject_resource_name_constraint"
                 tableName="resource_jn"/>
+        <createIndex indexName="resource_subject_fk_index"
+                     tableName="resource_jn">
+            <column name="subject_id"/>
+        </createIndex>
         <rollback>
             <dropTable tableName="resource_jn"/>
         </rollback>

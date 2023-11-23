@@ -23,6 +23,10 @@
                 columnNames="course_id, name"
                 constraintName="course_subject_name_constraint"
                 tableName="subject_jn"/>
+        <createIndex indexName="subject_course_fk_index"
+                     tableName="subject_jn">
+            <column name="course_id"/>
+        </createIndex>
         <rollback>
             <dropTable tableName="subject_jn"/>
         </rollback>
