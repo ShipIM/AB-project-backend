@@ -1,31 +1,26 @@
 package com.example.model.entity;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Generated;
-
-import java.util.List;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 @Table(name = "subject_jn")
 public class Subject {
 
     @Id
-    @Generated
     private Long id;
 
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Course course;
+    @Column(value = "course_id")
+    private long courseId;
 
-    @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Resource> resources;
 }

@@ -18,6 +18,5 @@ public interface CommentMapper {
 
     List<ResponseCommentContent> ToResponseCommentContent(List<Comment> comment);
 
-    @Mapping(target = "resource.id", source = "resourceId")
     Comment ToCommentEntity(CreateComment comment);
 }

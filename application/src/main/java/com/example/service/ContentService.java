@@ -1,9 +1,11 @@
 package com.example.service;
 
 import com.example.model.entity.Content;
+import com.example.model.entity.Resource;
 import com.example.repository.ContentRepository;
-import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -16,18 +18,21 @@ public class ContentService {
     private final ContentRepository contentRepository;
     private final ResourceService resourceService;
 
-    public List<Content> getContent(Predicate predicate) {
+    public Page<Content> getContentsByResource(long resourceId, PageRequest pageRequest) {
         Sort sort = Sort.by(Sort.Order.desc("filename"));
-        List<Content> result = new ArrayList<>();
-        contentRepository.findAll(predicate, sort).forEach(result::add);
 
-        return result;
+        return contentRepository.findAllByResourceId(resourceId, pageRequest.withSort(sort));
     }
 
     public List<Content> createContent(List<Content> contents, long resourceId) {
-        contents.forEach(content -> content.setResource(resourceService.getResourceById(resourceId)));
+        Resource resource = resourceService.getResourceById(resourceId);
+        contents.forEach(content -> content.setResourceId(resourceId));
 
-        return contentRepository.saveAll(contents);
+        Iterable<Content> iterableContents = contentRepository.saveAll(contents);
+        List<Content> result = new ArrayList<>();
+        iterableContents.forEach(result::add);
+
+        return result;
     }
 
 }

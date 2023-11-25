@@ -1,33 +1,27 @@
 package com.example.model.entity;
 
 import com.example.model.enumeration.DegreeType;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Generated;
-
-import java.util.List;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 @Table(name = "course_ref")
 public class Course {
 
     @Id
-    @Generated
     private Long id;
 
     private String name;
 
-    @Enumerated(value = EnumType.STRING)
-    @Column(name = "degree_type")
+    @Column(value = "degree_type")
     private DegreeType degreeType;
 
-    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Subject> subjects;
 }

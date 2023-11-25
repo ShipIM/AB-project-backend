@@ -1,7 +1,6 @@
 package com.example.exception.handler;
 
-import jakarta.persistence.EntityExistsException;
-import jakarta.persistence.EntityNotFoundException;
+import com.example.exception.EntityNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -23,12 +22,10 @@ public class ApplicationExceptionHandler {
     /**
      * Обработка ошибок связанных с запросами несуществующих сущностей
      */
-    @ExceptionHandler({EntityNotFoundException.class, EntityExistsException.class})
+    @ExceptionHandler(EntityNotFoundException.class)
     protected final ResponseEntity<Object> EntityExceptionHandler(Exception ex) throws Exception {
         if (ex instanceof EntityNotFoundException exception) {
             return getDefaultErrorResponse(exception.getMessage(), HttpStatus.NOT_FOUND);
-        } else if (ex instanceof EntityExistsException exception) {
-            return getDefaultErrorResponse(exception.getMessage(), HttpStatus.CONFLICT);
         }
 
         throw ex;

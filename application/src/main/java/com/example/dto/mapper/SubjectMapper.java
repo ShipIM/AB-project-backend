@@ -19,6 +19,5 @@ public interface SubjectMapper {
 
     List<ResponseSubject> ToListResponseSubject(List<Subject> subjects);
 
-    @Mapping(target = "course.id", source = "courseId")
     Subject ToSubjectEntity(CreateSubject subject);
 }

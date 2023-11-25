@@ -1,15 +1,14 @@
 package com.example.service;
 
+import com.example.exception.EntityNotFoundException;
+import com.example.model.entity.Course;
 import com.example.model.entity.Subject;
 import com.example.repository.SubjectRepository;
-import com.querydsl.core.types.Predicate;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -17,15 +16,14 @@ public class SubjectService {
     private final SubjectRepository subjectRepository;
     private final CourseService courseService;
 
-    public List<Subject> findAll(Predicate predicate) {
+    public Page<Subject> getSubjectsByCourse(long courseId, PageRequest pageRequest) {
         var sort = Sort.by(Sort.Order.desc("name"));
-        List<Subject> result = new ArrayList<>();
-        subjectRepository.findAll(predicate, sort).forEach(result::add);
-        return result;
+
+        return subjectRepository.findAllByCourseId(courseId, pageRequest.withSort(sort));
     }
 
     public Subject create(Subject subject) {
-        subject.setCourse(courseService.getById(subject.getCourse().getId()));
+        Course course = courseService.getById(subject.getCourseId());
 
         return subjectRepository.save(subject);
     }
