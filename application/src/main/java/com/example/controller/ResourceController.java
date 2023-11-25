@@ -8,8 +8,10 @@ import com.example.dto.resource.ResourceResponseDto;
 import com.example.model.entity.Resource;
 import com.example.model.enumeration.ResourceType;
 import com.example.service.ResourceService;
+import com.example.utils.JwtUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -28,6 +30,7 @@ public class ResourceController {
 
     private final ResourceService resourceService;
     private final ResourceMapper resourceMapper;
+    private final JwtUtils jwtUtils;
 
     @GetMapping("/resources/{id}")
     @Operation(description = "Получить существующий ресурс по идентификатору")
@@ -47,7 +50,11 @@ public class ResourceController {
     public ResourceResponseDto createResource(
             @RequestBody
             @Valid
-            CreateResourceRequestDto resourceDto) {
+            CreateResourceRequestDto resourceDto,
+            HttpServletRequest request) {
+        String jwt = request.getHeader("Authorization").substring(7);
+        resourceDto.setAuthor(jwtUtils.extractUsername(jwt));
+
         Resource resource = resourceMapper.mapToResource(resourceDto);
 
         resource = resourceService.createResource(resource);
