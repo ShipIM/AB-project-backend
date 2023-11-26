@@ -1,12 +1,12 @@
 package com.example.model.entity;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
 
@@ -14,24 +14,20 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 @Table(name = "comment_jn")
-@SequenceGenerator(name = "comment_seq", sequenceName = "comment_jn_seq", allocationSize = 1)
-@EntityListeners(AuditingEntityListener.class)
 public class Comment {
 
     @Id
-    @GeneratedValue(generator = "comment_seq")
     private Long id;
 
     private String author;
 
-    @CreatedDate
-    @Column(name = "created_date")
+    @Column(value = "created_date")
     private LocalDateTime createdDate;
 
     private String text;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Resource resource;
+    @Column(value = "resource_id")
+    private Long resourceId;
+
 }

@@ -2,13 +2,15 @@ package com.example.controller;
 
 import com.example.dto.content.response.ContentResponseDto;
 import com.example.dto.mapper.ContentMapper;
+import com.example.dto.page.request.PagingDto;
 import com.example.model.entity.Content;
-import com.example.model.entity.QContent;
 import com.example.service.ContentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -33,9 +35,7 @@ public class ContentController {
             @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
                     message = "Идентификатор ресурса должен быть положительным числом типа long")
             String id) {
-        List<Content> contents = contentService.getContent(
-                QContent.content.resource.id.eq(Long.parseLong(id))
-        );
+        List<Content> contents = contentService.getContentsByResource(Long.parseLong(id));
 
         return contentMapper.mapContentListToDtoList(contents);
     }

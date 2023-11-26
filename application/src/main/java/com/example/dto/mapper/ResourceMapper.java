@@ -13,7 +13,6 @@ public interface ResourceMapper {
 
     ResourceResponseDto mapToResourceDto(Resource resource);
 
-    @Mapping(target = "subject.id", source = "subjectId")
     Resource mapToResource(CreateResourceRequestDto dto);
 
     List<ResourceResponseDto> mapResourceListToDtoList(List<Resource> resources);

@@ -5,11 +5,11 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
     <changeSet author="ShipIM" id="16-11-2023--4-create-resource-jn-table">
         <createTable tableName="resource_jn">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints
                         primaryKey="true"/>
             </column>
-            <column name="name" type="VARCHAR(30)">
+            <column name="name" type="VARCHAR">
                 <constraints
                         nullable="false"/>
             </column>
@@ -17,8 +17,8 @@
                 <constraints
                         nullable="false"/>
             </column>
-            <column defaultValue="anonymous" name="author" type="VARCHAR(30)"/>
-            <column name="resource_type" type="VARCHAR(30)">
+            <column defaultValue="anonymous" name="author" type="VARCHAR"/>
+            <column name="resource_type" type="VARCHAR">
                 <constraints
                         nullable="false"/>
             </column>
@@ -28,6 +28,14 @@
                         foreignKeyName="resource_jn_subject_fkey" references="subject_jn(id)"/>
             </column>
         </createTable>
+        <addUniqueConstraint
+                columnNames="subject_id, name"
+                constraintName="subject_resource_name_constraint"
+                tableName="resource_jn"/>
+        <createIndex indexName="resource_subject_fk_index"
+                     tableName="resource_jn">
+            <column name="subject_id"/>
+        </createIndex>
         <rollback>
             <dropTable tableName="resource_jn"/>
         </rollback>

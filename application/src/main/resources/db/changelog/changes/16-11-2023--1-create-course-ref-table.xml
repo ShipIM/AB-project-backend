@@ -5,15 +5,16 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
     <changeSet author="ShipIM" id="16-11-2023--3-create-course-ref-table">
         <createTable tableName="course_ref">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints
                         primaryKey="true"/>
             </column>
-            <column name="name" type="VARCHAR(30)">
+            <column name="name" type="VARCHAR">
                 <constraints
-                        nullable="false"/>
+                        nullable="false"
+                        unique="true"/>
             </column>
-            <column name="degree_type" type="VARCHAR(30)">
+            <column name="degree_type" type="VARCHAR">
                 <constraints
                         nullable="false"/>
             </column>

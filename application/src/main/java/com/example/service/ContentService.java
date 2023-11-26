@@ -1,8 +1,9 @@
 package com.example.service;
 
+import com.example.exception.EntityNotFoundException;
 import com.example.model.entity.Content;
+import com.example.model.entity.Resource;
 import com.example.repository.ContentRepository;
-import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -16,18 +17,26 @@ public class ContentService {
     private final ContentRepository contentRepository;
     private final ResourceService resourceService;
 
-    public List<Content> getContent(Predicate predicate) {
-        Sort sort = Sort.by(Sort.Order.desc("filename"));
+    public List<Content> getContentsByResource(long resourceId) {
+        Sort sort = Sort.by(Sort.Order.asc("filename"));
+
+        Iterable<Content> iterableContents = contentRepository.findAllByResourceId(resourceId, sort);
         List<Content> result = new ArrayList<>();
-        contentRepository.findAll(predicate, sort).forEach(result::add);
+        iterableContents.forEach(result::add);
 
         return result;
     }
 
     public List<Content> createContent(List<Content> contents, long resourceId) {
-        contents.forEach(content -> content.setResource(resourceService.getResourceById(resourceId)));
+        if (!resourceService.isResourceExists(resourceId))
+            throw new EntityNotFoundException("Ресурса с таким идентификатором не существует");
 
-        return contentRepository.saveAll(contents);
+        contents.forEach(content -> content.setResourceId(resourceId));
+
+        Iterable<Content> iterableContents = contentRepository.saveAll(contents);
+        List<Content> result = new ArrayList<>();
+        iterableContents.forEach(result::add);
+
+        return result;
     }
-
 }

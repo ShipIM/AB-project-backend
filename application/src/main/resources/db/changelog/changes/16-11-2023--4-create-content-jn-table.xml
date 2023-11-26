@@ -5,11 +5,11 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
     <changeSet author="ShipIM" id="16-11-2023--2-create-content-jn-table">
         <createTable tableName="content_jn">
-            <column name="id" type="BIGINT">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints
                         primaryKey="true"/>
             </column>
-            <column name="filename" type="VARCHAR(30)">
+            <column name="filename" type="VARCHAR">
                 <constraints
                         nullable="false"/>
             </column>
@@ -17,7 +17,7 @@
                 <constraints
                         nullable="false"/>
             </column>
-            <column name="content_type" type="VARCHAR(30)">
+            <column name="content_type" type="VARCHAR">
                 <constraints
                         nullable="false"/>
             </column>
@@ -31,6 +31,10 @@
                         foreignKeyName="content_jn_resource_fkey" references="resource_jn(id)"/>
             </column>
         </createTable>
+        <createIndex indexName="content_resource_fk_index"
+                     tableName="content_jn">
+            <column name="resource_id"/>
+        </createIndex>
         <rollback>
             <dropTable tableName="content_jn"/>
         </rollback>
