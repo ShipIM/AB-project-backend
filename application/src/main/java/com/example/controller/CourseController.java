@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/courses")
 @Tag(name = "courses", description = "Контроллер для работы с курсами")
@@ -25,14 +27,9 @@ public class CourseController {
 
     @GetMapping
     @Operation(description = "Получить все существующие курсы")
-    public Page<CourseResponseDto> getCourses(PagingDto pagingDto) {
-        PageRequest pageRequest = PageRequest.of(
-                Integer.parseInt(pagingDto.getPageNumber()),
-                Integer.parseInt(pagingDto.getPageSize())
-        );
+    public List<CourseResponseDto> getCourses() {
+        List<Course> courses = courseService.getCourses();
 
-        Page<Course> courses = courseService.getCourses(pageRequest);
-
-        return courses.map(courseMapper::mapToCourseDto);
+        return courseMapper.mapCourseListToDtoList(courses);
     }
 }

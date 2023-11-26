@@ -21,6 +21,6 @@ public class Subject {
     private String name;
 
     @Column(value = "course_id")
-    private long courseId;
+    private Long courseId;
 
 }

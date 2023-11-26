@@ -30,20 +30,14 @@ public class ContentController {
 
     @GetMapping("/resources/{id}/contents")
     @Operation(description = "Получить содержимое ресурса по id")
-    public Page<ContentResponseDto> getResourceContents(
+    public List<ContentResponseDto> getResourceContents(
             @PathVariable
             @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
                     message = "Идентификатор ресурса должен быть положительным числом типа long")
-            String id,
-            PagingDto pagingDto) {
-        PageRequest pageRequest = PageRequest.of(
-                Integer.parseInt(pagingDto.getPageNumber()),
-                Integer.parseInt(pagingDto.getPageSize())
-        );
+            String id) {
+        List<Content> contents = contentService.getContentsByResource(Long.parseLong(id));
 
-        Page<Content> contents = contentService.getContentsByResource(Long.parseLong(id), pageRequest);
-
-        return contents.map(contentMapper::mapToContentDto);
+        return contentMapper.mapContentListToDtoList(contents);
     }
 
     @PostMapping("/resources/{id}/contents")

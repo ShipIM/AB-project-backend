@@ -2,7 +2,6 @@ package com.example.service;
 
 import com.example.exception.EntityNotFoundException;
 import com.example.model.entity.Resource;
-import com.example.model.entity.Subject;
 import com.example.model.enumeration.ResourceType;
 import com.example.repository.ResourceRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,7 @@ public class ResourceService {
     public Page<Resource> getResourcesBySubjectAndResourceType(long subjectId,
                                                                ResourceType resourceType,
                                                                PageRequest pageRequest) {
-        Sort sort = Sort.by(Sort.Order.desc("name"));
+        Sort sort = Sort.by(Sort.Order.asc("name"));
 
         return resourceRepository.findAllBySubjectIdAndResourceType(
                 subjectId,
@@ -38,10 +37,15 @@ public class ResourceService {
     }
 
     public Resource createResource(Resource resource) {
-        Subject subject = subjectService.getSubjectById(resource.getSubjectId());
+        if (!subjectService.isSubjectExists(resource.getSubjectId()))
+            throw new EntityNotFoundException("Предмета с таким идентификатором не существует");
 
         resource.setCreatedDate(LocalDateTime.now());
 
         return resourceRepository.save(resource);
+    }
+
+    public boolean isResourceExists(long id) {
+        return resourceRepository.existsById(id);
     }
 }

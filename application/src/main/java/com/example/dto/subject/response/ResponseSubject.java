@@ -1,6 +1,5 @@
 package com.example.dto.subject.response;
 
-import com.example.dto.course.response.CourseResponseDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,5 +8,4 @@ import lombok.Setter;
 public class ResponseSubject {
     private Long id;
     private String name;
-    private CourseResponseDto course;
 }

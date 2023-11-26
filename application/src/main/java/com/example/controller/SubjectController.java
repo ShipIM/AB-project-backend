@@ -4,7 +4,6 @@ import com.example.dto.mapper.SubjectMapper;
 import com.example.dto.page.request.PagingDto;
 import com.example.dto.subject.request.CreateSubject;
 import com.example.dto.subject.response.ResponseSubject;
-import com.example.dto.subject.response.ResponseSubjectWithoutCourse;
 import com.example.model.entity.Subject;
 import com.example.service.SubjectService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,7 +12,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -28,20 +26,16 @@ public class SubjectController {
 
     @GetMapping("/courses/{courseId}/subjects")
     @Operation(description = "Получить все предметы по id курса")
-    public Page<ResponseSubjectWithoutCourse> getCourseSubjects(
+    public Page<ResponseSubject> getCourseSubjects(
             @PathVariable
             @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
                     message = "Идентификатор предмета должен быть положительным числом типа long")
             String courseId,
             PagingDto pagingDto) {
-        PageRequest pageRequest = PageRequest.of(
-                Integer.parseInt(pagingDto.getPageNumber()),
-                Integer.parseInt(pagingDto.getPageSize())
-        );
+        Page<Subject> subjects = subjectService.getSubjectsByCourse(Long.parseLong(courseId),
+                pagingDto.formPageRequest());
 
-        Page<Subject> subjects = subjectService.getSubjectsByCourse(Long.parseLong(courseId), pageRequest);
-
-        return subjects.map(subjectMapper::ToResponseSubjectWithoutCourse);
+        return subjects.map(subjectMapper::ToResponseSubject);
     }
 
     @PostMapping("/subjects")
