@@ -1,10 +1,13 @@
 package com.example.dto.mapper;
 
-import com.example.dto.authentication.request.UserRequestDto;
+import com.example.dto.authentication.request.UserAuthRequestDto;
+import com.example.dto.authentication.request.UserCreateRequestDto;
 import com.example.model.entity.User;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-    User mapToUser(UserRequestDto userRequestDto);
+    User mapToUser(UserCreateRequestDto userCreateRequestDto);
+
+    User mapToUser(UserAuthRequestDto userAuthRequestDto);
 }

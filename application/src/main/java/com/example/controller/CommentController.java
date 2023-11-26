@@ -48,7 +48,7 @@ public class CommentController {
     public ResponseComment createComment(@RequestBody @Valid CreateComment createComment,
                                          HttpServletRequest request) {
         String jwt = request.getHeader("Authorization").substring(7);
-        createComment.setAuthor(jwtUtils.extractUsername(jwt));
+        createComment.setAuthor(jwtUtils.extractEmail(jwt));
 
         var comment = commentMapper.ToCommentEntity(createComment);
 

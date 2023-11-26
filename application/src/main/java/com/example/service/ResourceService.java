@@ -4,6 +4,7 @@ import com.example.exception.EntityNotFoundException;
 import com.example.model.entity.Resource;
 import com.example.model.enumeration.ResourceType;
 import com.example.repository.ResourceRepository;
+import com.example.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 public class ResourceService {
     private final ResourceRepository resourceRepository;
     private final SubjectService subjectService;
+    private final UserRepository userRepository;
 
     public Page<Resource> getResourcesBySubjectAndResourceType(long subjectId,
                                                                ResourceType resourceType,
@@ -40,6 +42,9 @@ public class ResourceService {
         if (!subjectService.isSubjectExists(resource.getSubjectId()))
             throw new EntityNotFoundException("Предмета с таким идентификатором не существует");
 
+        resource.setAuthor(userRepository.findByEmail(resource.getAuthor())
+                .orElseThrow(() -> new EntityNotFoundException("Пользователя с таким email не существует"))
+                .getUsername());
         resource.setCreatedDate(LocalDateTime.now());
 
         return resourceRepository.save(resource);

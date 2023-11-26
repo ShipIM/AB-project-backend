@@ -35,10 +35,10 @@ public class AuthenticationService {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
         );
-        var retrievedUser = userRepository.findByEmail(user.getEmail());
+        var retrievedUser = userRepository.findByEmail(user.getEmail())
+                .orElseThrow(() -> new EntityNotFoundException("Пользователя с таким email не существует"));
 
-        var jwtToken = jwtService.generateToken(retrievedUser
-                .orElseThrow(() -> new EntityNotFoundException("Пользователя с таким email не существует")));
+        var jwtToken = jwtService.generateToken(retrievedUser);
 
         return new AuthenticationResponseDto(jwtToken);
     }

@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.exception.EntityNotFoundException;
 import com.example.model.entity.User;
 import com.example.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,8 @@ public class DetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email)
             throws UsernameNotFoundException {
 
-        User user = userRepository.findByEmail(email).orElseThrow();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Пользователя с таким email не существует."));
 
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(), user.getPassword(), true, true, true,

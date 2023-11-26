@@ -3,6 +3,7 @@ package com.example.service;
 import com.example.exception.EntityNotFoundException;
 import com.example.model.entity.Comment;
 import com.example.repository.CommentRepository;
+import com.example.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 public class CommentService {
     private final CommentRepository commentRepository;
     private final ResourceService resourceService;
+    private final UserRepository userRepository;
 
     public Page<Comment> getCommentsByResource(long resourceId, PageRequest pageRequest) {
         var sort = Sort.by(Sort.Order.asc("createdDate"));
@@ -27,6 +29,9 @@ public class CommentService {
         if (!resourceService.isResourceExists(comment.getResourceId()))
             throw new EntityNotFoundException("Ресурса с таким идентификатором не существует");
 
+        comment.setAuthor(userRepository.findByEmail(comment.getAuthor())
+                .orElseThrow(() -> new EntityNotFoundException("Пользователя с таким email не существует"))
+                .getUsername());
         comment.setCreatedDate(LocalDateTime.now());
 
         return commentRepository.save(comment);

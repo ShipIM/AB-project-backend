@@ -17,7 +17,7 @@ public class JwtUtils {
 
     private final String secret;
 
-    public String extractUsername(String token) {
+    public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -43,7 +43,7 @@ public class JwtUtils {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
+        final String username = extractEmail(token);
 
         return username.equals(userDetails.getUsername());
     }
