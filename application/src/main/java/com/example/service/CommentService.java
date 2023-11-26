@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.exception.EntityNotFoundException;
 import com.example.model.entity.Comment;
 import com.example.model.entity.Resource;
 import com.example.repository.CommentRepository;
@@ -24,10 +25,15 @@ public class CommentService {
     }
 
     public Comment create(Comment comment) {
-        Resource resource = resourceService.getResourceById(comment.getResourceId());
+        if (!resourceService.isResourceExists(comment.getResourceId()))
+            throw new EntityNotFoundException("Ресурса с таким идентификатором не существует");
 
         comment.setCreatedDate(LocalDateTime.now());
 
         return commentRepository.save(comment);
+    }
+
+    public boolean isCommentExists(long id) {
+        return commentRepository.existsById(id);
     }
 }

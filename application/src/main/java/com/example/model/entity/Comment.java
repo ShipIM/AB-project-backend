@@ -28,6 +28,6 @@ public class Comment {
     private String text;
 
     @Column(value = "resource_id")
-    private long resourceId;
+    private Long resourceId;
 
 }

@@ -1,11 +1,10 @@
 package com.example.service;
 
+import com.example.exception.EntityNotFoundException;
 import com.example.model.entity.Content;
 import com.example.model.entity.Resource;
 import com.example.repository.ContentRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -18,14 +17,20 @@ public class ContentService {
     private final ContentRepository contentRepository;
     private final ResourceService resourceService;
 
-    public Page<Content> getContentsByResource(long resourceId, PageRequest pageRequest) {
-        Sort sort = Sort.by(Sort.Order.desc("filename"));
+    public List<Content> getContentsByResource(long resourceId) {
+        Sort sort = Sort.by(Sort.Order.asc("filename"));
 
-        return contentRepository.findAllByResourceId(resourceId, pageRequest.withSort(sort));
+        Iterable<Content> iterableContents = contentRepository.findAllByResourceId(resourceId, sort);
+        List<Content> result = new ArrayList<>();
+        iterableContents.forEach(result::add);
+
+        return result;
     }
 
     public List<Content> createContent(List<Content> contents, long resourceId) {
-        Resource resource = resourceService.getResourceById(resourceId);
+        if (!resourceService.isResourceExists(resourceId))
+            throw new EntityNotFoundException("Ресурса с таким идентификатором не существует");
+
         contents.forEach(content -> content.setResourceId(resourceId));
 
         Iterable<Content> iterableContents = contentRepository.saveAll(contents);
@@ -34,5 +39,4 @@ public class ContentService {
 
         return result;
     }
-
 }

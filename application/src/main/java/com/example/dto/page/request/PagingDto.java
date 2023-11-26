@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.Optional;
 
@@ -23,12 +24,10 @@ public class PagingDto {
     @Pattern(regexp = "\\d+", message = "Page size must be a number")
     private String pageSize;
 
-    public String getPageNumber() {
-        return Optional.ofNullable(pageNumber).orElse("0");
+    public PageRequest formPageRequest() {
+        return PageRequest.of(
+                Integer.parseInt(Optional.ofNullable(pageNumber).orElse("0")),
+                Integer.parseInt(Optional.ofNullable(pageSize).orElse("20"))
+        );
     }
-
-    public String getPageSize() {
-        return Optional.ofNullable(pageSize).orElse("20");
-    }
-
 }

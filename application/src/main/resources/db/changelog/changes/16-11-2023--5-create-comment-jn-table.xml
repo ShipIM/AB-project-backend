@@ -9,7 +9,10 @@
                 <constraints
                         primaryKey="true"/>
             </column>
-            <column defaultValue="anonymous" name="author" type="VARCHAR"/>
+            <column name="author" type="VARCHAR">
+                <constraints
+                    nullable="false"/>
+            </column>
             <column name="created_date" type="TIMESTAMP">
                 <constraints
                         nullable="false"/>

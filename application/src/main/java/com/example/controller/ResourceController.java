@@ -67,15 +67,10 @@ public class ResourceController {
             @NotBlank(message = "Необходимо указать тип ресурса")
             String resourceType,
             PagingDto pagingDto) {
-        PageRequest pageRequest = PageRequest.of(
-                Integer.parseInt(pagingDto.getPageNumber()),
-                Integer.parseInt(pagingDto.getPageSize())
-        );
-
         Page<Resource> resources = resourceService.getResourcesBySubjectAndResourceType(
                 Long.parseLong(id),
                 ResourceType.valueOf(resourceType),
-                pageRequest
+                pagingDto.formPageRequest()
         );
 
         return resources.map(resourceMapper::mapToResourceDto);

@@ -1,7 +1,6 @@
 package com.example.service;
 
 import com.example.exception.EntityNotFoundException;
-import com.example.model.entity.Course;
 import com.example.model.entity.Subject;
 import com.example.repository.SubjectRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,13 +16,14 @@ public class SubjectService {
     private final CourseService courseService;
 
     public Page<Subject> getSubjectsByCourse(long courseId, PageRequest pageRequest) {
-        var sort = Sort.by(Sort.Order.desc("name"));
+        var sort = Sort.by(Sort.Order.asc("name"));
 
         return subjectRepository.findAllByCourseId(courseId, pageRequest.withSort(sort));
     }
 
     public Subject create(Subject subject) {
-        Course course = courseService.getById(subject.getCourseId());
+        if (!courseService.isCourseExists(subject.getCourseId()))
+            throw new EntityNotFoundException("Курса с таким идентификатором не существует");
 
         return subjectRepository.save(subject);
     }
@@ -31,5 +31,9 @@ public class SubjectService {
     public Subject getSubjectById(long id) {
         return subjectRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Предмета с таким идентификатором не существует"));
+    }
+
+    public boolean isSubjectExists(long id) {
+        return subjectRepository.existsById(id);
     }
 }

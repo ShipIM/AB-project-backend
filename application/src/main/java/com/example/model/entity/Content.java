@@ -29,6 +29,6 @@ public class Content {
     private long size;
 
     @Column(value = "resource_id")
-    private long resourceId;
+    private Long resourceId;
 
 }

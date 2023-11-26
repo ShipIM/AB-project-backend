@@ -3,8 +3,10 @@ package com.example.exception.handler;
 import com.example.exception.EntityNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import org.postgresql.util.PSQLException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.relational.core.conversion.DbActionExecutionException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,10 +37,12 @@ public class ApplicationExceptionHandler {
     /**
      * Обработка ошибок во время sql запросов
      */
-    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ExceptionHandler(value = {DataIntegrityViolationException.class, DbActionExecutionException.class})
     protected final ResponseEntity<Object> SqlExceptionHandler(Exception ex) throws Exception {
         if (ex instanceof DataIntegrityViolationException) {
             return getDefaultErrorResponse(ex.getCause().getLocalizedMessage(), HttpStatus.CONFLICT);
+        } else if (ex instanceof DbActionExecutionException exception) {
+            return getDefaultErrorResponse(exception.getLocalizedMessage(), HttpStatus.CONFLICT);
         }
 
         throw ex;

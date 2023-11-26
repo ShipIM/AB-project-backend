@@ -32,6 +32,6 @@ public class Resource {
     private ResourceType resourceType;
 
     @Column(value = "subject_id")
-    private long subjectId;
+    private Long subjectId;
 
 }

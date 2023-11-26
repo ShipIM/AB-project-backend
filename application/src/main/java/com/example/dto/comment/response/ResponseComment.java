@@ -15,6 +15,4 @@ public class ResponseComment {
 
     @JsonProperty("created_date")
     private LocalDateTime createdDate;
-
-    private Long ResourceId;
 }
