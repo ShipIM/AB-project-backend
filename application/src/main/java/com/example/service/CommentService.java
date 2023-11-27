@@ -5,12 +5,11 @@ import com.example.model.entity.Comment;
 import com.example.repository.CommentRepository;
 import com.example.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -19,10 +18,16 @@ public class CommentService {
     private final ResourceService resourceService;
     private final UserRepository userRepository;
 
-    public Page<Comment> getCommentsByResource(long resourceId, PageRequest pageRequest) {
-        var sort = Sort.by(Sort.Order.asc("createdDate"));
+    public Page<Comment> getCommentsByResource(long resourceId, Pageable pageable) {
+        String sort = "created_date";
+        long total = commentRepository.countAllByResourceId(resourceId);
+        List<Comment> comments = commentRepository.findAllByResourceId(
+                resourceId,
+                sort,
+                pageable.getPageSize(),
+                pageable.getPageNumber());
 
-        return commentRepository.findAllByResourceId(resourceId, pageRequest.withSort(sort));
+        return new PageImpl<>(comments, pageable, total);
     }
 
     public Comment create(Comment comment) {
