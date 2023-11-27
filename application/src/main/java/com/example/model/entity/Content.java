@@ -1,6 +1,5 @@
 package com.example.model.entity;
 
-import com.example.model.enumeration.ContentType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +23,7 @@ public class Content {
     private byte[] bytes;
 
     @Column(value = "content_type")
-    private ContentType contentType;
+    private String contentType;
 
     private long size;
 
