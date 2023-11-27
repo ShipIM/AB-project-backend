@@ -1,11 +1,11 @@
 package com.example.service;
 
-import com.example.exception.EntityNotFoundException;
 import com.example.model.entity.Content;
 import com.example.repository.ContentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ContentService {
     private final ContentRepository contentRepository;
-    private final ResourceService resourceService;
 
     public List<Content> getContentsByResource(long resourceId) {
         Sort sort = Sort.by(Sort.Order.asc("filename"));
@@ -26,10 +25,8 @@ public class ContentService {
         return result;
     }
 
+    @Transactional
     public List<Content> createContent(List<Content> contents, long resourceId) {
-        if (!resourceService.isResourceExists(resourceId))
-            throw new EntityNotFoundException("Ресурса с таким идентификатором не существует");
-
         contents.forEach(content -> content.setResourceId(resourceId));
 
         Iterable<Content> iterableContents = contentRepository.saveAll(contents);

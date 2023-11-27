@@ -2,22 +2,17 @@ package com.example.controller;
 
 import com.example.dto.content.response.ContentResponseDto;
 import com.example.dto.mapper.ContentMapper;
-import com.example.dto.page.request.PagingDto;
 import com.example.model.entity.Content;
 import com.example.service.ContentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -36,27 +31,6 @@ public class ContentController {
                     message = "Идентификатор ресурса должен быть положительным числом типа long")
             String id) {
         List<Content> contents = contentService.getContentsByResource(Long.parseLong(id));
-
-        return contentMapper.mapContentListToDtoList(contents);
-    }
-
-    @PostMapping("/resources/{id}/contents")
-    @ResponseStatus(HttpStatus.CREATED)
-    @Operation(description = "Создание файлов")
-    public List<ContentResponseDto> createContent(
-            @PathVariable
-            @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
-                    message = "Идентификатор ресурса должен быть положительным числом типа long")
-            String id,
-            @RequestParam("files")
-            MultipartFile[] files) throws IOException {
-        List<Content> contents = new ArrayList<>();
-        for (MultipartFile multipartFile : files) {
-            Content content = contentMapper.mapToContent(multipartFile);
-            contents.add(content);
-        }
-
-        contents = contentService.createContent(contents, Long.parseLong(id));
 
         return contentMapper.mapContentListToDtoList(contents);
     }

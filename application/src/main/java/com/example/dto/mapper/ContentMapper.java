@@ -18,4 +18,6 @@ public interface ContentMapper {
     Content mapToContent(MultipartFile file) throws IOException;
 
     List<ContentResponseDto> mapContentListToDtoList(List<Content> contents);
+
+    List<Content> mapToContentList(List<MultipartFile> files);
 }

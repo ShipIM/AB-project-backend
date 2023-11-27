@@ -4,7 +4,6 @@ import com.example.dto.resource.CreateResourceRequestDto;
 import com.example.dto.resource.ResourceResponseDto;
 import com.example.model.entity.Resource;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import java.util.List;
 

@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.exception.EntityNotFoundException;
+import com.example.model.entity.Content;
 import com.example.model.entity.Resource;
 import com.example.model.enumeration.ResourceType;
 import com.example.repository.ResourceRepository;
@@ -10,14 +11,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Service
 @RequiredArgsConstructor
 public class ResourceService {
     private final ResourceRepository resourceRepository;
+    private final ContentService contentService;
     private final SubjectService subjectService;
     private final UserRepository userRepository;
 
@@ -38,7 +42,8 @@ public class ResourceService {
                 new EntityNotFoundException("Ресурса с таким идентификатором не существует"));
     }
 
-    public Resource createResource(Resource resource) {
+    @Transactional
+    public Resource createResource(Resource resource, List<Content> contents) {
         if (!subjectService.isSubjectExists(resource.getSubjectId()))
             throw new EntityNotFoundException("Предмета с таким идентификатором не существует");
 
@@ -47,7 +52,10 @@ public class ResourceService {
                 .getUsername());
         resource.setCreatedDate(LocalDateTime.now());
 
-        return resourceRepository.save(resource);
+        resource = resourceRepository.save(resource);
+        contentService.createContent(contents, resource.getId());
+
+        return resource;
     }
 
     public boolean isResourceExists(long id) {
