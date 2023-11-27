@@ -2,7 +2,6 @@ package com.example.service;
 
 import com.example.exception.EntityNotFoundException;
 import com.example.model.entity.Content;
-import com.example.model.entity.Resource;
 import com.example.repository.ContentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;

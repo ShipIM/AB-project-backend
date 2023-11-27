@@ -6,8 +6,10 @@ import com.example.dto.mapper.CommentMapper;
 import com.example.dto.page.request.PagingDto;
 import com.example.model.entity.Comment;
 import com.example.service.CommentService;
+import com.example.utils.JwtUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 public class CommentController {
     private final CommentService commentService;
     private final CommentMapper commentMapper;
+    private final JwtUtils jwtUtils;
 
     @GetMapping("/resources/{resourceId}/comments")
     @Operation(description = "Получить все комментарии по id ресурса")
@@ -42,7 +45,10 @@ public class CommentController {
     @PostMapping("/comments")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(description = "Создать комментарий")
-    public ResponseComment createComment(@RequestBody @Valid CreateComment createComment) {
+    public ResponseComment createComment(@RequestBody @Valid CreateComment createComment,
+                                         HttpServletRequest request) {
+        String jwt = request.getHeader("Authorization").substring(7);
+        createComment.setAuthor(jwtUtils.extractEmail(jwt));
 
         var comment = commentMapper.ToCommentEntity(createComment);
 

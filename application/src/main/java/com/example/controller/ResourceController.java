@@ -8,14 +8,16 @@ import com.example.dto.resource.ResourceResponseDto;
 import com.example.model.entity.Resource;
 import com.example.model.enumeration.ResourceType;
 import com.example.service.ResourceService;
+import com.example.utils.JwtUtils;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +30,7 @@ public class ResourceController {
 
     private final ResourceService resourceService;
     private final ResourceMapper resourceMapper;
+    private final JwtUtils jwtUtils;
 
     @GetMapping("/resources/{id}")
     @Operation(description = "Получить существующий ресурс по идентификатору")
@@ -47,7 +50,11 @@ public class ResourceController {
     public ResourceResponseDto createResource(
             @RequestBody
             @Valid
-            CreateResourceRequestDto resourceDto) {
+            CreateResourceRequestDto resourceDto,
+            HttpServletRequest request) {
+        String jwt = request.getHeader("Authorization").substring(7);
+        resourceDto.setAuthor(jwtUtils.extractEmail(jwt));
+
         Resource resource = resourceMapper.mapToResource(resourceDto);
 
         resource = resourceService.createResource(resource);
@@ -65,11 +72,11 @@ public class ResourceController {
             @RequestParam
             @ResourceTypeConstraint(message = "Неизвестный тип ресурса")
             @NotBlank(message = "Необходимо указать тип ресурса")
-            String resourceType,
+            String type,
             PagingDto pagingDto) {
         Page<Resource> resources = resourceService.getResourcesBySubjectAndResourceType(
                 Long.parseLong(id),
-                ResourceType.valueOf(resourceType),
+                ResourceType.valueOf(type),
                 pagingDto.formPageRequest()
         );
 
