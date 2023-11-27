@@ -19,7 +19,7 @@ public class CreateResourceRequestDto {
     @Size(max = 30, message = "Имя автора не должно превышать 30 символов")
     private String author;
 
-    @JsonAlias(value = {"resourceType", "resource_type"})
+    @JsonAlias(value = {"resourceType", "resource_type", "type"})
     @ResourceTypeConstraint(message = "Неизвестный тип ресурса")
     private String resourceType;
 
