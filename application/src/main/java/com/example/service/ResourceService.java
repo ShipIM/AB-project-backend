@@ -8,8 +8,8 @@ import com.example.repository.ResourceRepository;
 import com.example.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,14 +27,18 @@ public class ResourceService {
 
     public Page<Resource> getResourcesBySubjectAndResourceType(long subjectId,
                                                                ResourceType resourceType,
-                                                               PageRequest pageRequest) {
-        Sort sort = Sort.by(Sort.Order.asc("name"));
-
-        return resourceRepository.findAllBySubjectIdAndResourceType(
+                                                               Pageable pageable) {
+        String sort = "name";
+        long total = resourceRepository.countAllBySubjectIdAndResourceType(subjectId, resourceType);
+        List<Resource> resources = resourceRepository.findAllBySubjectIdAndResourceType(
                 subjectId,
                 resourceType,
-                pageRequest.withSort(sort)
+                sort,
+                pageable.getPageSize(),
+                pageable.getPageNumber()
         );
+
+        return new PageImpl<>(resources, pageable, total);
     }
 
     public Resource getResourceById(long id) {

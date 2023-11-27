@@ -1,5 +1,6 @@
 package com.example.dto.page.request;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
@@ -17,11 +18,13 @@ public class PagingDto {
 
     @Min(value = 0, message = "Page number must be a positive number")
     @Pattern(regexp = "\\d+", message = "Page size must be a number")
+    @JsonAlias(value = {"pageNumber", "page_number"})
     private String pageNumber;
 
     @Min(value = 1, message = "Page size must be >= 1")
     @Max(value = 20, message = "Page size must be <= 20")
     @Pattern(regexp = "\\d+", message = "Page size must be a number")
+    @JsonAlias(value = {"pageSize", "page_size"})
     private String pageSize;
 
     public PageRequest formPageRequest() {
