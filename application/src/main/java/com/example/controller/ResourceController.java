@@ -1,15 +1,16 @@
 package com.example.controller;
 
 import com.example.constraint.ResourceTypeConstraint;
+import com.example.dto.mapper.ContentMapper;
 import com.example.dto.mapper.ResourceMapper;
 import com.example.dto.page.request.PagingDto;
 import com.example.dto.resource.CreateResourceRequestDto;
 import com.example.dto.resource.ResourceResponseDto;
+import com.example.model.entity.Content;
 import com.example.model.entity.Resource;
 import com.example.model.enumeration.ResourceType;
 import com.example.service.ResourceService;
 import com.example.utils.JwtUtils;
-import com.fasterxml.jackson.annotation.JsonAlias;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +22,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @Tag(name = "resources", description = "Контроллер для работы с ресурсами")
@@ -30,6 +34,7 @@ public class ResourceController {
 
     private final ResourceService resourceService;
     private final ResourceMapper resourceMapper;
+    private final ContentMapper contentMapper;
     private final JwtUtils jwtUtils;
 
     @GetMapping("/resources/{id}")
@@ -48,18 +53,21 @@ public class ResourceController {
     @Operation(description = "Создать новый ресурс")
     @ResponseStatus(HttpStatus.CREATED)
     public ResourceResponseDto createResource(
-            @RequestBody
+            @RequestPart(value = "resource")
             @Valid
-            CreateResourceRequestDto resourceDto,
+            CreateResourceRequestDto resource,
+            @RequestPart(value = "files")
+            List<MultipartFile> files,
             HttpServletRequest request) {
         String jwt = request.getHeader("Authorization").substring(7);
-        resourceDto.setAuthor(jwtUtils.extractEmail(jwt));
+        resource.setAuthor(jwtUtils.extractEmail(jwt));
 
-        Resource resource = resourceMapper.mapToResource(resourceDto);
+        Resource resourceEntity = resourceMapper.mapToResource(resource);
+        List<Content> contents = contentMapper.mapToContentList(files);
 
-        resource = resourceService.createResource(resource);
+        resourceEntity = resourceService.createResource(resourceEntity, contents);
 
-        return resourceMapper.mapToResourceDto(resource);
+        return resourceMapper.mapToResourceDto(resourceEntity);
     }
 
     @GetMapping("/subjects/{id}/resources")

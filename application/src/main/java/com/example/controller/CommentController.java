@@ -18,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-
 @RestController
 @Tag(name = "comments", description = "Контроллер для работы с комментариями")
 @RequiredArgsConstructor
