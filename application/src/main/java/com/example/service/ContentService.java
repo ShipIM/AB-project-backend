@@ -4,7 +4,6 @@ import com.example.exception.EntityNotFoundException;
 import com.example.model.entity.Content;
 import com.example.repository.ContentRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,13 +16,9 @@ public class ContentService {
     private final ResourceService resourceService;
 
     public List<Content> getContentsByResource(long resourceId) {
-        Sort sort = Sort.by(Sort.Order.asc("filename"));
+        String sort = "filename";
 
-        Iterable<Content> iterableContents = contentRepository.findAllByResourceId(resourceId, sort);
-        List<Content> result = new ArrayList<>();
-        iterableContents.forEach(result::add);
-
-        return result;
+        return contentRepository.findAllByResourceId(resourceId, sort);
     }
 
     public List<Content> createContent(List<Content> contents, long resourceId) {

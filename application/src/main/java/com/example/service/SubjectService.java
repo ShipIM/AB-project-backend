@@ -5,9 +5,11 @@ import com.example.model.entity.Subject;
 import com.example.repository.SubjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -15,10 +17,16 @@ public class SubjectService {
     private final SubjectRepository subjectRepository;
     private final CourseService courseService;
 
-    public Page<Subject> getSubjectsByCourse(long courseId, PageRequest pageRequest) {
-        var sort = Sort.by(Sort.Order.asc("name"));
+    public Page<Subject> getSubjectsByCourse(long courseId, Pageable pageable) {
+        String sort = "name";
+        long total = subjectRepository.countAllByCourseId(courseId);
+        List<Subject> subjects = subjectRepository.findAllByCourseId(
+                courseId,
+                sort,
+                pageable.getPageSize(),
+                pageable.getPageNumber());
 
-        return subjectRepository.findAllByCourseId(courseId, pageRequest.withSort(sort));
+        return new PageImpl<>(subjects, pageable, total);
     }
 
     public Subject create(Subject subject) {
