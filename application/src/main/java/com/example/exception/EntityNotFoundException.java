@@ -1,7 +1,14 @@
 package com.example.exception;
 
-public class EntityNotFoundException extends RuntimeException {
+import org.zalando.problem.AbstractThrowableProblem;
+import org.zalando.problem.Status;
+
+public class EntityNotFoundException extends AbstractThrowableProblem {
     public EntityNotFoundException(String message) {
-        super(message);
+        super(
+                null,
+                "Entity not found",
+                Status.NOT_FOUND,
+                message);
     }
 }
