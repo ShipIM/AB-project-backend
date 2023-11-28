@@ -16,14 +16,14 @@ import java.util.Optional;
 @AllArgsConstructor
 public class PagingDto {
 
-    @Min(value = 0, message = "Page number must be a positive number")
-    @Pattern(regexp = "\\d+", message = "Page size must be a number")
+    @Min(value = 0, message = "Номер страницы должен быть положительным числом")
+    @Pattern(regexp = "\\d+", message = "Номер страницы должен быть числом")
     @JsonAlias(value = {"pageNumber", "page_number"})
     private String pageNumber;
 
-    @Min(value = 1, message = "Page size must be >= 1")
-    @Max(value = 20, message = "Page size must be <= 20")
-    @Pattern(regexp = "\\d+", message = "Page size must be a number")
+    @Min(value = 1, message = "Размер страницы должен быть >= 1")
+    @Max(value = 20, message = "Размер страницы должен быть <= 20")
+    @Pattern(regexp = "\\d+", message = "Размер страницы должен быть числом")
     @JsonAlias(value = {"pageSize", "page_size"})
     private String pageSize;
 
