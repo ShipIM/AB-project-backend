@@ -31,7 +31,7 @@ public class SubjectController {
             @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
                     message = "Идентификатор предмета должен быть положительным числом типа long")
             String courseId,
-            PagingDto pagingDto) {
+            @Valid PagingDto pagingDto) {
         Page<Subject> subjects = subjectService.getSubjectsByCourse(Long.parseLong(courseId),
                 pagingDto.formPageRequest());
 

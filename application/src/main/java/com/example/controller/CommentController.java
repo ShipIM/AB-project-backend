@@ -34,7 +34,7 @@ public class CommentController {
             @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
                     message = "Идентификатор комментария должен быть положительным числом типа long")
             String resourceId,
-            PagingDto pagingDto) {
+            @Valid PagingDto pagingDto) {
         Page<Comment> comments = commentService.getCommentsByResource(Long.parseLong(resourceId),
                 pagingDto.formPageRequest());
 
