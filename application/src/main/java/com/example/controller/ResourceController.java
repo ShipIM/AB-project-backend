@@ -81,7 +81,7 @@ public class ResourceController {
             @ResourceTypeConstraint(message = "Неизвестный тип ресурса")
             @NotBlank(message = "Необходимо указать тип ресурса")
             String type,
-            PagingDto pagingDto) {
+            @Valid PagingDto pagingDto) {
         Page<Resource> resources = resourceService.getResourcesBySubjectAndResourceType(
                 Long.parseLong(id),
                 ResourceType.valueOf(type),
