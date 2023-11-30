@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.dto.authentication.response.AuthenticationResponseDto;
+import com.example.dto.mapper.UserMapper;
 import com.example.exception.EntityNotFoundException;
 import com.example.model.entity.User;
 import com.example.model.enumeration.Role;
@@ -19,16 +20,20 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final UserMapper userMapper;
 
     public AuthenticationResponseDto register(User user) {
         user.setRole(Role.USER);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        userRepository.save(user);
+        user = userRepository.save(user);
 
         var jwtToken = jwtService.generateToken(user);
 
-        return new AuthenticationResponseDto(jwtToken);
+        AuthenticationResponseDto authDto = userMapper.mapToAuth(user);
+        authDto.setToken(jwtToken);
+
+        return authDto;
     }
 
     public AuthenticationResponseDto authenticate(User user) {
@@ -40,6 +45,9 @@ public class AuthenticationService {
 
         var jwtToken = jwtService.generateToken(retrievedUser);
 
-        return new AuthenticationResponseDto(jwtToken);
+        AuthenticationResponseDto authDto = userMapper.mapToAuth(retrievedUser);
+        authDto.setToken(jwtToken);
+
+        return authDto;
     }
 }
