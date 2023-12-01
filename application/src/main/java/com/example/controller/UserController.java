@@ -11,9 +11,11 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@Secured("ROLE_ADMIN")
 @RestController
 @RequestMapping("/users")
 @Tag(name = "users", description = "Контроллер для работы с пользователями")
