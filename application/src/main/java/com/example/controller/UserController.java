@@ -15,7 +15,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@Secured("ROLE_ADMIN")
+@Secured("ADMIN")
 @RestController
 @RequestMapping("/users")
 @Tag(name = "users", description = "Контроллер для работы с пользователями")
