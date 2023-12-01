@@ -1,6 +1,7 @@
 package com.example.model.entity;
 
 import com.example.model.enumeration.Role;
+import com.example.model.enumeration.Status;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,4 +26,6 @@ public class User {
     private String username;
 
     private Role role;
+
+    private Status status;
 }
