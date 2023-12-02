@@ -4,6 +4,7 @@ import com.example.dto.authentication.response.AuthenticationResponseDto;
 import com.example.dto.mapper.UserMapper;
 import com.example.exception.EntityNotFoundException;
 import com.example.model.entity.User;
+import com.example.model.entity.UserPersonalInfoEntity;
 import com.example.model.enumeration.Role;
 import com.example.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService {
 
     private final UserRepository userRepository;
+    private final UserPersonalInfoService userPersonalInfoService;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -27,6 +29,7 @@ public class AuthenticationService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         user = userRepository.save(user);
+        userPersonalInfoService.createEmpty(user.getId());
 
         var jwtToken = jwtService.generateToken(user);
 
