@@ -21,4 +21,8 @@ public class CreateComment {
             message = "Идентификатор ресурса должен быть положительным числом типа long")
     @JsonProperty("resource_id")
     private String resourceId;
+
+    @Pattern( )
+    @JsonProperty("is_anonymous")
+    private String isAnonymous;
 }

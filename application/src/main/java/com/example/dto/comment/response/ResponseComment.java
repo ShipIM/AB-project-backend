@@ -1,6 +1,7 @@
 package com.example.dto.comment.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,4 +16,8 @@ public class ResponseComment {
 
     @JsonProperty("created_date")
     private LocalDateTime createdDate;
+
+    @Pattern( )
+    @JsonProperty("is_anonymous")
+    private String isAnonymous;
 }

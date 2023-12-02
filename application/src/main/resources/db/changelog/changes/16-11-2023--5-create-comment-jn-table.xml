@@ -26,6 +26,7 @@
                         nullable="false"
                         foreignKeyName="comment_jn_resource_fkey" references="resource_jn(id)"/>
             </column>
+            <column name="is_anonymous" type="boolean" defaultValueBoolean="false"/>
         </createTable>
         <createIndex indexName="comment_resource_fk_index"
                      tableName="comment_jn">

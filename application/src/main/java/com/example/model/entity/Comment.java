@@ -30,4 +30,6 @@ public class Comment {
     @Column(value = "resource_id")
     private Long resourceId;
 
+    @Column(value = "is_anonymous")
+    private Long isAnonymous;
 }
