@@ -6,6 +6,7 @@ import com.example.repository.UserPersonInfoRepository;
 import com.example.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -13,6 +14,7 @@ public class UserPersonalInfoService {
     private final UserPersonInfoRepository userPersonInfoRepository;
     private final UserRepository userRepository;
 
+    @Transactional
     public UserPersonalInfoEntity getUserInfo(long id) {
         if (!isUserExist(id)) {
             if (userRepository.existsById(id)) {
@@ -25,6 +27,7 @@ public class UserPersonalInfoService {
         return userPersonInfoRepository.findById(id).get();
     }
 
+    @Transactional
     public UserPersonalInfoEntity createEmpty(long id) {
         if (isUserExist(id)) {
             return getUserInfo(id);
