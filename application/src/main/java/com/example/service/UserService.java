@@ -26,12 +26,12 @@ public class UserService {
         return new PageImpl<>(users, pageable, total);
     }
 
-    public void setUserInactive(long id) {
+    public void setUserStatus(long id, Status status) {
         if (!isUserExists(id)) {
             throw new EntityNotFoundException("Пользователя с таким идентификатором не существует");
         }
 
-        userRepository.setUserStatus(id, Status.INACTIVE);
+        userRepository.setUserStatus(id, status);
     }
 
     public boolean isUserExists(long id) {

@@ -1,4 +1,4 @@
-package com.example.dto.resource;
+package com.example.dto.resource.request;
 
 import com.example.constraint.ResourceTypeConstraint;
 import com.fasterxml.jackson.annotation.JsonAlias;

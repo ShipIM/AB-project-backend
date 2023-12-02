@@ -24,11 +24,10 @@ public interface UserRepository extends CrudRepository<User, Long> {
                        @Param("status") Status status);
 
     @Query("select * from user_jn " +
-            "where status = 'ACTIVE'" +
             "order by :sort limit :page_size offset :page_number * :page_size")
     List<User> findAll(@Param("sort") String sort,
-                       @Param("page_size") long pageSize,
-                       @Param("page_number") long pageNumber);
+                          @Param("page_size") long pageSize,
+                          @Param("page_number") long pageNumber);
 
     @Query("select count(*) from user_jn")
     long countAll();
