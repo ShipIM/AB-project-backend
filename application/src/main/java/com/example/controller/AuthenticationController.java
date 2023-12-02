@@ -6,6 +6,7 @@ import com.example.dto.authentication.response.AuthenticationResponseDto;
 import com.example.dto.mapper.UserMapper;
 import com.example.model.entity.User;
 import com.example.service.AuthenticationService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Tag(name = "auth", description = "Контроллер для регистрации и авторизации")
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthenticationController {

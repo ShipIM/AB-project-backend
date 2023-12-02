@@ -41,7 +41,7 @@ public class QuartzConfiguration {
     public JobDetailFactoryBean clear() {
         return createJobDetail(
                 ClearJob.class,
-                "Clear Job"
+                "Clear"
         );
     }
 
@@ -49,8 +49,8 @@ public class QuartzConfiguration {
     public SimpleTriggerFactoryBean triggerClear(JobDetail jobDetail) {
         return createTrigger(
                 jobDetail,
-                5,
-                "Clear Trigger"
+                900000,
+                "Clear"
         );
     }
 
