@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="2023-12-02-add-is_anonymous-column-comment-jn-table" author="Vadim">
+    <changeSet id="02-12-2023-add-is_anonymous-column-comment-jn-table" author="Vadim">
         <addColumn tableName="comment_jn">
             <column name="is_anonymous" type="boolean" defaultValueBoolean="false"/>
         </addColumn>

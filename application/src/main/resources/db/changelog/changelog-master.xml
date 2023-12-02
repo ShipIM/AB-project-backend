@@ -10,4 +10,5 @@
     <include file="/db/changelog/changes/16-11-2023--5-create-comment-jn-table.xml"/>
     <include file="/db/changelog/changes/17-11-2023--1-fill-course-table-with-entities.xml"/>
     <include file="/db/changelog/changes/25-11-2023--1-create-user-jn-table.xml"/>
+    <include file="/db/changelog/changes/02-12-2023-add-is_anonymous-column-comment-jn-table.xml"/>
 </databaseChangeLog>
