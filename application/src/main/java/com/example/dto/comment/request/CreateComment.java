@@ -22,7 +22,6 @@ public class CreateComment {
     @JsonProperty("resource_id")
     private String resourceId;
 
-    @Pattern( )
     @JsonProperty("is_anonymous")
-    private String isAnonymous;
+    private boolean isAnonymous;
 }

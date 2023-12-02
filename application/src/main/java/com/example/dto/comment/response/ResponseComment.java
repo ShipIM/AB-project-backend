@@ -17,7 +17,6 @@ public class ResponseComment {
     @JsonProperty("created_date")
     private LocalDateTime createdDate;
 
-    @Pattern( )
     @JsonProperty("is_anonymous")
-    private String isAnonymous;
+    private boolean isAnonymous;
 }
