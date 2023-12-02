@@ -50,6 +50,15 @@ public class CommentService {
         return commentRepository.existsById(id);
     }
 
+
+    public void delete(long id) {
+        if (isCommentExists(id)) {
+            commentRepository.deleteById(id);
+            return;
+        }
+
+        throw new EntityNotFoundException("Комментария с таким идентификатором не существует");
+
     private Comment setAnonymIfIsAnonymousComment(Comment comment) {
         if (comment.isAnonymous()) {
             comment.setAuthor("Аноним");

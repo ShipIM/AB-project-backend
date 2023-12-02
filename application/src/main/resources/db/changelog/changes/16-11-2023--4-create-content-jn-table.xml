@@ -25,12 +25,12 @@
                 <constraints
                         nullable="false"/>
             </column>
-            <column name="resource_id" type="BIGINT">
-                <constraints
-                        nullable="false"
-                        foreignKeyName="content_jn_resource_fkey" references="resource_jn(id)"/>
-            </column>
+            <column name="resource_id" type="BIGINT"/>
         </createTable>
+        <addForeignKeyConstraint baseTableName="content_jn" baseColumnNames="resource_id"
+                                 constraintName="content_jn_resource_fkey"
+                                 referencedTableName="resource_jn"
+                                 referencedColumnNames="id" onDelete="CASCADE" onUpdate="CASCADE"/>
         <createIndex indexName="content_resource_fk_index"
                      tableName="content_jn">
             <column name="resource_id"/>

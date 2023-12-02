@@ -13,16 +13,16 @@
                 <constraints
                         nullable="false"/>
             </column>
-            <column name="course_id" type="BIGINT">
-                <constraints
-                        nullable="false"
-                        foreignKeyName="subject_jn_course_fkey" references="course_ref(id)"/>
-            </column>
+            <column name="course_id" type="BIGINT"/>
         </createTable>
         <addUniqueConstraint
                 columnNames="course_id, name"
                 constraintName="course_subject_name_constraint"
                 tableName="subject_jn"/>
+        <addForeignKeyConstraint baseTableName="subject_jn" baseColumnNames="course_id"
+                                 constraintName="subject_jn_course_fkey"
+                                 referencedTableName="course_ref"
+                                 referencedColumnNames="id" onDelete="CASCADE" onUpdate="CASCADE"/>
         <createIndex indexName="subject_course_fk_index"
                      tableName="subject_jn">
             <column name="course_id"/>

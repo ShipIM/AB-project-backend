@@ -90,4 +90,15 @@ public class ResourceController {
 
         return resources.map(resourceMapper::mapToResourceDto);
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/resources/{resourceId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(description = "Удалить ресурс по id")
+    public void deleteResource(@PathVariable
+                              @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
+                                      message = "Идентификатор комментария должен быть положительным числом типа long")
+                              String resourceId) {
+        resourceService.delete(Long.parseLong(resourceId));
+    }
 }
