@@ -13,6 +13,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
@@ -31,7 +32,7 @@ public class CommentController {
     public Page<ResponseComment> getComments(
             @PathVariable
             @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
-                    message = "Идентификатор комментария должен быть положительным числом типа long")
+                    message = "Идентификатор ресурса должен быть положительным числом типа long")
             String resourceId,
             @Valid PagingDto pagingDto) {
         Page<Comment> comments = commentService.getCommentsByResource(Long.parseLong(resourceId),
@@ -52,5 +53,16 @@ public class CommentController {
         var responseComment = commentService.create(comment);
 
         return commentMapper.ToResponseComment(responseComment);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/comments/{commentId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(description = "Удалить комментарий по id")
+    public void deleteComment(@PathVariable
+                                         @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
+                                                 message = "Идентификатор комментария должен быть положительным числом типа long")
+                                         String commentId) {
+        commentService.delete((Long.parseLong(commentId)));
     }
 }

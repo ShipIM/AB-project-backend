@@ -65,4 +65,13 @@ public class ResourceService {
     public boolean isResourceExists(long id) {
         return resourceRepository.existsById(id);
     }
+
+    public void delete(long id) {
+        if (isResourceExists(id)) {
+            resourceRepository.deleteById(id);
+            return;
+        }
+
+        throw new EntityNotFoundException("Ресурса с таким идентификатором не существует");
+    }
 }

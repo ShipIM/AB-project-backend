@@ -45,4 +45,13 @@ public class CommentService {
     public boolean isCommentExists(long id) {
         return commentRepository.existsById(id);
     }
+
+    public void delete(long id) {
+        if (isCommentExists(id)) {
+            commentRepository.deleteById(id);
+            return;
+        }
+
+        throw new EntityNotFoundException("Комментария с таким идентификатором не существует");
+    }
 }
