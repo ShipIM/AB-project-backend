@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="02-12-2023--2-create-user-personal-info-jn-table" author="Vadim">
+        <createTable tableName="user_personal_info_jn">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints
+                        primaryKey="true"
+                        foreignKeyName="user_personal_info_jn_user_fkey" references="user_jn(id)"/>
+            </column>
+            <column name="real_name" type="VARCHAR"/>
+            <column name="gender" type="VARCHAR"/>
+            <column name="city" type="VARCHAR"/>
+            <column name="telephone" type="VARCHAR"/>
+            <column name="course" type="BIGINT"/>
+            <column name="university" type="VARCHAR"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="user_personal_info_jn"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
