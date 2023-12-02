@@ -1,7 +1,7 @@
 package com.example.controller;
 
-import com.example.dto.authentication.request.UserAuthRequestDto;
-import com.example.dto.authentication.request.UserCreateRequestDto;
+import com.example.dto.authentication.request.AuthenticateRequestDto;
+import com.example.dto.authentication.request.RegisterRequestDto;
 import com.example.dto.authentication.response.AuthenticationResponseDto;
 import com.example.dto.mapper.UserMapper;
 import com.example.model.entity.User;
@@ -23,14 +23,14 @@ public class AuthenticationController {
     private final UserMapper userMapper;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponseDto> register(@RequestBody @Valid UserCreateRequestDto request) {
+    public ResponseEntity<AuthenticationResponseDto> register(@RequestBody @Valid RegisterRequestDto request) {
         User user = userMapper.mapToUser(request);
 
         return ResponseEntity.ok(service.register(user));
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponseDto> authenticate(@RequestBody @Valid UserAuthRequestDto request) {
+    public ResponseEntity<AuthenticationResponseDto> authenticate(@RequestBody @Valid AuthenticateRequestDto request) {
         User user = userMapper.mapToUser(request);
 
         return ResponseEntity.ok(service.authenticate(user));

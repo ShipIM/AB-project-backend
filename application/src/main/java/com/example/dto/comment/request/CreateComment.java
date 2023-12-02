@@ -17,6 +17,7 @@ public class CreateComment {
     @Size(max = 255, message = "Текст комментария не может быть длиннее 255 символов")
     private String text;
 
+    @NotBlank(message = "Идентификатор ресурса не должен быть пустой строкой")
     @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
             message = "Идентификатор ресурса должен быть положительным числом типа long")
     @JsonProperty("resource_id")

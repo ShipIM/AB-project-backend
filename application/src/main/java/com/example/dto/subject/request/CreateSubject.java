@@ -18,5 +18,6 @@ public class CreateSubject {
     @JsonProperty("course_id")
     @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
             message = "Идентификатор курса должен быть положительным числом типа long")
+    @NotBlank(message = "Идентификатор ресурса не должен быть пустой строкой")
     private String courseId;
 }
