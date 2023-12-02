@@ -31,5 +31,5 @@ public class Comment {
     private Long resourceId;
 
     @Column(value = "is_anonymous")
-    private Long isAnonymous;
+    private boolean isAnonymous;
 }
