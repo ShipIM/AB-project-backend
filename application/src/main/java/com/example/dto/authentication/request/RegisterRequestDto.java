@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserCreateRequestDto {
+public class RegisterRequestDto {
 
     @Email(message = "Невалидная почта")
     private String email;

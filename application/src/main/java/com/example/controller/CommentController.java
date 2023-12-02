@@ -41,6 +41,7 @@ public class CommentController {
         return comments.map(commentMapper::ToResponseComment);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/comments")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(description = "Создать комментарий")

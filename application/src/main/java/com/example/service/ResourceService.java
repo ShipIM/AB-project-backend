@@ -48,8 +48,9 @@ public class ResourceService {
 
     @Transactional
     public Resource createResource(Resource resource, List<Content> contents) {
-        if (!subjectService.isSubjectExists(resource.getSubjectId()))
+        if (!subjectService.isSubjectExists(resource.getSubjectId())) {
             throw new EntityNotFoundException("Предмета с таким идентификатором не существует");
+        }
 
         resource.setAuthor(userRepository.findByEmail(resource.getAuthor())
                 .orElseThrow(() -> new EntityNotFoundException("Пользователя с таким email не существует"))

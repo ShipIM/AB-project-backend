@@ -1,4 +1,4 @@
-package com.example.dto.resource;
+package com.example.dto.resource.response;
 
 import com.example.model.enumeration.ResourceType;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,12 +28,15 @@ public class CommentService {
                 pageable.getPageSize(),
                 pageable.getPageNumber());
 
+        comments = comments.stream().map(this::setAnonymIfIsAnonymousComment).collect(Collectors.toList());
+
         return new PageImpl<>(comments, pageable, total);
     }
 
     public Comment create(Comment comment) {
-        if (!resourceService.isResourceExists(comment.getResourceId()))
+        if (!resourceService.isResourceExists(comment.getResourceId())) {
             throw new EntityNotFoundException("Ресурса с таким идентификатором не существует");
+        }
 
         comment.setAuthor(userRepository.findByEmail(comment.getAuthor())
                 .orElseThrow(() -> new EntityNotFoundException("Пользователя с таким email не существует"))
@@ -46,6 +50,7 @@ public class CommentService {
         return commentRepository.existsById(id);
     }
 
+
     public void delete(long id) {
         if (isCommentExists(id)) {
             commentRepository.deleteById(id);
@@ -53,5 +58,12 @@ public class CommentService {
         }
 
         throw new EntityNotFoundException("Комментария с таким идентификатором не существует");
+
+    private Comment setAnonymIfIsAnonymousComment(Comment comment) {
+        if (comment.isAnonymous()) {
+            comment.setAuthor("Аноним");
+        }
+
+        return comment;
     }
 }
