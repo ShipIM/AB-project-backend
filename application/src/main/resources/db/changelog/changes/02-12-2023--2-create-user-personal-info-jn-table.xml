@@ -6,11 +6,7 @@
 
     <changeSet id="02-12-2023--2-create-user-personal-info-jn-table" author="Vadim">
         <createTable tableName="user_personal_info_jn">
-            <column name="id" type="BIGINT">
-                <constraints
-                        primaryKey="true"
-                        foreignKeyName="user_personal_info_jn_user_fkey" references="user_jn(id)"/>
-            </column>
+            <column name="id" type="BIGINT"/>
             <column name="real_name" type="VARCHAR" />
             <column name="gender" type="VARCHAR" />
             <column name="city" type="VARCHAR" />
@@ -18,6 +14,10 @@
             <column name="course" type="BIGINT"/>
             <column name="university" type="VARCHAR" />
         </createTable>
+        <addForeignKeyConstraint baseTableName="user_personal_info_jn" baseColumnNames="id"
+                                 constraintName="user_personal_info_jn_user_fkey"
+                                 referencedTableName="user_jn"
+                                 referencedColumnNames="id" onDelete="CASCADE" onUpdate="CASCADE"/>
         <rollback>
             <dropTable tableName="user_personal_info_jn"/>
         </rollback>
