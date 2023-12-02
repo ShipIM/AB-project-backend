@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class ResponseComment {
+    private Long id;
+
     private String author;
 
     private String text;
