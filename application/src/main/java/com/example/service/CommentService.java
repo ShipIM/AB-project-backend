@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +27,8 @@ public class CommentService {
                 sort,
                 pageable.getPageSize(),
                 pageable.getPageNumber());
+
+        comments = comments.stream().map(this::setAnonymIfIsAnonymousComment).collect(Collectors.toList());
 
         return new PageImpl<>(comments, pageable, total);
     }
@@ -45,5 +48,13 @@ public class CommentService {
 
     public boolean isCommentExists(long id) {
         return commentRepository.existsById(id);
+    }
+
+    private Comment setAnonymIfIsAnonymousComment(Comment comment) {
+        if (comment.isAnonymous()) {
+            comment.setAuthor("Аноним");
+        }
+
+        return comment;
     }
 }
