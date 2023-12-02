@@ -31,8 +31,9 @@ public class CommentService {
     }
 
     public Comment create(Comment comment) {
-        if (!resourceService.isResourceExists(comment.getResourceId()))
+        if (!resourceService.isResourceExists(comment.getResourceId())) {
             throw new EntityNotFoundException("Ресурса с таким идентификатором не существует");
+        }
 
         comment.setAuthor(userRepository.findByEmail(comment.getAuthor())
                 .orElseThrow(() -> new EntityNotFoundException("Пользователя с таким email не существует"))
