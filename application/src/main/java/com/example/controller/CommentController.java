@@ -63,6 +63,6 @@ public class CommentController {
                                          @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
                                                  message = "Идентификатор комментария должен быть положительным числом типа long")
                                          String commentId) {
-        commentService.delete((Long.parseLong(commentId)));
+        commentService.delete(Long.parseLong(commentId));
     }
 }

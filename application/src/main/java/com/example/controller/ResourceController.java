@@ -100,6 +100,6 @@ public class ResourceController {
                               @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
                                       message = "Идентификатор комментария должен быть положительным числом типа long")
                               String resourceId) {
-        resourceService.delete((Long.parseLong(resourceId)));
+        resourceService.delete(Long.parseLong(resourceId));
     }
 }
