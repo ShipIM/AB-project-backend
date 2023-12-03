@@ -30,8 +30,9 @@ public class SubjectService {
     }
 
     public Subject create(Subject subject) {
-        if (!courseService.isCourseExists(subject.getCourseId()))
+        if (!courseService.isCourseExists(subject.getCourseId())) {
             throw new EntityNotFoundException("Курса с таким идентификатором не существует");
+        }
 
         return subjectRepository.save(subject);
     }

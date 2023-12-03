@@ -6,15 +6,16 @@ import com.example.dto.mapper.CommentMapper;
 import com.example.dto.page.request.PagingDto;
 import com.example.model.entity.Comment;
 import com.example.service.CommentService;
-import com.example.utils.JwtUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,14 +26,13 @@ import org.springframework.web.bind.annotation.*;
 public class CommentController {
     private final CommentService commentService;
     private final CommentMapper commentMapper;
-    private final JwtUtils jwtUtils;
 
     @GetMapping("/resources/{resourceId}/comments")
     @Operation(description = "Получить все комментарии по id ресурса")
     public Page<ResponseComment> getComments(
             @PathVariable
             @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
-                    message = "Идентификатор комментария должен быть положительным числом типа long")
+                    message = "Идентификатор ресурса должен быть положительным числом типа long")
             String resourceId,
             @Valid PagingDto pagingDto) {
         Page<Comment> comments = commentService.getCommentsByResource(Long.parseLong(resourceId),
@@ -41,18 +41,29 @@ public class CommentController {
         return comments.map(commentMapper::ToResponseComment);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/comments")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(description = "Создать комментарий")
-    public ResponseComment createComment(@RequestBody @Valid CreateComment createComment,
-                                         HttpServletRequest request) {
-        String jwt = request.getHeader("Authorization").substring(7);
-        createComment.setAuthor(jwtUtils.extractEmail(jwt));
+    public ResponseComment createComment(@RequestBody @Valid CreateComment createComment) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        createComment.setAuthor(userDetails.getUsername());
 
         var comment = commentMapper.ToCommentEntity(createComment);
 
         var responseComment = commentService.create(comment);
 
         return commentMapper.ToResponseComment(responseComment);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/comments/{commentId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(description = "Удалить комментарий по id")
+    public void deleteComment(@PathVariable
+                                         @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
+                                                 message = "Идентификатор комментария должен быть положительным числом типа long")
+                                         String commentId) {
+        commentService.delete(Long.parseLong(commentId));
     }
 }

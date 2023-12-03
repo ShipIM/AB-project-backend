@@ -22,16 +22,16 @@
                 <constraints
                         nullable="false"/>
             </column>
-            <column name="subject_id" type="BIGINT">
-                <constraints
-                        nullable="false"
-                        foreignKeyName="resource_jn_subject_fkey" references="subject_jn(id)"/>
-            </column>
+            <column name="subject_id" type="BIGINT"/>
         </createTable>
         <addUniqueConstraint
                 columnNames="subject_id, name"
                 constraintName="subject_resource_name_constraint"
                 tableName="resource_jn"/>
+        <addForeignKeyConstraint baseTableName="resource_jn" baseColumnNames="subject_id"
+                                 constraintName="resource_jn_subject_fkey"
+                                 referencedTableName="subject_jn"
+                                 referencedColumnNames="id" onDelete="CASCADE" onUpdate="CASCADE"/>
         <createIndex indexName="resource_subject_fk_index"
                      tableName="resource_jn">
             <column name="subject_id"/>

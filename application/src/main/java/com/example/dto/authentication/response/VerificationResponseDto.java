@@ -8,10 +8,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AuthenticationResponseDto {
+public class VerificationResponseDto {
 
     private Long id;
-    private String token;
     private String login;
     private Role role;
 

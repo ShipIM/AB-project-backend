@@ -4,22 +4,23 @@ import com.example.constraint.ResourceTypeConstraint;
 import com.example.dto.mapper.ContentMapper;
 import com.example.dto.mapper.ResourceMapper;
 import com.example.dto.page.request.PagingDto;
-import com.example.dto.resource.CreateResourceRequestDto;
-import com.example.dto.resource.ResourceResponseDto;
+import com.example.dto.resource.request.CreateResourceRequestDto;
+import com.example.dto.resource.response.ResourceResponseDto;
 import com.example.model.entity.Content;
 import com.example.model.entity.Resource;
 import com.example.model.enumeration.ResourceType;
 import com.example.service.ResourceService;
-import com.example.utils.JwtUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,7 +36,6 @@ public class ResourceController {
     private final ResourceService resourceService;
     private final ResourceMapper resourceMapper;
     private final ContentMapper contentMapper;
-    private final JwtUtils jwtUtils;
 
     @GetMapping("/resources/{id}")
     @Operation(description = "Получить существующий ресурс по идентификатору")
@@ -49,6 +49,7 @@ public class ResourceController {
         return resourceMapper.mapToResourceDto(res);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/resources")
     @Operation(description = "Создать новый ресурс")
     @ResponseStatus(HttpStatus.CREATED)
@@ -57,10 +58,9 @@ public class ResourceController {
             @Valid
             CreateResourceRequestDto resource,
             @RequestPart(value = "files")
-            List<MultipartFile> files,
-            HttpServletRequest request) {
-        String jwt = request.getHeader("Authorization").substring(7);
-        resource.setAuthor(jwtUtils.extractEmail(jwt));
+            List<MultipartFile> files) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        resource.setAuthor(userDetails.getUsername());
 
         Resource resourceEntity = resourceMapper.mapToResource(resource);
         List<Content> contents = contentMapper.mapToContentList(files);
@@ -89,5 +89,16 @@ public class ResourceController {
         );
 
         return resources.map(resourceMapper::mapToResourceDto);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/resources/{resourceId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(description = "Удалить ресурс по id")
+    public void deleteResource(@PathVariable
+                              @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
+                                      message = "Идентификатор комментария должен быть положительным числом типа long")
+                              String resourceId) {
+        resourceService.delete(Long.parseLong(resourceId));
     }
 }
