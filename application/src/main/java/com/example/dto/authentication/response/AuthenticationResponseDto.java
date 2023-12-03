@@ -12,7 +12,7 @@ public class AuthenticationResponseDto {
 
     private Long id;
     private String token;
-    private String username;
+    private String login;
     private Role role;
 
 }

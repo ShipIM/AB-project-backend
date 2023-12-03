@@ -28,15 +28,11 @@ public class User implements UserDetails {
 
     private String password;
 
-    private String username;
+    private String login;
 
     private Role role;
 
     private Status status;
-
-    public String getLogin() {
-        return username;
-    }
 
     @Override
     public String getUsername() {

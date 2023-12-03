@@ -11,7 +11,7 @@ import lombok.Setter;
 public class VerificationResponseDto {
 
     private Long id;
-    private String username;
+    private String login;
     private Role role;
 
 }
