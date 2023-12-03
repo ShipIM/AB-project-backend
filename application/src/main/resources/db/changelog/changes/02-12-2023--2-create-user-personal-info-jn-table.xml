@@ -6,7 +6,9 @@
 
     <changeSet id="02-12-2023--2-create-user-personal-info-jn-table" author="Vadim">
         <createTable tableName="user_personal_info_jn">
-            <column name="id" type="BIGINT"/>
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
             <column name="real_name" type="VARCHAR" />
             <column name="gender" type="VARCHAR" />
             <column name="city" type="VARCHAR" />

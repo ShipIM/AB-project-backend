@@ -29,14 +29,11 @@ public class UserPersonalInfoService {
 
     @Transactional
     public UserPersonalInfoEntity createEmpty(long id) {
-        if (isUserExist(id)) {
-            return getUserInfo(id);
+        if (!isUserExist(id)) {
+            userPersonInfoRepository.createEmpty(id);
         }
 
-        var userInfo = new UserPersonalInfoEntity();
-        userInfo.setId(id);
-
-        return userPersonInfoRepository.save(userInfo);
+        return getUserInfo(id);
     }
 
     public UserPersonalInfoEntity updateUserInfo(UserPersonalInfoEntity userInfo) {

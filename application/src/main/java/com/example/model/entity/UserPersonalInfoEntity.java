@@ -18,17 +18,17 @@ public class UserPersonalInfoEntity {
     private Long id;
 
     @Column(value = "real_name")
-    private String realName = "";
+    private String realName;
 
-    private String gender= "";
+    private String gender;
 
-    private String city= "";
+    private String city;
 
-    private String telephone= "";
+    private String telephone;
 
-    private Long course= 0L;
+    private Long course;
 
-    private String university= "";
+    private String university;
 
     @Column(value = "avatar_bytes")
     private byte[] avatarBytes;
