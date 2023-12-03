@@ -22,4 +22,10 @@ public class ResponseUserInfo {
     private Long course;
 
     private String university;
+
+    @JsonProperty("avatar_bytes")
+    private byte[] avatarBytes;
+
+    @JsonProperty("avatar_content_type")
+    private String avatarContentType;
 }

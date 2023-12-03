@@ -30,6 +30,12 @@ public class UserPersonalInfoEntity {
 
     private String university= "";
 
+    @Column(value = "avatar_bytes")
+    private byte[] avatarBytes;
+
+    @Column(value = "avatar_content_type")
+    private String avatarContentType;
+
     public static void UpdateEntity(UserPersonalInfoEntity oldEntity, UserPersonalInfoEntity newEntity) {
         oldEntity.setRealName(newEntity.getRealName());
         oldEntity.setGender(newEntity.getGender());
@@ -37,5 +43,7 @@ public class UserPersonalInfoEntity {
         oldEntity.setTelephone(newEntity.getTelephone());
         oldEntity.setCourse(newEntity.getCourse());
         oldEntity.setUniversity(newEntity.getUniversity());
+        oldEntity.setAvatarBytes(newEntity.getAvatarBytes());
+        oldEntity.setAvatarContentType(newEntity.getAvatarContentType());
     }
 }

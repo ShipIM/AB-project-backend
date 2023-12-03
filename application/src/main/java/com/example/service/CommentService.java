@@ -59,7 +59,7 @@ public class CommentService {
 
         throw new EntityNotFoundException("Комментария с таким идентификатором не существует");
     }
-    
+
     private Comment setAnonymIfIsAnonymousComment(Comment comment) {
         if (comment.isAnonymous()) {
             comment.setAuthor("Аноним");

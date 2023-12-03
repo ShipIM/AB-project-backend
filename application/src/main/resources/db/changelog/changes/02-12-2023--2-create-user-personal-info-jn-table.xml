@@ -13,6 +13,8 @@
             <column name="telephone" type="VARCHAR" />
             <column name="course" type="BIGINT"/>
             <column name="university" type="VARCHAR" />
+            <column name="avatar_bytes" type="BYTEA"/>
+            <column name="avatar_content_type" type="VARCHAR"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="user_personal_info_jn" baseColumnNames="id"
                                  constraintName="user_personal_info_jn_user_fkey"
