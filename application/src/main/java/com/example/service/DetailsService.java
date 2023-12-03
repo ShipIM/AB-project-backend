@@ -23,11 +23,7 @@ public class DetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email)
             throws UsernameNotFoundException {
 
-        User user = userRepository.findByEmail(email)
+        return userRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("Пользователя с таким email не существует."));
-
-        return new org.springframework.security.core.userdetails.User(
-                user.getEmail(), user.getPassword(), true, true, true,
-                true, List.of(user.getRole()));
     }
 }
