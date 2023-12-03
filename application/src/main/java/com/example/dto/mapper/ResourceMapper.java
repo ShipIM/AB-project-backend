@@ -1,7 +1,7 @@
 package com.example.dto.mapper;
 
-import com.example.dto.resource.CreateResourceRequestDto;
-import com.example.dto.resource.ResourceResponseDto;
+import com.example.dto.resource.request.CreateResourceRequestDto;
+import com.example.dto.resource.response.ResourceResponseDto;
 import com.example.model.entity.Resource;
 import org.mapstruct.Mapper;
 
