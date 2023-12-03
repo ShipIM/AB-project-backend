@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.dto.authentication.response.AuthenticationResponseDto;
+import com.example.dto.authentication.response.VerificationResponseDto;
 import com.example.dto.mapper.UserMapper;
 import com.example.exception.EntityNotFoundException;
 import com.example.model.entity.User;
@@ -49,5 +50,12 @@ public class AuthenticationService {
         authDto.setToken(jwtToken);
 
         return authDto;
+    }
+
+    public VerificationResponseDto verify(String email) {
+        var retrievedUser = userRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Пользователя с таким email не существует"));
+
+        return userMapper.mapToVerify(retrievedUser);
     }
 }
