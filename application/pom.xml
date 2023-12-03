@@ -189,7 +189,7 @@
                             <dataFile>${project.build.directory}/coverage-reports/jacoco.exec</dataFile>
                             <outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
                             <includes>
-                                <include>com/example/controller/*Controller*</include>
+                                <include>com/example/controller/*Service*</include>
                             </includes>
                         </configuration>
                     </execution>
