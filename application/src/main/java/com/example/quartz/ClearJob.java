@@ -13,7 +13,6 @@ public class ClearJob implements Job {
 
     @Override
     public void execute(JobExecutionContext context) {
-        System.out.println("Hello world!");
         commentService.deleteOld();
     }
 }
