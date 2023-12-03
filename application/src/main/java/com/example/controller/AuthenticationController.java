@@ -3,18 +3,20 @@ package com.example.controller;
 import com.example.dto.authentication.request.AuthenticateRequestDto;
 import com.example.dto.authentication.request.RegisterRequestDto;
 import com.example.dto.authentication.response.AuthenticationResponseDto;
+import com.example.dto.authentication.response.VerificationResponseDto;
 import com.example.dto.mapper.UserMapper;
 import com.example.model.entity.User;
 import com.example.service.AuthenticationService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Tag(name = "auth", description = "Контроллер для регистрации и авторизации")
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthenticationController {
@@ -22,18 +24,25 @@ public class AuthenticationController {
     private final AuthenticationService service;
     private final UserMapper userMapper;
 
-    @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponseDto> register(@RequestBody @Valid RegisterRequestDto request) {
+    @PostMapping("/registration")
+    public AuthenticationResponseDto register(@RequestBody @Valid RegisterRequestDto request) {
         User user = userMapper.mapToUser(request);
 
-        return ResponseEntity.ok(service.register(user));
+        return service.register(user);
     }
 
-    @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponseDto> authenticate(@RequestBody @Valid AuthenticateRequestDto request) {
+    @PostMapping("/authentication")
+    public AuthenticationResponseDto authenticate(@RequestBody @Valid AuthenticateRequestDto request) {
         User user = userMapper.mapToUser(request);
 
-        return ResponseEntity.ok(service.authenticate(user));
+        return service.authenticate(user);
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/verification")
+    public VerificationResponseDto verify() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return service.verify(userDetails.getUsername());
+    }
 }
