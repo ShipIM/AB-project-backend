@@ -13,6 +13,10 @@ import org.springframework.scheduling.quartz.*;
 public class QuartzConfiguration {
     private final ApplicationContext applicationContext;
 
+    private final String CLEAR_JOB_NAME = "clear";
+    private final String CLEAR_TRIGGER_NAME = "clear";
+    private final long DEFAULT_TRIGGER_FREQUENCY = 900000;
+
     @Bean
     public SpringBeanJobFactory springBeanJobFactory() {
         AutowiringSpringBeanJobFactory jobFactory = new AutowiringSpringBeanJobFactory();
@@ -41,7 +45,7 @@ public class QuartzConfiguration {
     public JobDetailFactoryBean clear() {
         return createJobDetail(
                 ClearJob.class,
-                "Clear"
+                CLEAR_JOB_NAME
         );
     }
 
@@ -49,8 +53,8 @@ public class QuartzConfiguration {
     public SimpleTriggerFactoryBean triggerClear(JobDetail jobDetail) {
         return createTrigger(
                 jobDetail,
-                900000,
-                "Clear"
+                DEFAULT_TRIGGER_FREQUENCY,
+                CLEAR_TRIGGER_NAME
         );
     }
 

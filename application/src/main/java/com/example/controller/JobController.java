@@ -22,13 +22,15 @@ public class JobController {
 
     private final Scheduler scheduler;
 
+    private final String DEFAULT_GROUP_NAME = "DEFAULT";
+
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(description = "Изменить время исполнения задачи")
     @PatchMapping("/{job}")
     public void updateTriggerTime(
             @PathVariable String job,
             @RequestBody @Valid UpdateJobRequestDto dto) throws SchedulerException {
-        JobKey jobKey = scheduler.getJobKeys(GroupMatcher.groupEquals("DEFAULT")).stream()
+        JobKey jobKey = scheduler.getJobKeys(GroupMatcher.groupEquals(DEFAULT_GROUP_NAME)).stream()
                 .filter(key -> key.getName().equals(job))
                 .findAny()
                 .orElseThrow(() -> new QuartzNoEntityException("Задачи с таким названием не существует"));
@@ -43,7 +45,7 @@ public class JobController {
             SimpleTriggerImpl sti = new SimpleTriggerImpl();
 
             sti.setName(job);
-            sti.setGroup("DEFAULT");
+            sti.setGroup(DEFAULT_GROUP_NAME);
             sti.setJobKey(jobKey);
             sti.setJobDataMap(trigger.getJobDataMap());
             sti.setStartTime(trigger.getStartTime());
