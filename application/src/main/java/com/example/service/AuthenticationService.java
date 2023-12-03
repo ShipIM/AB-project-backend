@@ -10,8 +10,6 @@ import com.example.model.enumeration.Role;
 import com.example.model.enumeration.Status;
 import com.example.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,12 +20,12 @@ public class AuthenticationService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
     private final UserMapper userMapper;
 
     public AuthenticationResponseDto register(User user) {
         user.setRole(Role.USER);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setStatus(Status.ACTIVE);
 
         user = userRepository.save(user);
 
@@ -40,13 +38,9 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponseDto authenticate(User user) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
-        );
-
         var retrievedUser = userRepository.findByEmail(user.getEmail())
                 .orElseThrow(() -> new EntityNotFoundException("Пользователя с таким email не существует"));
-        if (retrievedUser.getStatus().equals(Status.INACTIVE)) {
+        if (!retrievedUser.isEnabled()) {
             throw new InactiveAccountException("Аккаунт заблокирован администратором");
         }
 

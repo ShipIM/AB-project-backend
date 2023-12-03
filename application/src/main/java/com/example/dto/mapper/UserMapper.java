@@ -8,6 +8,7 @@ import com.example.dto.authentication.response.VerificationResponseDto;
 import com.example.dto.user.response.UserResponseDto;
 import com.example.model.entity.User;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
@@ -17,11 +18,14 @@ public interface UserMapper {
 
     User mapToUser(AuthenticateRequestDto authenticateRequestDto);
 
+    @Mapping(target = "username", expression = "java(user.getLogin())")
     UserResponseDto mapToDto(User user);
 
     List<UserResponseDto> mapToDtoList(List<User> users);
 
+    @Mapping(target = "username", expression = "java(user.getLogin())")
     AuthenticationResponseDto mapToAuth(User user);
 
+    @Mapping(target = "username", expression = "java(user.getLogin())")
     VerificationResponseDto mapToVerify(User user);
 }
