@@ -46,6 +46,10 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
+    public void deleteOld() {
+        commentRepository.deleteOld();
+    }
+
     public boolean isCommentExists(long id) {
         return commentRepository.existsById(id);
     }

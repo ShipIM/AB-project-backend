@@ -1,6 +1,7 @@
 package com.example.repository;
 
 import com.example.model.entity.Comment;
+import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -21,4 +22,9 @@ public interface CommentRepository extends CrudRepository<Comment, Long> {
 
     @Query("select count(*) from comment_jn where resource_id = :resource")
     long countAllByResourceId(@Param("resource") long resourceId);
+
+    @Modifying
+    @Query("delete from comment_jn " +
+            "where created_date + INTERVAL '2 year' < CURRENT_DATE")
+    void deleteOld();
 }
