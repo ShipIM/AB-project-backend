@@ -19,6 +19,10 @@ public class ResponseUserInfo {
 
     private String telephone;
 
+    private String login;
+
+    private String email;
+
     private Long course;
 
     private String university;

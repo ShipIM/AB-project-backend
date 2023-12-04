@@ -26,6 +26,11 @@ public class UserService {
         return new PageImpl<>(users, pageable, total);
     }
 
+    public User getById(long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Пользователя с таким идентификатором не существует"));
+    }
+
     public void setUserStatus(long id, Status status) {
         if (!isUserExists(id)) {
             throw new EntityNotFoundException("Пользователя с таким идентификатором не существует");

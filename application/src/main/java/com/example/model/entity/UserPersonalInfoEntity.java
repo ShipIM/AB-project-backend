@@ -36,14 +36,18 @@ public class UserPersonalInfoEntity {
     @Column(value = "avatar_content_type")
     private String avatarContentType;
 
-    public static void UpdateEntity(UserPersonalInfoEntity oldEntity, UserPersonalInfoEntity newEntity) {
-        oldEntity.setRealName(newEntity.getRealName());
-        oldEntity.setGender(newEntity.getGender());
-        oldEntity.setCity(newEntity.getCity());
-        oldEntity.setTelephone(newEntity.getTelephone());
-        oldEntity.setCourse(newEntity.getCourse());
-        oldEntity.setUniversity(newEntity.getUniversity());
-        oldEntity.setAvatarBytes(newEntity.getAvatarBytes());
-        oldEntity.setAvatarContentType(newEntity.getAvatarContentType());
+    public void UpdateEntity(UserPersonalInfoEntity newEntity) {
+        UpdateEntityWithoutAvatar(newEntity);
+        this.avatarBytes = newEntity.getAvatarBytes();
+        this.avatarContentType = newEntity.getAvatarContentType();
+    }
+
+    public void UpdateEntityWithoutAvatar(UserPersonalInfoEntity newEntity) {
+        this.realName = newEntity.getRealName();
+        this.gender = newEntity.getGender();
+        this.city = newEntity.getCity();
+        this.telephone = newEntity.getTelephone();
+        this.course = newEntity.getCourse();
+        this.university = newEntity.getUniversity();
     }
 }

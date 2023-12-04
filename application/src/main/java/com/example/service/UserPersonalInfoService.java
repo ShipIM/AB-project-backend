@@ -12,12 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserPersonalInfoService {
     private final UserPersonInfoRepository userPersonInfoRepository;
-    private final UserRepository userRepository;
+    private final UserService userRepository;
 
     @Transactional
     public UserPersonalInfoEntity getUserInfo(long id) {
         if (!isUserExist(id)) {
-            if (userRepository.existsById(id)) {
+            if (userRepository.isUserExists(id)) {
                 return createEmpty(id);
             }
 
@@ -42,7 +42,18 @@ public class UserPersonalInfoService {
         }
 
         var oldEntity = userPersonInfoRepository.findById(userInfo.getId()).get();
-        UserPersonalInfoEntity.UpdateEntity(oldEntity, userInfo);
+        oldEntity.UpdateEntity(userInfo);
+
+        return userPersonInfoRepository.save(oldEntity);
+    }
+
+    public UserPersonalInfoEntity updateUserInfoWithoutAvatar(UserPersonalInfoEntity userInfo) {
+        if (!isUserExist(userInfo.getId())) {
+            throw new EntityNotFoundException("Пользователя с таким идентификатором не существует");
+        }
+
+        var oldEntity = userPersonInfoRepository.findById(userInfo.getId()).get();
+        oldEntity.UpdateEntityWithoutAvatar(userInfo);
 
         return userPersonInfoRepository.save(oldEntity);
     }

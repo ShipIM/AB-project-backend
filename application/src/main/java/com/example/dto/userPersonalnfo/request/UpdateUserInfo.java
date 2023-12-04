@@ -17,15 +17,13 @@ public class UpdateUserInfo {
 
     private String city;
 
+    @Pattern(regexp = "^[78]\\d{10}$|^$",
+            message = "Телефонный номер должен быть формата: (7/8)-nnn-nnn-nn-nn")
     private String telephone;
 
-    @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
-            message = "Идентификатор пользователя должен быть положительным числом типа long")
+    @Pattern(regexp = "^(?!0+$)\\d{1,19}$|^$",
+            message = "Идентификатор курса должен быть положительным числом типа long")
     private String course;
 
     private String university;
-
-    @JsonAlias(value = {"resourceType", "resource_type", "type"})
-    @ResourceTypeConstraint(message = "Неизвестный тип ресурса", canNull = true)
-    private String resourceType;
 }
