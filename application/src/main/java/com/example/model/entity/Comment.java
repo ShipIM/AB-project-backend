@@ -20,7 +20,8 @@ public class Comment {
     @Id
     private Long id;
 
-    private String author;
+    @Column(value = "author_id")
+    private Long authorId;
 
     @Column(value = "created_date")
     private LocalDateTime createdDate;

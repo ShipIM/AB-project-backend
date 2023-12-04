@@ -10,7 +10,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CreateComment {
-    private String author;
+    @NotBlank(message = "Идентификатор автора не должен быть пустой строкой")
+    @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
+            message = "Идентификатор автора должен быть положительным числом типа long")
+    @JsonProperty("author_id")
+    private String authorId;
 
     @NotBlank(message = "Текст комментария не может состоять только из пробельных символов")
     @Size(min = 1, message = "Текст комментария должен содержать хотя бы один символ")

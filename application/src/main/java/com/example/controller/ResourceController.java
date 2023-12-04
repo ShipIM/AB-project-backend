@@ -10,6 +10,7 @@ import com.example.model.entity.Content;
 import com.example.model.entity.Resource;
 import com.example.model.enumeration.ResourceType;
 import com.example.service.ResourceService;
+import com.example.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -36,6 +37,7 @@ public class ResourceController {
     private final ResourceService resourceService;
     private final ResourceMapper resourceMapper;
     private final ContentMapper contentMapper;
+    private final UserService userService;
 
     @GetMapping("/resources/{id}")
     @Operation(description = "Получить существующий ресурс по идентификатору")
@@ -45,8 +47,10 @@ public class ResourceController {
                     message = "Идентификатор ресурса должен быть положительным числом типа long")
             String id) {
         Resource res = resourceService.getResourceById(Long.parseLong(id));
+        var responseResource = resourceMapper.mapToResourceDto(res);
+        responseResource.setAuthor(userService.getById(responseResource.getAuthorId()).getLogin());
 
-        return resourceMapper.mapToResourceDto(res);
+        return responseResource;
     }
 
     @PreAuthorize("hasRole('USER')")
@@ -59,15 +63,14 @@ public class ResourceController {
             CreateResourceRequestDto resource,
             @RequestPart(value = "files")
             List<MultipartFile> files) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        resource.setAuthor(userDetails.getUsername());
-
         Resource resourceEntity = resourceMapper.mapToResource(resource);
         List<Content> contents = contentMapper.mapToContentList(files);
 
         resourceEntity = resourceService.createResource(resourceEntity, contents);
+        var resourceResponse = resourceMapper.mapToResourceDto(resourceEntity);
+        resourceResponse.setAuthor(userService.getById(resourceResponse.getAuthorId()).getLogin());
 
-        return resourceMapper.mapToResourceDto(resourceEntity);
+        return resourceResponse;
     }
 
     @GetMapping("/subjects/{id}/resources")
@@ -82,13 +85,11 @@ public class ResourceController {
             @NotBlank(message = "Необходимо указать тип ресурса")
             String type,
             @Valid PagingDto pagingDto) {
-        Page<Resource> resources = resourceService.getResourcesBySubjectAndResourceType(
+        return resourceService.getResourcesBySubjectAndResourceType(
                 Long.parseLong(id),
                 ResourceType.valueOf(type),
                 pagingDto.formPageRequest()
         );
-
-        return resources.map(resourceMapper::mapToResourceDto);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -96,9 +97,9 @@ public class ResourceController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(description = "Удалить ресурс по id")
     public void deleteResource(@PathVariable
-                              @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
-                                      message = "Идентификатор комментария должен быть положительным числом типа long")
-                              String resourceId) {
+                               @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
+                                       message = "Идентификатор комментария должен быть положительным числом типа long")
+                               String resourceId) {
         resourceService.delete(Long.parseLong(resourceId));
     }
 }

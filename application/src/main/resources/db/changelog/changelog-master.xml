@@ -15,4 +15,7 @@
     <include file="/db/changelog/changes/02-12-2023-add-is_anonymous-column-comment-jn-table.xml"/>
     <include file="/db/changelog/changes/02-12-2023--2-create-user-personal-info-jn-table.xml"/>
     <include file="/db/changelog/changes/03-12-2023--1-change-user-jn-username-column-name.xml"/>
+    <include file="/db/changelog/changes/04-12-2023-create-default-user.xml"/>
+    <include file="/db/changelog/changes/04-12-2023-link-resources-and-users-tables.xml"/>
+    <include file="/db/changelog/changes/04-12-2023-link-comments-and-users-tables.xml"/>
 </databaseChangeLog>
