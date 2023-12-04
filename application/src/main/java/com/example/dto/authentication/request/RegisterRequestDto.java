@@ -17,8 +17,8 @@ public class RegisterRequestDto {
     @NotBlank(message = "Пароль не должен быть пустым")
     private String password;
 
-    @Size(min = 1, max = 16, message = "Неправильный размер username")
-    @NotBlank(message = "username не должен быть пустым")
-    private String username;
+    @Size(min = 1, max = 16, message = "Неправильный размер login")
+    @NotBlank(message = "login не должен быть пустым")
+    private String login;
 
 }
