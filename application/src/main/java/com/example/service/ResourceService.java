@@ -54,7 +54,7 @@ public class ResourceService {
 
         resource.setAuthor(userRepository.findByEmail(resource.getAuthor())
                 .orElseThrow(() -> new EntityNotFoundException("Пользователя с таким email не существует"))
-                .getUsername());
+                .getLogin());
         resource.setCreatedDate(LocalDateTime.now());
 
         resource = resourceRepository.save(resource);

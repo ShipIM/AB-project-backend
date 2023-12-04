@@ -40,7 +40,7 @@ public class CommentService {
 
         comment.setAuthor(userRepository.findByEmail(comment.getAuthor())
                 .orElseThrow(() -> new EntityNotFoundException("Пользователя с таким email не существует"))
-                .getUsername());
+                .getLogin());
         comment.setCreatedDate(LocalDateTime.now());
 
         return commentRepository.save(comment);
