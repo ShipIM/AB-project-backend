@@ -59,6 +59,11 @@ public class ResourceService {
         if (!subjectService.isSubjectExists(resource.getSubjectId())) {
             throw new EntityNotFoundException("Предмета с таким идентификатором не существует");
         }
+
+        if (!userService.isUserExists(resource.getAuthorId())) {
+            throw new EntityNotFoundException("Пользователя с таким идентификатором не существует");
+        }
+
         resource.setCreatedDate(LocalDateTime.now());
 
         resource = resourceRepository.save(resource);
