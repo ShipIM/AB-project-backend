@@ -36,13 +36,13 @@ public class UserPersonalInfoEntity {
     @Column(value = "avatar_content_type")
     private String avatarContentType;
 
-    public void UpdateEntity(UserPersonalInfoEntity newEntity) {
-        UpdateEntityWithoutAvatar(newEntity);
+    public void updateEntity(UserPersonalInfoEntity newEntity) {
+        updateEntityWithoutAvatar(newEntity);
         this.avatarBytes = newEntity.getAvatarBytes();
         this.avatarContentType = newEntity.getAvatarContentType();
     }
 
-    public void UpdateEntityWithoutAvatar(UserPersonalInfoEntity newEntity) {
+    public void updateEntityWithoutAvatar(UserPersonalInfoEntity newEntity) {
         this.realName = newEntity.getRealName();
         this.gender = newEntity.getGender();
         this.city = newEntity.getCity();

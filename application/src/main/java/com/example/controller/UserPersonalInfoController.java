@@ -46,7 +46,8 @@ public class UserPersonalInfoController {
         var userInfo = userPersonInfoService.getUserInfo(id);
         var user = userService.getById(id);
 
-        var responseUserInfo = userInfoMapper.mapToResponseUserInfo(userInfo);;
+        var responseUserInfo = userInfoMapper.mapToResponseUserInfo(userInfo);
+
         responseUserInfo.setEmail(user.getEmail());
         responseUserInfo.setLogin(user.getLogin());
 
@@ -58,38 +59,26 @@ public class UserPersonalInfoController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(description = "Обновить персональные данные пользователя по идентификатору")
     public ResponseUserInfo updateUser(
-            @PathVariable
-            @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
-                    message = "Идентификатор пользователя должен быть положительным числом типа long")
-            String userId,
             @RequestPart(value = "userInfo")
             @Valid
             UpdateUserInfo userInfoDto,
             @RequestPart(value = "avatar")
-            MultipartFile avatar) throws AccessDeniedException {
-        var id = Long.parseLong(userId);
-        var user = userService.getById(id);
+            MultipartFile avatar) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (!Objects.equals(userDetails.getUsername(), user.getUsername())) {
-            throw new AccessDeniedException("У вас недостаточно прав для редактирования данных этого пользователя");
-        }
+        var user = userService.getByEmail(userDetails.getUsername());
 
         var userInfo = userInfoMapper.mapToUserInfoEntity(userInfoDto);
-        userInfo.setId(id);
+        userInfo.setId(user.getId());
 
         try {
-            byte[] bytes = avatar.getBytes();
-            if (bytes != null) {
-                userInfo.setAvatarBytes(Arrays.copyOf(bytes, bytes.length));
-                userInfo.setAvatarContentType(avatar.getContentType());
-            }
+            userInfo.setAvatarBytes(avatar.getBytes());
+            userInfo.setAvatarContentType(avatar.getContentType());
         } catch (IOException ignored) {
         }
 
-
         var updateUserInfo = userPersonInfoService.updateUserInfo(userInfo);
 
-        var responseUserInfo = userInfoMapper.mapToResponseUserInfo(updateUserInfo);;
+        var responseUserInfo = userInfoMapper.mapToResponseUserInfo(updateUserInfo);
         responseUserInfo.setEmail(user.getEmail());
         responseUserInfo.setLogin(user.getLogin());
 
@@ -97,30 +86,23 @@ public class UserPersonalInfoController {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @PatchMapping("/user/{userId}/info")
+    @PatchMapping("/user/info")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(description = "Обновить персональные данные пользователя (кроме аватара) по идентификатору")
     public ResponseUserInfo updateUserWithoutAvatar(
-            @PathVariable
-            @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
-                    message = "Идентификатор пользователя должен быть положительным числом типа long")
-            String userId,
             @RequestPart(value = "userInfo")
             @Valid
-            UpdateUserInfo userInfoDto) throws AccessDeniedException {
-        var id = Long.parseLong(userId);
-        var user = userService.getById(id);
+            UpdateUserInfo userInfoDto) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (!Objects.equals(userDetails.getUsername(), user.getUsername())) {
-            throw new AccessDeniedException("У вас недостаточно прав для редактирования данных этого пользователя");
-        }
+        var user = userService.getByEmail(userDetails.getUsername());
 
         var userInfo = userInfoMapper.mapToUserInfoEntity(userInfoDto);
-        userInfo.setId(id);
+        userInfo.setId(user.getId());
 
         var updateUserInfo = userPersonInfoService.updateUserInfoWithoutAvatar(userInfo);
 
-        var responseUserInfo = userInfoMapper.mapToResponseUserInfo(updateUserInfo);;
+        var responseUserInfo = userInfoMapper.mapToResponseUserInfo(updateUserInfo);
+
         responseUserInfo.setEmail(user.getEmail());
         responseUserInfo.setLogin(user.getLogin());
 

@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.constraint.ResourceTypeConstraint;
+import com.example.dto.comment.response.ResponseComment;
 import com.example.dto.mapper.ContentMapper;
 import com.example.dto.mapper.ResourceMapper;
 import com.example.dto.page.request.PagingDto;
@@ -18,6 +19,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,6 +28,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -85,11 +88,24 @@ public class ResourceController {
             @NotBlank(message = "Необходимо указать тип ресурса")
             String type,
             @Valid PagingDto pagingDto) {
-        return resourceService.getResourcesBySubjectAndResourceType(
+        Page<Resource> resources = resourceService.getResourcesBySubjectAndResourceType(
                 Long.parseLong(id),
                 ResourceType.valueOf(type),
                 pagingDto.formPageRequest()
         );
+
+        var responseResources = new ArrayList<ResourceResponseDto>();
+
+        for (var resource : resources) {
+            var login = userService.getById(resource.getAuthorId()).getLogin();
+
+            var resourceResponseDto = resourceMapper.mapToResourceDto(resource);
+            resourceResponseDto.setAuthor(login);
+
+            responseResources.add(resourceResponseDto);
+        }
+
+        return new PageImpl<>(responseResources, resources.getPageable(), resources.getTotalElements());
     }
 
     @PreAuthorize("hasRole('ADMIN')")

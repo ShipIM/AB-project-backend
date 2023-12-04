@@ -31,7 +31,7 @@ public class ResourceService {
     private final UserService userService;
     private final ResourceMapper resourceMapper;
 
-    public Page<ResourceResponseDto> getResourcesBySubjectAndResourceType(long subjectId,
+    public Page<Resource> getResourcesBySubjectAndResourceType(long subjectId,
                                                                           ResourceType resourceType,
                                                                           Pageable pageable) {
         String sort = "name";
@@ -44,9 +44,7 @@ public class ResourceService {
                 pageable.getPageNumber()
         );
 
-        var responseResources = resources.stream().map(this::mapToResponseResource).collect(Collectors.toList());
-
-        return new PageImpl<>(responseResources, pageable, total);
+        return new PageImpl<>(resources, pageable, total);
     }
 
     public Resource getResourceById(long id) {
@@ -83,14 +81,5 @@ public class ResourceService {
         }
 
         throw new EntityNotFoundException("Ресурса с таким идентификатором не существует");
-    }
-
-    private ResourceResponseDto mapToResponseResource(Resource resource) {
-        var login = userService.getById(resource.getAuthorId()).getLogin();
-
-        var resourceResponseDto = resourceMapper.mapToResourceDto(resource);
-        resourceResponseDto.setAuthor(login);
-
-        return resourceResponseDto;
     }
 }

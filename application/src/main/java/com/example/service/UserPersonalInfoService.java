@@ -3,7 +3,6 @@ package com.example.service;
 import com.example.exception.EntityNotFoundException;
 import com.example.model.entity.UserPersonalInfoEntity;
 import com.example.repository.UserPersonInfoRepository;
-import com.example.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +41,7 @@ public class UserPersonalInfoService {
         }
 
         var oldEntity = userPersonInfoRepository.findById(userInfo.getId()).get();
-        oldEntity.UpdateEntity(userInfo);
+        oldEntity.updateEntity(userInfo);
 
         return userPersonInfoRepository.save(oldEntity);
     }
@@ -53,7 +52,7 @@ public class UserPersonalInfoService {
         }
 
         var oldEntity = userPersonInfoRepository.findById(userInfo.getId()).get();
-        oldEntity.UpdateEntityWithoutAvatar(userInfo);
+        oldEntity.updateEntityWithoutAvatar(userInfo);
 
         return userPersonInfoRepository.save(oldEntity);
     }

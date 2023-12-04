@@ -19,9 +19,8 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final ResourceService resourceService;
     private final UserService userService;
-    private final CommentMapper commentMapper;
 
-    public Page<ResponseComment> getCommentsByResource(long resourceId, Pageable pageable) {
+    public Page<Comment> getCommentsByResource(long resourceId, Pageable pageable) {
         String sort = "created_date";
         long total = commentRepository.countAllByResourceId(resourceId);
         List<Comment> comments = commentRepository.findAllByResourceId(
@@ -30,12 +29,9 @@ public class CommentService {
                 pageable.getPageSize(),
                 pageable.getPageNumber());
 
-        var responseComments = comments.stream()
-                .map(this::setAnonymIfIsAnonymousComment)
-                .map(this::mapToResponseComment)
-                .collect(Collectors.toList());
+        comments = comments.stream().map(this::setAnonymIfIsAnonymousComment).collect(Collectors.toList());
 
-        return new PageImpl<>(responseComments, pageable, total);
+        return new PageImpl<>(comments, pageable, total);
     }
 
     public Comment create(Comment comment) {
@@ -76,14 +72,5 @@ public class CommentService {
         }
 
         return comment;
-    }
-
-    private ResponseComment mapToResponseComment(Comment comment) {
-        var login = userService.getById(comment.getAuthorId()).getLogin();
-
-        var responseComment = commentMapper.ToResponseComment(comment);
-        responseComment.setAuthor(login);
-
-        return responseComment;
     }
 }

@@ -21,6 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 @RestController
@@ -40,8 +41,20 @@ public class CommentController {
                     message = "Идентификатор ресурса должен быть положительным числом типа long")
             String resourceId,
             @Valid PagingDto pagingDto) {
-        return commentService.getCommentsByResource(Long.parseLong(resourceId),
-                pagingDto.formPageRequest());
+        Page<Comment> comments = commentService.getCommentsByResource(Long.parseLong(resourceId), pagingDto.formPageRequest());
+
+        var responseComments = new ArrayList<ResponseComment>();
+
+        for (var comment : comments) {
+            var login = userService.getById(comment.getAuthorId()).getLogin();
+
+            var responseComment = commentMapper.ToResponseComment(comment);
+            responseComment.setAuthor(login);
+
+            responseComments.add(responseComment);
+        }
+
+        return new PageImpl<>(responseComments, comments.getPageable(), comments.getTotalElements());
     }
 
     @PreAuthorize("hasRole('USER')")
