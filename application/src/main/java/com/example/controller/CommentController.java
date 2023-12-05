@@ -45,8 +45,8 @@ public class CommentController {
         var responseComments = comments.map(commentMapper::ToResponseComment);
 
         for (var comment : responseComments) {
-            var login = userService.getById(comment.getAuthorId()).getLogin();
-            responseComment.setAuthor(login);
+            var login = userService.getById(Long.parseLong(comment.getAuthorId())).getLogin();
+            comment.setAuthor(login);
         }
 
         return responseComments;

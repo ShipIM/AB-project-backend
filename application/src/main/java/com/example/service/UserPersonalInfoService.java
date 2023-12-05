@@ -15,15 +15,12 @@ public class UserPersonalInfoService {
 
     @Transactional
     public UserPersonalInfoEntity getUserInfo(long id) {
-        if (!isUserExist(id)) {
-            if (userRepository.isUserExists(id)) {
-                return createEmpty(id);
-            }
-
-            throw new EntityNotFoundException("Пользователя с таким идентификатором не существует");
+        if (!isUserExist(id) && userRepository.isUserExists(id)) {
+            return createEmpty(id);
         }
 
-        return userPersonInfoRepository.findById(id).get();
+        return userPersonInfoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Пользователя с таким идентификатором не существует"));
     }
 
     @Transactional
@@ -36,22 +33,16 @@ public class UserPersonalInfoService {
     }
 
     public UserPersonalInfoEntity updateUserInfo(UserPersonalInfoEntity userInfo) {
-        if (!isUserExist(userInfo.getId())) {
-            throw new EntityNotFoundException("Пользователя с таким идентификатором не существует");
-        }
-
-        var oldEntity = userPersonInfoRepository.findById(userInfo.getId()).get();
+        var oldEntity = userPersonInfoRepository.findById(userInfo.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Пользователя с таким идентификатором не существует"));
         oldEntity.updateEntity(userInfo);
 
         return userPersonInfoRepository.save(oldEntity);
     }
 
     public UserPersonalInfoEntity updateUserInfoWithoutAvatar(UserPersonalInfoEntity userInfo) {
-        if (!isUserExist(userInfo.getId())) {
-            throw new EntityNotFoundException("Пользователя с таким идентификатором не существует");
-        }
-
-        var oldEntity = userPersonInfoRepository.findById(userInfo.getId()).get();
+        var oldEntity = userPersonInfoRepository.findById(userInfo.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Пользователя с таким идентификатором не существует"));
         oldEntity.updateEntityWithoutAvatar(userInfo);
 
         return userPersonInfoRepository.save(oldEntity);

@@ -9,7 +9,7 @@
             <column name="email" value=""/>
             <column name="password" value=""/>
             <column name="login" value="Аноним"/>
-            <column name="role" value=""/>
+            <column name="role" value="USER"/>
         </insert>
     </changeSet>
 </databaseChangeLog>

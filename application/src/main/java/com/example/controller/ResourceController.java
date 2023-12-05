@@ -98,7 +98,7 @@ public class ResourceController {
 
         for (var resource : responseResources) {
             var login = userService.getById(resource.getAuthorId()).getLogin();
-            resourceResponseDto.setAuthor(login);
+            resource.setAuthor(login);
         }
 
         return responseResources;
