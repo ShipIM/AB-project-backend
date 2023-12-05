@@ -42,19 +42,14 @@ public class CommentController {
             String resourceId,
             @Valid PagingDto pagingDto) {
         Page<Comment> comments = commentService.getCommentsByResource(Long.parseLong(resourceId), pagingDto.formPageRequest());
+        var responseComments = comments.map(commentMapper::ToResponseComment);
 
-        var responseComments = new ArrayList<ResponseComment>();
-
-        for (var comment : comments) {
+        for (var comment : responseComments) {
             var login = userService.getById(comment.getAuthorId()).getLogin();
-
-            var responseComment = commentMapper.ToResponseComment(comment);
             responseComment.setAuthor(login);
-
-            responseComments.add(responseComment);
         }
 
-        return new PageImpl<>(responseComments, comments.getPageable(), comments.getTotalElements());
+        return responseComments;
     }
 
     @PreAuthorize("hasRole('USER')")

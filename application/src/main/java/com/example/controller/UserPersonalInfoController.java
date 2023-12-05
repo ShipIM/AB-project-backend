@@ -73,7 +73,8 @@ public class UserPersonalInfoController {
         try {
             userInfo.setAvatarBytes(avatar.getBytes());
             userInfo.setAvatarContentType(avatar.getContentType());
-        } catch (IOException ignored) {
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Не хватает параметра 'avatar' или он пустой");
         }
 
         var updateUserInfo = userPersonInfoService.updateUserInfo(userInfo);

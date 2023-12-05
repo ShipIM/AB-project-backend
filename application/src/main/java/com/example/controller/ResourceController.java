@@ -94,18 +94,14 @@ public class ResourceController {
                 pagingDto.formPageRequest()
         );
 
-        var responseResources = new ArrayList<ResourceResponseDto>();
+        var responseResources = resources.map(resourceMapper::mapToResourceDto);
 
-        for (var resource : resources) {
+        for (var resource : responseResources) {
             var login = userService.getById(resource.getAuthorId()).getLogin();
-
-            var resourceResponseDto = resourceMapper.mapToResourceDto(resource);
             resourceResponseDto.setAuthor(login);
-
-            responseResources.add(resourceResponseDto);
         }
 
-        return new PageImpl<>(responseResources, resources.getPageable(), resources.getTotalElements());
+        return responseResources;
     }
 
     @PreAuthorize("hasRole('ADMIN')")
