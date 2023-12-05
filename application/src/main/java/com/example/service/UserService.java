@@ -22,8 +22,19 @@ public class UserService {
         String sort = "id";
         long total = userRepository.countAll();
         List<User> users = userRepository.findAll(sort, pageable.getPageSize(), pageable.getPageNumber());
+        users.removeIf(user -> user.getId() == 0);
 
         return new PageImpl<>(users, pageable, total);
+    }
+
+    public User getById(long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Пользователя с таким идентификатором не существует"));
+    }
+
+    public User getByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Пользователя с такой почтой не существует"));
     }
 
     public void setUserStatus(long id, Status status) {

@@ -15,6 +15,8 @@ import java.lang.annotation.Target;
 public @interface ResourceTypeConstraint {
     String message() default "";
 
+    boolean canNull() default false;
+
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};

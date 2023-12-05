@@ -1,6 +1,10 @@
 package com.example.service;
 
+import com.example.dto.comment.response.ResponseComment;
+import com.example.dto.mapper.ResourceMapper;
+import com.example.dto.resource.response.ResourceResponseDto;
 import com.example.exception.EntityNotFoundException;
+import com.example.model.entity.Comment;
 import com.example.model.entity.Content;
 import com.example.model.entity.Resource;
 import com.example.model.enumeration.ResourceType;
@@ -15,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -23,11 +28,12 @@ public class ResourceService {
     private final ResourceRepository resourceRepository;
     private final ContentService contentService;
     private final SubjectService subjectService;
-    private final UserRepository userRepository;
+    private final UserService userService;
+    private final ResourceMapper resourceMapper;
 
     public Page<Resource> getResourcesBySubjectAndResourceType(long subjectId,
-                                                               ResourceType resourceType,
-                                                               Pageable pageable) {
+                                                                          ResourceType resourceType,
+                                                                          Pageable pageable) {
         String sort = "name";
         long total = resourceRepository.countAllBySubjectIdAndResourceType(subjectId, resourceType);
         List<Resource> resources = resourceRepository.findAllBySubjectIdAndResourceType(
@@ -52,9 +58,10 @@ public class ResourceService {
             throw new EntityNotFoundException("Предмета с таким идентификатором не существует");
         }
 
-        resource.setAuthor(userRepository.findByEmail(resource.getAuthor())
-                .orElseThrow(() -> new EntityNotFoundException("Пользователя с таким email не существует"))
-                .getLogin());
+        if (!userService.isUserExists(resource.getAuthorId())) {
+            throw new EntityNotFoundException("Пользователя с таким идентификатором не существует");
+        }
+
         resource.setCreatedDate(LocalDateTime.now());
 
         resource = resourceRepository.save(resource);

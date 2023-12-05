@@ -14,6 +14,9 @@ public class ResponseComment {
 
     private String author;
 
+    @JsonProperty("author_id")
+    private String authorId;
+
     private String text;
 
     @JsonProperty("created_date")
