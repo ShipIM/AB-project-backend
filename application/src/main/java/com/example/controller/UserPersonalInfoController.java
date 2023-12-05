@@ -55,7 +55,7 @@ public class UserPersonalInfoController {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @PatchMapping("/user/{userId}/info/avatar")
+    @PatchMapping("/user/info/avatar")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(description = "Обновить персональные данные пользователя по идентификатору")
     public ResponseUserInfo updateUser(
