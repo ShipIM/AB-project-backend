@@ -39,7 +39,7 @@ public class SubjectController {
         return subjects.map(subjectMapper::ToResponseSubject);
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/subjects")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(description = "Создание предмета")

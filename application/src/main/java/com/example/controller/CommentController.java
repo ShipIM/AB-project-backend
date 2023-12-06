@@ -66,7 +66,7 @@ public class CommentController {
         return responseComment;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR')")
     @DeleteMapping("/comments/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(description = "Удалить комментарий по id")
