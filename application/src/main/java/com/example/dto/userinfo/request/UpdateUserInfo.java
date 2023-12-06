@@ -1,7 +1,5 @@
-package com.example.dto.userPersonalnfo.request;
+package com.example.dto.userinfo.request;
 
-import com.example.constraint.ResourceTypeConstraint;
-import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;

@@ -2,12 +2,11 @@ package com.example.controller;
 
 
 import com.example.dto.mapper.UserInfoMapper;
-import com.example.dto.userPersonalnfo.request.UpdateUserInfo;
-import com.example.dto.userPersonalnfo.response.ResponseUserInfo;
+import com.example.dto.userinfo.request.UpdateUserInfo;
+import com.example.dto.userinfo.response.ResponseUserInfo;
 import com.example.service.UserPersonalInfoService;
 import com.example.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
@@ -21,9 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.AccessDeniedException;
-import java.util.Arrays;
-import java.util.Objects;
 
 @RestController
 @Tag(name = "user personal info", description = "Контроллер для работы с персональными данными пользователя")

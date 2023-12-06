@@ -2,6 +2,7 @@ package com.example.service;
 
 import com.example.exception.EntityNotFoundException;
 import com.example.model.entity.User;
+import com.example.model.enumeration.Role;
 import com.example.model.enumeration.Status;
 import com.example.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,14 @@ public class UserService {
         }
 
         userRepository.setUserStatus(id, status);
+    }
+
+    public void setUserRole(long id, Role role) {
+        if (!isUserExists(id)) {
+            throw new EntityNotFoundException("Пользователя с таким идентификатором не существует");
+        }
+
+        userRepository.setUserRole(id, role);
     }
 
     public boolean isUserExists(long id) {
