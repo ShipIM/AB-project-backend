@@ -36,9 +36,9 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @Operation(description = "Удалить существующего пользователя по id")
+    @Operation(description = "Изменить статус пользователя по id")
     @PatchMapping("/{userId}")
-    public void deleteUser(
+    public void updateUserStatus(
             @PathVariable
             @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
                     message = "Идентификатор пользователя должен быть положительным числом типа long")
