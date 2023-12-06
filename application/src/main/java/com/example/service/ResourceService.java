@@ -29,7 +29,6 @@ public class ResourceService {
     private final ContentService contentService;
     private final SubjectService subjectService;
     private final UserService userService;
-    private final ResourceMapper resourceMapper;
 
     public Page<Resource> getResourcesBySubjectAndResourceType(long subjectId,
                                                                           ResourceType resourceType,
