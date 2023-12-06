@@ -42,6 +42,14 @@ public class SubjectService {
                 new EntityNotFoundException("Предмета с таким идентификатором не существует"));
     }
 
+    public void delete(long id) {
+        if (!isSubjectExists(id)) {
+            throw new EntityNotFoundException("Предмета с таким идентификатором не существует");
+        }
+
+        subjectRepository.deleteById(id);
+    }
+
     public boolean isSubjectExists(long id) {
         return subjectRepository.existsById(id);
     }

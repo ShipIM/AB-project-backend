@@ -50,4 +50,16 @@ public class SubjectController {
 
         return subjectMapper.ToResponseSubject(responseSubject);
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/subjects/{subjectId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(description = "Удалить предмет по id")
+    public void deleteSubject(
+            @PathVariable
+            @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
+                    message = "Идентификатор предмета должен быть положительным числом типа long")
+            String subjectId) {
+        subjectService.delete(Long.parseLong(subjectId));
+    }
 }
