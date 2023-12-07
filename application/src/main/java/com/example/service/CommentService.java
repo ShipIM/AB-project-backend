@@ -1,7 +1,5 @@
 package com.example.service;
 
-import com.example.dto.comment.response.ResponseComment;
-import com.example.dto.mapper.CommentMapper;
 import com.example.exception.EntityNotFoundException;
 import com.example.model.entity.Comment;
 import com.example.repository.CommentRepository;
@@ -21,11 +19,9 @@ public class CommentService {
     private final UserService userService;
 
     public Page<Comment> getCommentsByResource(long resourceId, Pageable pageable) {
-        String sort = "created_date";
         long total = commentRepository.countAllByResourceId(resourceId);
         List<Comment> comments = commentRepository.findAllByResourceId(
                 resourceId,
-                sort,
                 pageable.getPageSize(),
                 pageable.getPageNumber());
 
@@ -48,8 +44,8 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
-    public void deleteOld() {
-        commentRepository.deleteOld();
+    public void deleteTwoYearOld() {
+        commentRepository.deleteTwoYearOld();
     }
 
     public boolean isCommentExists(long id) {

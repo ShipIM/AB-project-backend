@@ -46,7 +46,7 @@ public class SubjectController {
     public ResponseSubject createSubject(@RequestBody @Valid CreateSubject createSubject) {
         var subject = subjectMapper.ToSubjectEntity(createSubject);
 
-        var responseSubject = subjectService.create(subject);
+        var responseSubject = subjectService.createOrUpdate(subject);
 
         return subjectMapper.ToResponseSubject(responseSubject);
     }

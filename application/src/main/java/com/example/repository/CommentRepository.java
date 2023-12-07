@@ -14,9 +14,8 @@ public interface CommentRepository extends CrudRepository<Comment, Long> {
 
     @Query("select * from comment_jn " +
             "where resource_id = :resource " +
-            "order by :sort limit :page_size offset :page_number * :page_size")
+            "order by created_date limit :page_size offset :page_number * :page_size")
     List<Comment> findAllByResourceId(@Param("resource") long resourceId,
-                                      @Param("sort") String sort,
                                       @Param("page_size") long pageSize,
                                       @Param("page_number") long pageNumber);
 
@@ -26,5 +25,5 @@ public interface CommentRepository extends CrudRepository<Comment, Long> {
     @Modifying
     @Query("delete from comment_jn " +
             "where created_date + INTERVAL '2 year' < CURRENT_DATE")
-    void deleteOld();
+    void deleteTwoYearOld();
 }

@@ -18,18 +18,16 @@ public class SubjectService {
     private final CourseService courseService;
 
     public Page<Subject> getSubjectsByCourse(long courseId, Pageable pageable) {
-        String sort = "name";
         long total = subjectRepository.countAllByCourseId(courseId);
         List<Subject> subjects = subjectRepository.findAllByCourseId(
                 courseId,
-                sort,
                 pageable.getPageSize(),
                 pageable.getPageNumber());
 
         return new PageImpl<>(subjects, pageable, total);
     }
 
-    public Subject create(Subject subject) {
+    public Subject createOrUpdate(Subject subject) {
         if (!courseService.isCourseExists(subject.getCourseId())) {
             throw new EntityNotFoundException("Курса с таким идентификатором не существует");
         }
@@ -37,7 +35,7 @@ public class SubjectService {
         return subjectRepository.save(subject);
     }
 
-    public Subject getSubjectById(long id) {
+    public Subject getById(long id) {
         return subjectRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Предмета с таким идентификатором не существует"));
     }
