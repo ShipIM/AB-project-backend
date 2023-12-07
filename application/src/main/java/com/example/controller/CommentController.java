@@ -27,8 +27,6 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 public class CommentController {
     private final CommentService commentService;
-    private final ResourceService resourceService;
-    private final FeedNewsService feedNewsService;
     private final CommentMapper commentMapper;
     private final UserService userService;
 
