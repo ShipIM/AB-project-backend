@@ -21,11 +21,9 @@ public class CommentService {
     private final UserService userService;
 
     public Page<Comment> getCommentsByResource(long resourceId, Pageable pageable) {
-        String sort = "created_date";
         long total = commentRepository.countAllByResourceId(resourceId);
         List<Comment> comments = commentRepository.findAllByResourceId(
                 resourceId,
-                sort,
                 pageable.getPageSize(),
                 pageable.getPageNumber());
 
