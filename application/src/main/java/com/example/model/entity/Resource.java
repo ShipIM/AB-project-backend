@@ -26,7 +26,8 @@ public class Resource {
     @Column(value = "created_date")
     private LocalDateTime createdDate;
 
-    private String author;
+    @Column(value = "author_id")
+    private Long authorId;
 
     @Column(value = "resource_type")
     private ResourceType resourceType;

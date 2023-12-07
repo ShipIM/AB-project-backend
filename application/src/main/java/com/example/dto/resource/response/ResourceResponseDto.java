@@ -20,6 +20,9 @@ public class ResourceResponseDto {
 
     private String author;
 
+    @JsonProperty("author_id")
+    private Long authorId;
+
     @JsonProperty("resource_type")
     private ResourceType resourceType;
 

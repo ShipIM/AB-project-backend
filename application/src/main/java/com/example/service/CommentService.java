@@ -1,9 +1,10 @@
 package com.example.service;
 
+import com.example.dto.comment.response.ResponseComment;
+import com.example.dto.mapper.CommentMapper;
 import com.example.exception.EntityNotFoundException;
 import com.example.model.entity.Comment;
 import com.example.repository.CommentRepository;
-import com.example.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 public class CommentService {
     private final CommentRepository commentRepository;
     private final ResourceService resourceService;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     public Page<Comment> getCommentsByResource(long resourceId, Pageable pageable) {
         String sort = "created_date";
@@ -38,9 +39,10 @@ public class CommentService {
             throw new EntityNotFoundException("Ресурса с таким идентификатором не существует");
         }
 
-        comment.setAuthor(userRepository.findByEmail(comment.getAuthor())
-                .orElseThrow(() -> new EntityNotFoundException("Пользователя с таким email не существует"))
-                .getUsername());
+        if (!userService.isUserExists(comment.getAuthorId())) {
+            throw new EntityNotFoundException("Пользователя с таким идентификатором не существует");
+        }
+
         comment.setCreatedDate(LocalDateTime.now());
 
         return commentRepository.save(comment);
@@ -66,7 +68,7 @@ public class CommentService {
 
     private Comment setAnonymIfIsAnonymousComment(Comment comment) {
         if (comment.isAnonymous()) {
-            comment.setAuthor("Аноним");
+            comment.setAuthorId(0L);
         }
 
         return comment;

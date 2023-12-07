@@ -1,6 +1,6 @@
 package com.example.constraint;
 
-import com.example.constraint.validator.ResourceTypeValidator;
+import com.example.constraint.validator.RoleValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
@@ -11,11 +11,9 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = ResourceTypeValidator.class)
-public @interface ResourceTypeConstraint {
+@Constraint(validatedBy = RoleValidator.class)
+public @interface RoleConstraint {
     String message() default "";
-
-    boolean canNull() default false;
 
     Class<?>[] groups() default {};
 

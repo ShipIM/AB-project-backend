@@ -2,9 +2,11 @@ package com.example.controller;
 
 import com.example.dto.mapper.UserMapper;
 import com.example.dto.page.request.PagingDto;
+import com.example.dto.role.request.UpdateRoleRequestDto;
 import com.example.dto.status.request.UpdateStatusRequestDto;
 import com.example.dto.user.response.UserResponseDto;
 import com.example.model.entity.User;
+import com.example.model.enumeration.Role;
 import com.example.model.enumeration.Status;
 import com.example.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,14 +38,26 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @Operation(description = "Удалить существующего пользователя по id")
-    @PatchMapping("/{userId}")
-    public void deleteUser(
+    @Operation(description = "Изменить статус пользователя по id")
+    @PatchMapping("/{userId}/status")
+    public void updateUserStatus(
             @PathVariable
             @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
                     message = "Идентификатор пользователя должен быть положительным числом типа long")
             String userId,
             @RequestBody @Valid UpdateStatusRequestDto dto) {
         userService.setUserStatus(Long.parseLong(userId), Status.valueOf(dto.getStatus()));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(description = "Изменить роль пользователя по id")
+    @PatchMapping("/{userId}/role")
+    public void updateUserRole(
+            @PathVariable
+            @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
+                    message = "Идентификатор пользователя должен быть положительным числом типа long")
+            String userId,
+            @RequestBody @Valid UpdateRoleRequestDto dto) {
+        userService.setUserRole(Long.parseLong(userId), Role.valueOf(dto.getRole()));
     }
 }

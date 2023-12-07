@@ -2,6 +2,7 @@ package com.example.service;
 
 import com.example.exception.EntityNotFoundException;
 import com.example.model.entity.User;
+import com.example.model.enumeration.Role;
 import com.example.model.enumeration.Status;
 import com.example.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +23,19 @@ public class UserService {
         String sort = "id";
         long total = userRepository.countAll();
         List<User> users = userRepository.findAll(sort, pageable.getPageSize(), pageable.getPageNumber());
+        users.removeIf(user -> user.getId() == 0);
 
         return new PageImpl<>(users, pageable, total);
+    }
+
+    public User getById(long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Пользователя с таким идентификатором не существует"));
+    }
+
+    public User getByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Пользователя с такой почтой не существует"));
     }
 
     public void setUserStatus(long id, Status status) {
@@ -32,6 +44,14 @@ public class UserService {
         }
 
         userRepository.setUserStatus(id, status);
+    }
+
+    public void setUserRole(long id, Role role) {
+        if (!isUserExists(id)) {
+            throw new EntityNotFoundException("Пользователя с таким идентификатором не существует");
+        }
+
+        userRepository.setUserRole(id, role);
     }
 
     public boolean isUserExists(long id) {

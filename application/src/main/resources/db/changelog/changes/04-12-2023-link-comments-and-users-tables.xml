@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="04-12-2023-link-comments-and-users-tables" author="Vadim">
+        <dropColumn tableName="comment_jn">
+            <column name="author"/>
+        </dropColumn>
+        <addColumn tableName="comment_jn">
+            <column name="author_id" type="BIGINT" defaultValueNumeric="0"/>
+        </addColumn>
+        <addForeignKeyConstraint baseTableName="comment_jn" baseColumnNames="author_id"
+                                 constraintName="comment_jn_users_fkey"
+                                 referencedTableName="user_jn"
+                                 referencedColumnNames="id" onDelete="SET DEFAULT" onUpdate="CASCADE"/>
+    </changeSet>
+</databaseChangeLog>
