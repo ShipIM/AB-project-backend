@@ -11,7 +11,6 @@ import java.util.List;
 
 @Repository
 public interface ContentRepository extends CrudRepository<Content, Long>, PagingAndSortingRepository<Content, Long> {
-    @Query("select * from content_jn where resource_id = :resource order by :sort")
-    List<Content> findAllByResourceId(@Param("resource") long resourceId,
-                                      @Param("sort") String sort);
+    @Query("select * from content_jn where resource_id = :resource order by filename")
+    List<Content> findAllByResourceId(@Param("resource") long resourceId);
 }

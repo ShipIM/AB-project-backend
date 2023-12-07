@@ -34,12 +34,10 @@ public class ResourceService {
     public Page<Resource> getResourcesBySubjectAndResourceType(long subjectId,
                                                                           ResourceType resourceType,
                                                                           Pageable pageable) {
-        String sort = "name";
         long total = resourceRepository.countAllBySubjectIdAndResourceType(subjectId, resourceType);
         List<Resource> resources = resourceRepository.findAllBySubjectIdAndResourceType(
                 subjectId,
                 resourceType,
-                sort,
                 pageable.getPageSize(),
                 pageable.getPageNumber()
         );

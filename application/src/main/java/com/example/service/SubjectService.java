@@ -18,11 +18,9 @@ public class SubjectService {
     private final CourseService courseService;
 
     public Page<Subject> getSubjectsByCourse(long courseId, Pageable pageable) {
-        String sort = "name";
         long total = subjectRepository.countAllByCourseId(courseId);
         List<Subject> subjects = subjectRepository.findAllByCourseId(
                 courseId,
-                sort,
                 pageable.getPageSize(),
                 pageable.getPageNumber());
 

@@ -15,9 +15,7 @@ public class ContentService {
     private final ContentRepository contentRepository;
 
     public List<Content> getContentsByResource(long resourceId) {
-        String sort = "filename";
-
-        return contentRepository.findAllByResourceId(resourceId, sort);
+        return contentRepository.findAllByResourceId(resourceId);
     }
 
     @Transactional

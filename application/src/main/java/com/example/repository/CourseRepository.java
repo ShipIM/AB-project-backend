@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface CourseRepository extends CrudRepository<Course, Long> {
-    @Query("select * from course_ref order by :sort")
-    List<Course> findAll(@Param("sort") String sort);
+    @Query("select * from course_ref order by name")
+    List<Course> findAll();
 }

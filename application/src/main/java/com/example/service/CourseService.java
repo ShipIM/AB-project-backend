@@ -15,9 +15,7 @@ public class CourseService {
     private final CourseRepository courseRepository;
 
     public List<Course> getCourses() {
-        String sort = "name";
-
-        return courseRepository.findAll(sort);
+        return courseRepository.findAll();
     }
 
     public Course getById(long id) {

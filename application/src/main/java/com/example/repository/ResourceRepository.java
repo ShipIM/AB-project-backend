@@ -15,10 +15,9 @@ import java.util.List;
 public interface ResourceRepository extends CrudRepository<Resource, Long>, PagingAndSortingRepository<Resource, Long> {
     @Query("select * from resource_jn " +
             "where resource_type = :resource_type and subject_id = :subject " +
-            "order by :sort limit :page_size offset :page_number * :page_size")
+            "order by name limit :page_size offset :page_number * :page_size")
     List<Resource> findAllBySubjectIdAndResourceType(@Param("subject") long subjectId,
                                                      @Param("resource_type") ResourceType resourceType,
-                                                     @Param("sort") String sort,
                                                      @Param("page_size") long pageSize,
                                                      @Param("page_number") long pageNumber);
 
