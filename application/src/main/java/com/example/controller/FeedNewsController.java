@@ -25,7 +25,7 @@ import java.util.List;
 @Tag(name = "feed", description = "Контроллер для работы с лентой новостей")
 @RequiredArgsConstructor
 @Validated
-public class NewsFeedController {
+public class FeedNewsController {
 
     private final FeedNewsService feedNewsService;
     private final FeedNewsMapper feedNewsMapper;
@@ -68,7 +68,7 @@ public class NewsFeedController {
 
     @GetMapping("/feeds")
     @Operation(description = "Получить страницу новостей")
-    public Page<FeedNewsResponseDto> getFeedNews(
+    public Page<FeedNewsResponseDto> getFeedNewsPage(
             @Valid PagingDto pagingDto) {
         var feedNewsList = feedNewsService.getFeedNewsPage(pagingDto.formPageRequest());
 

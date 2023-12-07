@@ -4,11 +4,8 @@ import com.example.dto.comment.request.CommentCreateDto;
 import com.example.dto.comment.response.CommentResponseDto;
 import com.example.dto.mapper.CommentMapper;
 import com.example.dto.page.request.PagingDto;
-import com.example.exception.EntityNotFoundException;
 import com.example.model.entity.CommentEntity;
 import com.example.service.CommentService;
-import com.example.service.FeedNewsService;
-import com.example.service.ResourceService;
 import com.example.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -104,10 +101,10 @@ public class CommentController {
     @DeleteMapping("/comments/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(description = "Удалить комментарий по id")
-    public void deleteResourceComment(@PathVariable
-                                      @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
-                                              message = "Идентификатор комментария должен быть положительным числом типа long")
-                                      String commentId) {
+    public void deleteComment(@PathVariable
+                              @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
+                                      message = "Идентификатор комментария должен быть положительным числом типа long")
+                              String commentId) {
         commentService.delete(Long.parseLong(commentId));
     }
 }
