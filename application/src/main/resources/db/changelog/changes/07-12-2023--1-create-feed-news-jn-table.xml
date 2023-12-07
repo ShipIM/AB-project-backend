@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet author="Vadim" id="07-12-2023--1-create-feed-news-jn-table">
+        <createTable tableName="feed_news_jn">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints
+                        primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR">
+                <constraints
+                        nullable="false" unique="true"/>
+            </column>
+            <column name="text" type="VARCHAR">
+                <constraints
+                        nullable="false"/>
+            </column>
+            <column name="created_date" type="TIMESTAMP">
+                <constraints
+                        nullable="false"/>
+            </column>
+            <column defaultValue="anonymous" name="author" type="VARCHAR"/>
+            <column name="author_id" type="BIGINT" defaultValueNumeric="0"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="feed_news_jn" baseColumnNames="author_id"
+                                 constraintName="feed_news_jn_users_fkey"
+                                 referencedTableName="user_jn"
+                                 referencedColumnNames="id" onDelete="SET DEFAULT" onUpdate="CASCADE"/>
+        <createIndex indexName="feed_news_created_date_index"
+                     tableName="feed_news_jn">
+            <column name="created_date"/>
+        </createIndex>
+        <rollback>
+            <dropTable tableName="feed_news_jn"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

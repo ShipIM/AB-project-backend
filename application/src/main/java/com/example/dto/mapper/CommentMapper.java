@@ -1,8 +1,11 @@
 package com.example.dto.mapper;
 
-import com.example.dto.comment.request.CreateComment;
-import com.example.dto.comment.response.ResponseComment;
-import com.example.model.entity.Comment;
+import com.example.dto.comment.request.CommentCreateDto;
+import com.example.dto.comment.request.ResourceCommentCreateDto;
+import com.example.dto.comment.response.CommentResponseDto;
+import com.example.dto.comment.response.ResourceCommentResponseDto;
+import com.example.model.entity.CommentEntity;
+import com.example.model.entity.ResourceCommentEntity;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -10,9 +13,9 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
 
-    ResponseComment ToResponseComment(Comment comment);
+    CommentResponseDto ToResponseComment(CommentEntity comment);
 
-    List<ResponseComment> ToResponseCommentContent(List<Comment> comment);
+    List<CommentResponseDto> ToResponseCommentContent(List<CommentEntity> comment);
 
-    Comment ToCommentEntity(CreateComment comment);
+    CommentEntity ToCommentEntity(CommentCreateDto comment);
 }

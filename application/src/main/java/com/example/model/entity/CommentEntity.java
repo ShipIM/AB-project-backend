@@ -14,18 +14,20 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "feed_news_jn")
-public class FeedNews {
+@Table(name = "comment_jn")
+public class CommentEntity {
+
     @Id
     private Long id;
 
-    private String name;
-
-    private String text;
+    @Column(value = "author_id")
+    private Long authorId;
 
     @Column(value = "created_date")
     private LocalDateTime createdDate;
 
-    @Column(value = "author_id")
-    private Long authorId;
+    private String text;
+
+    @Column(value = "is_anonymous")
+    private boolean isAnonymous;
 }

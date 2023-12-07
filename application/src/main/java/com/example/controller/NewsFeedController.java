@@ -37,7 +37,7 @@ public class NewsFeedController {
     public FeedNewsResponseDto getFeedNews(
             @PathVariable
             @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
-                    message = "Идентификатор ресурса должен быть положительным числом типа long")
+                    message = "Идентификатор новости должен быть положительным числом типа long")
             String newsId) {
         var feedNews = feedNewsService.getById(Long.parseLong(newsId));
         var feedNewsResponse = feedNewsMapper.mapToResponseDto(feedNews);
@@ -46,7 +46,7 @@ public class NewsFeedController {
         return feedNewsResponse;
     }
 
-    @PreAuthorize("hasRole('MODER')")
+    @PreAuthorize("hasRole('MODERATOR')")
     @PostMapping("/feeds")
     @Operation(description = "Создать новую новость")
     @ResponseStatus(HttpStatus.CREATED)
@@ -57,7 +57,7 @@ public class NewsFeedController {
             @RequestPart(value = "files")
             List<MultipartFile> files) {
         var feedNewsEntity = feedNewsMapper.mapToEntity(feedNews);
-        var contents = contentMapper.mapToContentList(files);
+        var contents = contentMapper.mapToFeedNewsContentList(files);
 
         feedNewsEntity = feedNewsService.create(feedNewsEntity, contents);
         var feedNewsResponse = feedNewsMapper.mapToResponseDto(feedNewsEntity);
@@ -82,7 +82,7 @@ public class NewsFeedController {
         return feedNewsResponseList;
     }
 
-    @PreAuthorize("hasRole('MODER')")
+    @PreAuthorize("hasRole('MODERATOR')")
     @DeleteMapping("/feed/{newsId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(description = "Удалить новость по идентификатору")

@@ -13,7 +13,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "content_jn")
-public class Content {
+public class ContentEntity {
 
     @Id
     private Long id;
@@ -26,8 +26,5 @@ public class Content {
     private String contentType;
 
     private long size;
-
-    @Column(value = "resource_id")
-    private Long resourceId;
 
 }

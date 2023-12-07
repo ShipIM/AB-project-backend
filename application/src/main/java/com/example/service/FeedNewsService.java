@@ -1,9 +1,8 @@
 package com.example.service;
 
 import com.example.exception.EntityNotFoundException;
-import com.example.model.entity.Content;
+import com.example.model.entity.FeedNewsContent;
 import com.example.model.entity.FeedNews;
-import com.example.model.entity.Resource;
 import com.example.repository.FeedNewsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,7 +19,7 @@ import java.util.List;
 public class FeedNewsService {
     private final FeedNewsRepository feedNewsRepository;
     private final UserService userService;
-    private final ContentService contentService;
+    private final FeedNewsContentService contentService;
 
     public Page<FeedNews> getFeedNewsPage(Pageable pageable) {
         String sort = "created_date DESC";
@@ -40,7 +39,7 @@ public class FeedNewsService {
     }
 
     @Transactional
-    public FeedNews create(FeedNews feedNews, List<Content> contents) {
+    public FeedNews create(FeedNews feedNews, List<FeedNewsContent> contents) {
         if (!userService.isUserExists(feedNews.getAuthorId())) {
             throw new EntityNotFoundException("Пользователя с таким идентификатором не существует");
         }
@@ -53,12 +52,12 @@ public class FeedNewsService {
         return feedNews;
     }
 
-    public boolean isExists(long id) {
+    public boolean isFeedNewsExists(long id) {
         return feedNewsRepository.existsById(id);
     }
 
     public void delete(long id) {
-        if (isExists(id)) {
+        if (isFeedNewsExists(id)) {
             feedNewsRepository.deleteById(id);
             return;
         }

@@ -1,6 +1,6 @@
 package com.example.repository;
 
-import com.example.model.entity.Comment;
+import com.example.model.entity.CommentEntity;
 import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -10,15 +10,14 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CommentRepository extends CrudRepository<Comment, Long> {
+public interface CommentRepository extends CrudRepository<CommentEntity, Long> {
 
     @Query("select * from comment_jn " +
             "where resource_id = :resource " +
-            "order by :sort limit :page_size offset :page_number * :page_size")
-    List<Comment> findAllByResourceId(@Param("resource") long resourceId,
-                                      @Param("sort") String sort,
-                                      @Param("page_size") long pageSize,
-                                      @Param("page_number") long pageNumber);
+            "order by created_date limit :page_size offset :page_number * :page_size")
+    List<CommentEntity> findAllByResourceId(@Param("resource") long resourceId,
+                                            @Param("page_size") long pageSize,
+                                            @Param("page_number") long pageNumber);
 
     @Query("select count(*) from comment_jn where resource_id = :resource")
     long countAllByResourceId(@Param("resource") long resourceId);

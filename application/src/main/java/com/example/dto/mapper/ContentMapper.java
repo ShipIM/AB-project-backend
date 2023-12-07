@@ -1,7 +1,9 @@
 package com.example.dto.mapper;
 
-import com.example.dto.content.response.ContentResponseDto;
-import com.example.model.entity.Content;
+import com.example.dto.content.response.FeedContentResponseDto;
+import com.example.dto.content.response.ResourceContentResponseDto;
+import com.example.model.entity.FeedNewsContent;
+import com.example.model.entity.ResourceContentEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,12 +14,22 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ContentMapper {
 
-    ContentResponseDto mapToContentDto(Content content);
+    ResourceContentResponseDto mapToContentDto(ResourceContentEntity content);
 
     @Mapping(target = "filename", expression = "java(file.getName())")
-    Content mapToContent(MultipartFile file) throws IOException;
+    ResourceContentEntity mapToResourceContent(MultipartFile file) throws IOException;
 
-    List<ContentResponseDto> mapContentListToDtoList(List<Content> contents);
+    List<ResourceContentResponseDto> mapToResourceContentDtoList(List<ResourceContentEntity> contents);
 
-    List<Content> mapToContentList(List<MultipartFile> files);
+    List<ResourceContentEntity> mapToResourceContentList(List<MultipartFile> files);
+
+
+    FeedContentResponseDto mapToContentDto(FeedNewsContent content);
+
+    @Mapping(target = "filename", expression = "java(file.getName())")
+    FeedNewsContent mapToFeedNewsContent(MultipartFile file) throws IOException;
+
+    List<FeedContentResponseDto> mapToFeedNewsContentDtoList(List<FeedNewsContent> contents);
+
+    List<FeedNewsContent> mapToFeedNewsContentList(List<MultipartFile> files);
 }

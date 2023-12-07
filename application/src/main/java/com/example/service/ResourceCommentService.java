@@ -1,10 +1,10 @@
 package com.example.service;
 
-import com.example.dto.comment.response.ResponseComment;
-import com.example.dto.mapper.CommentMapper;
 import com.example.exception.EntityNotFoundException;
-import com.example.model.entity.Comment;
+import com.example.model.entity.CommentEntity;
+import com.example.model.entity.ResourceCommentEntity;
 import com.example.repository.CommentRepository;
+import com.example.repository.ResourceCommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -15,17 +15,15 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class CommentService {
+public class ResourceCommentService {
     private final CommentRepository commentRepository;
     private final ResourceService resourceService;
     private final UserService userService;
 
-    public Page<Comment> getCommentsByResource(long resourceId, Pageable pageable) {
-        String sort = "created_date";
+    public Page<CommentEntity> getCommentsByResource(long resourceId, Pageable pageable) {
         long total = commentRepository.countAllByResourceId(resourceId);
-        List<Comment> comments = commentRepository.findAllByResourceId(
+        List<CommentEntity> comments = commentRepository.findAllByResourceId(
                 resourceId,
-                sort,
                 pageable.getPageSize(),
                 pageable.getPageNumber());
 
@@ -34,7 +32,7 @@ public class CommentService {
         return new PageImpl<>(comments, pageable, total);
     }
 
-    public Comment create(Comment comment) {
+    public CommentEntity create(CommentEntity comment) {
         if (!resourceService.isResourceExists(comment.getResourceId())) {
             throw new EntityNotFoundException("Ресурса с таким идентификатором не существует");
         }
@@ -66,7 +64,7 @@ public class CommentService {
         throw new EntityNotFoundException("Комментария с таким идентификатором не существует");
     }
 
-    private Comment setAnonymIfIsAnonymousComment(Comment comment) {
+    private CommentEntity setAnonymIfIsAnonymousComment(CommentEntity comment) {
         if (comment.isAnonymous()) {
             comment.setAuthorId(0L);
         }

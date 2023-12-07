@@ -8,24 +8,17 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "feed_news_jn")
-public class FeedNews {
-    @Id
-    private Long id;
+@Table(name = "feed_news_content")
+public class FeedNewsContent {
 
-    private String name;
+    @Column(value = "content_id")
+    private Long contentId;
 
-    private String text;
+    @Column(value = "feed_news_id")
+    private Long feedNewsId;
 
-    @Column(value = "created_date")
-    private LocalDateTime createdDate;
-
-    @Column(value = "author_id")
-    private Long authorId;
 }
