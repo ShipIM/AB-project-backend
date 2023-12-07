@@ -8,7 +8,6 @@ import com.example.dto.authentication.response.VerificationResponseDto;
 import com.example.dto.user.response.UserResponseDto;
 import com.example.model.entity.User;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import java.util.List;
 

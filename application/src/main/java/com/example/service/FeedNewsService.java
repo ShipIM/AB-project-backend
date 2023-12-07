@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.exception.EntityNotFoundException;
+import com.example.model.entity.ContentEntity;
 import com.example.model.entity.FeedNewsContent;
 import com.example.model.entity.FeedNews;
 import com.example.repository.FeedNewsRepository;
@@ -19,7 +20,7 @@ import java.util.List;
 public class FeedNewsService {
     private final FeedNewsRepository feedNewsRepository;
     private final UserService userService;
-    private final FeedNewsContentService contentService;
+    private final ContentService contentService;
 
     public Page<FeedNews> getFeedNewsPage(Pageable pageable) {
         String sort = "created_date DESC";
@@ -39,7 +40,7 @@ public class FeedNewsService {
     }
 
     @Transactional
-    public FeedNews create(FeedNews feedNews, List<FeedNewsContent> contents) {
+    public FeedNews create(FeedNews feedNews, List<ContentEntity> contents) {
         if (!userService.isUserExists(feedNews.getAuthorId())) {
             throw new EntityNotFoundException("Пользователя с таким идентификатором не существует");
         }
@@ -47,7 +48,7 @@ public class FeedNewsService {
         feedNews.setCreatedDate(LocalDateTime.now());
 
         feedNews = feedNewsRepository.save(feedNews);
-        contentService.createContent(contents, feedNews.getId());
+        contentService.createFeedNewsContent(contents, feedNews.getId());
 
         return feedNews;
     }

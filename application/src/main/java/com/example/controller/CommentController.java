@@ -1,16 +1,14 @@
 package com.example.controller;
 
 import com.example.dto.comment.request.CommentCreateDto;
-import com.example.dto.comment.request.ResourceCommentCreateDto;
 import com.example.dto.comment.response.CommentResponseDto;
-import com.example.dto.comment.response.ResourceCommentResponseDto;
 import com.example.dto.mapper.CommentMapper;
 import com.example.dto.page.request.PagingDto;
+import com.example.exception.EntityNotFoundException;
 import com.example.model.entity.CommentEntity;
-import com.example.model.entity.FeedNewsComment;
-import com.example.model.entity.ResourceCommentEntity;
-import com.example.service.FeedNewsCommentService;
-import com.example.service.ResourceCommentService;
+import com.example.service.CommentService;
+import com.example.service.FeedNewsService;
+import com.example.service.ResourceService;
 import com.example.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,9 +26,9 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Validated
 public class CommentController {
-    private final ResourceCommentService resourceCommentService;
-    private final FeedNewsCommentService feedNewsCommentService;
-
+    private final CommentService commentService;
+    private final ResourceService resourceService;
+    private final FeedNewsService feedNewsService;
     private final CommentMapper commentMapper;
     private final UserService userService;
 
@@ -42,7 +40,7 @@ public class CommentController {
                     message = "Идентификатор ресурса должен быть положительным числом типа long")
             String resourceId,
             @Valid PagingDto pagingDto) {
-        Page<CommentEntity> comments = resourceCommentService.getCommentsByResource(Long.parseLong(resourceId), pagingDto.formPageRequest());
+        Page<CommentEntity> comments = commentService.getCommentsByResource(Long.parseLong(resourceId), pagingDto.formPageRequest());
         var responseComments = comments.map(commentMapper::ToResponseComment);
 
         for (var comment : responseComments) {
@@ -61,7 +59,7 @@ public class CommentController {
                     message = "Идентификатор новости должен быть положительным числом типа long")
             String feedNewsId,
             @Valid PagingDto pagingDto) {
-        Page<CommentEntity> comments = feedNewsCommentService.getCommentsByFeedNewsId(Long.parseLong(feedNewsId), pagingDto.formPageRequest());
+        Page<CommentEntity> comments = commentService.getCommentsByFeedNewsId(Long.parseLong(feedNewsId), pagingDto.formPageRequest());
         var responseComments = comments.map(commentMapper::ToResponseComment);
 
         for (var comment : responseComments) {
@@ -79,7 +77,9 @@ public class CommentController {
     public CommentResponseDto createResourceComment(@RequestBody @Valid CommentCreateDto createComment) {
         var comment = commentMapper.ToCommentEntity(createComment);
 
-        comment = resourceCommentService.create(comment);
+        var resourceId = Long.parseLong(createComment.getSourceId());
+        comment = commentService.createResourceComment(comment, resourceId);
+
         var responseComment = commentMapper.ToResponseComment(comment);
         responseComment.setAuthor(userService.getById(comment.getAuthorId()).getLogin());
 
@@ -93,7 +93,9 @@ public class CommentController {
     public CommentResponseDto createFeedComment(@RequestBody @Valid CommentCreateDto createComment) {
         var comment = commentMapper.ToCommentEntity(createComment);
 
-        comment = feedNewsCommentService.create(comment);
+        var feedNewsId = Long.parseLong(createComment.getSourceId());
+        comment = commentService.createFeedNewsComment(comment, feedNewsId);
+
         var responseComment = commentMapper.ToResponseComment(comment);
         responseComment.setAuthor(userService.getById(comment.getAuthorId()).getLogin());
 
@@ -101,24 +103,13 @@ public class CommentController {
     }
 
     @PreAuthorize("hasRole('MODERATOR')")
-    @DeleteMapping("/resources/comments/{commentId}")
+    @DeleteMapping("/comments/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(description = "Удалить комментарий по id")
     public void deleteResourceComment(@PathVariable
-                              @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
-                                      message = "Идентификатор комментария должен быть положительным числом типа long")
-                              String commentId) {
-        resourceCommentService.delete(Long.parseLong(commentId));
-    }
-
-    @PreAuthorize("hasRole('MODERATOR')")
-    @DeleteMapping("/feed/comments/{commentId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Operation(description = "Удалить комментарий по id")
-    public void deleteFeedComment(@PathVariable
-                              @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
-                                      message = "Идентификатор комментария должен быть положительным числом типа long")
-                              String commentId) {
-        feedNewsCommentService.delete(Long.parseLong(commentId));
+                                      @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
+                                              message = "Идентификатор комментария должен быть положительным числом типа long")
+                                      String commentId) {
+        commentService.delete(Long.parseLong(commentId));
     }
 }

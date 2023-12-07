@@ -6,8 +6,6 @@ import com.example.dto.mapper.ResourceMapper;
 import com.example.dto.page.request.PagingDto;
 import com.example.dto.resource.request.CreateResourceRequestDto;
 import com.example.dto.resource.response.ResourceResponseDto;
-import com.example.model.entity.ResourceContentEntity;
-import com.example.model.entity.Resource;
 import com.example.model.enumeration.ResourceType;
 import com.example.service.ResourceService;
 import com.example.service.UserService;
@@ -44,7 +42,7 @@ public class ResourceController {
             @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
                     message = "Идентификатор ресурса должен быть положительным числом типа long")
             String id) {
-        Resource res = resourceService.getResourceById(Long.parseLong(id));
+        var res = resourceService.getResourceById(Long.parseLong(id));
         var responseResource = resourceMapper.mapToResourceDto(res);
         responseResource.setAuthor(userService.getById(responseResource.getAuthorId()).getLogin());
 
@@ -61,8 +59,8 @@ public class ResourceController {
             CreateResourceRequestDto resource,
             @RequestPart(value = "files")
             List<MultipartFile> files) {
-        Resource resourceEntity = resourceMapper.mapToResource(resource);
-        List<ResourceContentEntity> contents = contentMapper.mapToResourceContentList(files);
+        var resourceEntity = resourceMapper.mapToResource(resource);
+        var contents = contentMapper.mapToContentEntityList(files);
 
         resourceEntity = resourceService.createResource(resourceEntity, contents);
         var resourceResponse = resourceMapper.mapToResourceDto(resourceEntity);
@@ -83,7 +81,7 @@ public class ResourceController {
             @NotBlank(message = "Необходимо указать тип ресурса")
             String type,
             @Valid PagingDto pagingDto) {
-        Page<Resource> resources = resourceService.getResourcesBySubjectAndResourceType(
+        var resources = resourceService.getResourcesBySubjectAndResourceType(
                 Long.parseLong(id),
                 ResourceType.valueOf(type),
                 pagingDto.formPageRequest()

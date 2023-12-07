@@ -19,7 +19,9 @@
     <include file="/db/changelog/changes/04-12-2023-link-resources-and-users-tables.xml"/>
     <include file="/db/changelog/changes/04-12-2023-link-comments-and-users-tables.xml"/>
     <include file="/db/changelog/changes/07-12-2023--1-create-feed-news-jn-table.xml"/>
-    <include file="/db/changelog/changes/07-12-2023--2-create-feed-news-content-jn-table.xml"/>
-    <include file="/db/changelog/changes/07-12-2023--3-create-feed-news-comment-jn-table.xml"/>
-
+    <include file="/db/changelog/changes/07-12-2023--2-create-feed-news-content-table.xml"/>
+    <include file="/db/changelog/changes/07-12-2023--3-create-feed-news-comment-table.xml"/>
+    <include file="/db/changelog/changes/07-12-2023--4-create-resource-content-table.xml"/>
+    <include file="/db/changelog/changes/07-12-2023--5-create-resource-comment-table.xml"/>
+    <include file="/db/changelog/changes/07-12-2023--6-drop-resource-id-comment-jn-content-jn-table.xml"/>
 </databaseChangeLog>

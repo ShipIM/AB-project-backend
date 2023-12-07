@@ -57,7 +57,7 @@ public class NewsFeedController {
             @RequestPart(value = "files")
             List<MultipartFile> files) {
         var feedNewsEntity = feedNewsMapper.mapToEntity(feedNews);
-        var contents = contentMapper.mapToFeedNewsContentList(files);
+        var contents = contentMapper.mapToContentEntityList(files);
 
         feedNewsEntity = feedNewsService.create(feedNewsEntity, contents);
         var feedNewsResponse = feedNewsMapper.mapToResponseDto(feedNewsEntity);

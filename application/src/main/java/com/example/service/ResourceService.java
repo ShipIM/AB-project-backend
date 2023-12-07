@@ -1,7 +1,7 @@
 package com.example.service;
 
 import com.example.exception.EntityNotFoundException;
-import com.example.model.entity.ResourceContentEntity;
+import com.example.model.entity.ContentEntity;
 import com.example.model.entity.Resource;
 import com.example.model.enumeration.ResourceType;
 import com.example.repository.ResourceRepository;
@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ResourceService {
     private final ResourceRepository resourceRepository;
-    private final ResourceContentService contentService;
+    private final ContentService contentService;
     private final SubjectService subjectService;
     private final UserService userService;
 
@@ -46,7 +46,7 @@ public class ResourceService {
     }
 
     @Transactional
-    public Resource createResource(Resource resource, List<ResourceContentEntity> contents) {
+    public Resource createResource(Resource resource, List<ContentEntity> contents) {
         if (!subjectService.isSubjectExists(resource.getSubjectId())) {
             throw new EntityNotFoundException("Предмета с таким идентификатором не существует");
         }
@@ -58,7 +58,7 @@ public class ResourceService {
         resource.setCreatedDate(LocalDateTime.now());
 
         resource = resourceRepository.save(resource);
-        contentService.createContent(contents, resource.getId());
+        contentService.createResourceContent(contents, resource.getId());
 
         return resource;
     }

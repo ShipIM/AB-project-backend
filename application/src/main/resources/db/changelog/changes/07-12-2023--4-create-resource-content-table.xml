@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet author="Vadim" id="07-12-2023--4-create-resource-content-table">
+        <createTable tableName="resource_content">
+            <column name="content_id" type="BIGINT"/>
+            <column name="resource_id" type="BIGINT"/>
+        </createTable>
+        <addPrimaryKey tableName="resource_content" columnNames="resource_id,content_id"/>
+        <addForeignKeyConstraint baseTableName="resource_content" baseColumnNames="resource_id"
+                                 constraintName="resource_content_resource_fkey"
+                                 referencedTableName="resource_jn"
+                                 referencedColumnNames="id" onDelete="CASCADE" onUpdate="CASCADE"/>
+        <addForeignKeyConstraint baseTableName="resource_content" baseColumnNames="content_id"
+                                 constraintName="resource_content_content_fkey"
+                                 referencedTableName="content_jn"
+                                 referencedColumnNames="id" onDelete="CASCADE" onUpdate="CASCADE"/>
+        <rollback>
+            <dropTable tableName="resource_content"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
