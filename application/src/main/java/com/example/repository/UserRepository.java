@@ -1,6 +1,7 @@
 package com.example.repository;
 
 import com.example.model.entity.User;
+import com.example.model.enumeration.Role;
 import com.example.model.enumeration.Status;
 import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
@@ -22,6 +23,13 @@ public interface UserRepository extends CrudRepository<User, Long> {
             "where id = :user")
     void setUserStatus(@Param("user") long userId,
                        @Param("status") Status status);
+
+    @Modifying
+    @Query("update user_jn " +
+            "set role = :role " +
+            "where id = :user")
+    void setUserRole(@Param("user") long userId,
+                     @Param("role") Role role);
 
     @Query("select * from user_jn " +
             "order by :sort limit :page_size offset :page_number * :page_size")

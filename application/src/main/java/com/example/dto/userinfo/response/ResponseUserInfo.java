@@ -1,6 +1,5 @@
-package com.example.dto.userPersonalnfo.response;
+package com.example.dto.userinfo.response;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
