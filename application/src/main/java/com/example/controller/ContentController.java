@@ -35,7 +35,7 @@ public class ContentController {
         return contentMapper.mapToContentResponseDtoList(contents);
     }
 
-    @GetMapping("/feed/{feedNewsId}/contents")
+    @GetMapping("/feeds/{feedNewsId}/contents")
     @Operation(description = "Получить содержимое новости по id")
     public List<ContentResponseDto> getFeedNewsContents(
             @PathVariable

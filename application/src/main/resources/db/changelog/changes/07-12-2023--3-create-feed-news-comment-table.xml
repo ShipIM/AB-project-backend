@@ -5,11 +5,12 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
     <changeSet author="Vadim" id="07-12-2023--3-create-feed-news-comment-table">
         <createTable tableName="feed_news_comment">
-            <column name="comment_id" type="BIGINT"/>
+            <column name="comment_id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
             <column name="feed_news_id" type="BIGINT"/>
             <column name="thread_parent_id" type="BIGINT"/>
         </createTable>
-        <addPrimaryKey tableName="feed_news_comment" columnNames="feed_news_id,comment_id"/>
         <addForeignKeyConstraint baseTableName="feed_news_comment" baseColumnNames="feed_news_id"
                                  constraintName="feed_news_comment_feed_news_fkey"
                                  referencedTableName="feed_news_jn"

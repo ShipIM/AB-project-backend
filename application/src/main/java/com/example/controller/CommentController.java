@@ -27,6 +27,22 @@ public class CommentController {
     private final CommentMapper commentMapper;
     private final UserService userService;
 
+    @GetMapping("/comments/{commentId}")
+    @Operation(description = "Получить комментарий по id")
+    public CommentResponseDto getComment(
+            @PathVariable
+            @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
+                    message = "Идентификатор ресурса должен быть положительным числом типа long")
+            String commentId) {
+        var comment = commentService.getById(Long.parseLong(commentId));
+
+        var responseComment = commentMapper.ToResponseComment(comment);
+        var login = userService.getById(Long.parseLong(responseComment.getAuthorId())).getLogin();
+        responseComment.setAuthor(login);
+
+        return responseComment;
+    }
+
     @GetMapping("/resources/{resourceId}/comments")
     @Operation(description = "Получить все комментарии по id ресурса")
     public Page<CommentResponseDto> getResourceComments(

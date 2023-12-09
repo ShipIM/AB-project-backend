@@ -36,13 +36,13 @@ public interface CommentRepository extends CrudRepository<CommentEntity, Long> {
                                             @Param("page_size") long pageSize,
                                             @Param("page_number") long pageNumber);
 
-    @Query("select count(*) from comment_jn JOIN resource_comment rc on rc.comment_id = cj.id where rc.resource_id = :resource")
+    @Query("select count(*) from comment_jn cj JOIN resource_comment rc on rc.comment_id = cj.id where rc.resource_id = :resource")
     long countAllByResourceId(@Param("resource") long resourceId);
 
-    @Query("select count(*) from comment_jn JOIN feed_news_comment fc on fc.comment_id = cj.id where fc.feed_news_id = :feed_news_id")
+    @Query("select count(*) from comment_jn cj JOIN feed_news_comment fc on fc.comment_id = cj.id where fc.feed_news_id = :feed_news_id")
     long countAllByFeedNewsId(@Param("feed_news_id") long feedNewsId);
 
-    @Query("select count(*) from comment_jn JOIN feed_news_comment fc on fc.comment_id = cj.id where fc.thread_parent_id = :thread_parent_id")
+    @Query("select count(*) from comment_jn cj JOIN feed_news_comment fc on fc.comment_id = cj.id where fc.thread_parent_id = :thread_parent_id")
     long countAllByCommentId(@Param("thread_parent_id") long threadParentId);
 
     @Modifying

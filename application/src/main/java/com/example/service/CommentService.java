@@ -20,6 +20,11 @@ public class CommentService {
     private final FeedNewsService feedNewsService;
     private final UserService userService;
 
+    public CommentEntity getById(long id) {
+        return commentRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Комментария с таким идентификатором не существует"));
+    }
+
     public Page<CommentEntity> getCommentsByResource(long resourceId, Pageable pageable) {
         long total = commentRepository.countAllByResourceId(resourceId);
         List<CommentEntity> comments = commentRepository.findAllByResourceId(

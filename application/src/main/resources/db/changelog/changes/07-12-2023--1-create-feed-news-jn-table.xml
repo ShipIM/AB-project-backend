@@ -21,7 +21,6 @@
                 <constraints
                         nullable="false"/>
             </column>
-            <column defaultValue="anonymous" name="author" type="VARCHAR"/>
             <column name="author_id" type="BIGINT" defaultValueNumeric="0"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="feed_news_jn" baseColumnNames="author_id"

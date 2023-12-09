@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface FeedNewsRepository extends CrudRepository<FeedNews, Long>, PagingAndSortingRepository<FeedNews, Long> {
-    @Query("select * from resource_jn " +
+    @Query("select * from feed_news_jn " +
             "order by created_date DESC limit :page_size offset :page_number * :page_size")
     List<FeedNews> findAll(@Param("page_size") long pageSize,
                            @Param("page_number") long pageNumber);

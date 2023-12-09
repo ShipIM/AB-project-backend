@@ -12,10 +12,10 @@ import java.util.List;
 
 @Repository
 public interface ContentRepository extends CrudRepository<ContentEntity, Long>, PagingAndSortingRepository<ContentEntity, Long> {
-    @Query("select * from content_jn JOIN resource_content rc on rc.content_id = cj.id where rc.resource_id = :resource order by filename")
+    @Query("select * from content_jn cj JOIN resource_content rc on rc.content_id = cj.id where rc.resource_id = :resource order by filename")
     List<ContentEntity> findAllByResourceId(@Param("resource") long resourceId);
 
-    @Query("select * from content_jn JOIN feed_news_content fc on fc.content_id = cj.id where fc.feed_news_id = :feed_news_id order by filename")
+    @Query("select * from content_jn cj JOIN feed_news_content fc on fc.content_id = cj.id where fc.feed_news_id = :feed_news_id order by filename")
     List<ContentEntity> findAllByFeedNewsId(@Param("feed_news_id") long feedNewsId);
 
     @Modifying
