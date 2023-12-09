@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "resource_jn")
-public class Resource {
+public class ResourceEntity {
 
     @Id
     private Long id;

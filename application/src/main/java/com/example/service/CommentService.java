@@ -96,6 +96,7 @@ public class CommentService {
         return createdComment;
     }
 
+    @Transactional
     public CommentEntity createThreadComment(CommentEntity comment, long parentCommentId) {
         if (!isCommentExists(parentCommentId)) {
             throw new EntityNotFoundException("Комментария с таким идентификатором не существует");

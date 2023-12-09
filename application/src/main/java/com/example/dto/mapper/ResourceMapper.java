@@ -2,7 +2,7 @@ package com.example.dto.mapper;
 
 import com.example.dto.resource.request.CreateResourceRequestDto;
 import com.example.dto.resource.response.ResourceResponseDto;
-import com.example.model.entity.Resource;
+import com.example.model.entity.ResourceEntity;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -10,10 +10,10 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ResourceMapper {
 
-    ResourceResponseDto mapToResourceDto(Resource resource);
+    ResourceResponseDto mapToResourceDto(ResourceEntity resource);
 
-    Resource mapToResource(CreateResourceRequestDto dto);
+    ResourceEntity mapToResource(CreateResourceRequestDto dto);
 
-    List<ResourceResponseDto> mapResourceListToDtoList(List<Resource> resources);
+    List<ResourceResponseDto> mapResourceListToDtoList(List<ResourceEntity> resources);
 
 }

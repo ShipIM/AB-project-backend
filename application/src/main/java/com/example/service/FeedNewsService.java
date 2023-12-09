@@ -2,8 +2,7 @@ package com.example.service;
 
 import com.example.exception.EntityNotFoundException;
 import com.example.model.entity.ContentEntity;
-import com.example.model.entity.FeedNewsContent;
-import com.example.model.entity.FeedNews;
+import com.example.model.entity.FeedNewsEntity;
 import com.example.repository.FeedNewsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,9 +21,9 @@ public class FeedNewsService {
     private final UserService userService;
     private final ContentService contentService;
 
-    public Page<FeedNews> getFeedNewsPage(Pageable pageable) {
+    public Page<FeedNewsEntity> getFeedNewsPage(Pageable pageable) {
         long total = feedNewsRepository.count();
-        List<FeedNews> feedNewsList = feedNewsRepository.findAll(
+        List<FeedNewsEntity> feedNewsList = feedNewsRepository.findAll(
                 pageable.getPageSize(),
                 pageable.getPageNumber()
         );
@@ -32,13 +31,13 @@ public class FeedNewsService {
         return new PageImpl<>(feedNewsList, pageable, total);
     }
 
-    public FeedNews getById(long id) {
+    public FeedNewsEntity getById(long id) {
         return feedNewsRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Новости с таким идентификатором не существует"));
     }
 
     @Transactional
-    public FeedNews create(FeedNews feedNews, List<ContentEntity> contents) {
+    public FeedNewsEntity createOrUpdate(FeedNewsEntity feedNews, List<ContentEntity> contents) {
         if (!userService.isUserExists(feedNews.getAuthorId())) {
             throw new EntityNotFoundException("Пользователя с таким идентификатором не существует");
         }
