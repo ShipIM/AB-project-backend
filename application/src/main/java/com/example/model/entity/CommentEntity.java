@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -27,6 +28,10 @@ public class CommentEntity {
     @CreatedDate
     @Column(value = "created_date")
     private LocalDateTime createdDate;
+
+    @LastModifiedDate
+    @Column(value = "last_modified_date")
+    private LocalDateTime lastModifiedDate;
 
     private String text;
 

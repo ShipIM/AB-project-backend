@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.exception.EntityNotFoundException;
+import com.example.exception.IllegalAccessException;
 import com.example.model.entity.CommentEntity;
 import com.example.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
@@ -113,7 +114,6 @@ public class CommentService {
         return commentRepository.existsById(id);
     }
 
-
     public void delete(long id) {
         if (isCommentExists(id)) {
             commentRepository.deleteById(id);
@@ -121,6 +121,19 @@ public class CommentService {
         }
 
         throw new EntityNotFoundException("Комментария с таким идентификатором не существует");
+    }
+
+    public void editComment(CommentEntity comment) {
+        CommentEntity retrievedComment = commentRepository.findById(comment.getId())
+                .orElseThrow(() ->  new EntityNotFoundException("Комментария с таким идентификатором не существует"));
+
+        if (!retrievedComment.getAuthorId().equals(comment.getAuthorId())) {
+            throw new IllegalAccessException("Редактирование комментария другого пользователя невозможно");
+        }
+
+        retrievedComment.setText(comment.getText());
+
+        createOrUpdate(retrievedComment);
     }
 
     private CommentEntity setAnonymIfIsAnonymousComment(CommentEntity comment) {

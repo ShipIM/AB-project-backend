@@ -1,0 +1,25 @@
+package com.example.dto.comment.request;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class CommentEditRequestDto {
+
+    @NotBlank(message = "Идентификатор комментария не должен быть пустой строкой")
+    @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
+            message = "Идентификатор комментария должен быть положительным числом типа long")
+    @JsonProperty("comment_id")
+    private String commentId;
+
+    @NotBlank(message = "Текст комментария не может состоять только из пробельных символов")
+    @Size(min = 1, message = "Текст комментария должен содержать хотя бы один символ")
+    @Size(max = 255, message = "Текст комментария не может быть длиннее 255 символов")
+    private String text;
+
+}

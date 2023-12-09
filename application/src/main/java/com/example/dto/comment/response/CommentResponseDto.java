@@ -21,6 +21,9 @@ public class CommentResponseDto {
     @JsonProperty("created_date")
     private LocalDateTime createdDate;
 
+    @JsonProperty("last_modified_date")
+    private LocalDateTime lastModifiedDate;
+
     @JsonProperty("is_anonymous")
     private boolean isAnonymous;
 }
