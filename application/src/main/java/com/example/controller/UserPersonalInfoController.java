@@ -53,7 +53,7 @@ public class UserPersonalInfoController {
     @PreAuthorize("hasRole('USER')")
     @PatchMapping("/user/info/avatar")
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(description = "Обновить персональные данные пользователя по идентификатору")
+    @Operation(description = "Обновить персональные данные пользователя")
     public ResponseUserInfo updateUser(
             @RequestPart(value = "userInfo")
             @Valid
@@ -85,7 +85,7 @@ public class UserPersonalInfoController {
     @PreAuthorize("hasRole('USER')")
     @PatchMapping("/user/info")
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(description = "Обновить персональные данные пользователя (кроме аватара) по идентификатору")
+    @Operation(description = "Обновить персональные данные пользователя (кроме аватара)")
     public ResponseUserInfo updateUserWithoutAvatar(
             @RequestPart(value = "userInfo")
             @Valid

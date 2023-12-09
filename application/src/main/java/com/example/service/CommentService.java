@@ -1,13 +1,12 @@
 package com.example.service;
 
-import com.example.dto.comment.response.ResponseComment;
-import com.example.dto.mapper.CommentMapper;
 import com.example.exception.EntityNotFoundException;
-import com.example.model.entity.Comment;
+import com.example.model.entity.CommentEntity;
 import com.example.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,14 +17,18 @@ import java.util.stream.Collectors;
 public class CommentService {
     private final CommentRepository commentRepository;
     private final ResourceService resourceService;
+    private final FeedNewsService feedNewsService;
     private final UserService userService;
 
-    public Page<Comment> getCommentsByResource(long resourceId, Pageable pageable) {
-        String sort = "created_date";
+    public CommentEntity getById(long id) {
+        return commentRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Комментария с таким идентификатором не существует"));
+    }
+
+    public Page<CommentEntity> getCommentsByResource(long resourceId, Pageable pageable) {
         long total = commentRepository.countAllByResourceId(resourceId);
-        List<Comment> comments = commentRepository.findAllByResourceId(
+        List<CommentEntity> comments = commentRepository.findAllByResourceId(
                 resourceId,
-                sort,
                 pageable.getPageSize(),
                 pageable.getPageNumber());
 
@@ -34,11 +37,32 @@ public class CommentService {
         return new PageImpl<>(comments, pageable, total);
     }
 
-    public Comment create(Comment comment) {
-        if (!resourceService.isResourceExists(comment.getResourceId())) {
-            throw new EntityNotFoundException("Ресурса с таким идентификатором не существует");
-        }
+    public Page<CommentEntity> getCommentsByFeedNewsId(long feedNewsId, Pageable pageable) {
+        long total = commentRepository.countAllByFeedNewsId(feedNewsId);
+        List<CommentEntity> comments = commentRepository.findAllByFeedNewsId(
+                feedNewsId,
+                pageable.getPageSize(),
+                pageable.getPageNumber());
 
+        comments = comments.stream().map(this::setAnonymIfIsAnonymousComment).collect(Collectors.toList());
+
+        return new PageImpl<>(comments, pageable, total);
+    }
+
+    public Page<CommentEntity> getCommentsByCommentId(long commentId, PageRequest pageable) {
+        long total = commentRepository.countAllByCommentId(commentId);
+        List<CommentEntity> comments = commentRepository.findAllByCommentId(
+                commentId,
+                pageable.getPageSize(),
+                pageable.getPageNumber());
+
+        comments = comments.stream().map(this::setAnonymIfIsAnonymousComment).collect(Collectors.toList());
+
+        return new PageImpl<>(comments, pageable, total);
+    }
+
+    @Transactional
+    public CommentEntity createOrUpdate(CommentEntity comment) {
         if (!userService.isUserExists(comment.getAuthorId())) {
             throw new EntityNotFoundException("Пользователя с таким идентификатором не существует");
         }
@@ -46,6 +70,41 @@ public class CommentService {
         comment.setCreatedDate(LocalDateTime.now());
 
         return commentRepository.save(comment);
+    }
+
+    @Transactional
+    public CommentEntity createResourceComment(CommentEntity comment, Long resourceId) {
+        if (!resourceService.isResourceExists(resourceId)) {
+            throw new EntityNotFoundException("Новости с таким идентификатором не существует");
+        }
+
+        var createdComment = createOrUpdate(comment);
+        commentRepository.createResourceComment(resourceId, createdComment.getId());
+
+        return createdComment;
+    }
+
+    @Transactional
+    public CommentEntity createFeedNewsComment(CommentEntity comment, Long feedNewsId) {
+        if (!feedNewsService.isFeedNewsExists(feedNewsId)) {
+            throw new EntityNotFoundException("Новости с таким идентификатором не существует");
+        }
+
+        var createdComment = createOrUpdate(comment);
+        commentRepository.createFeedNewsComment(feedNewsId, createdComment.getId());
+
+        return createdComment;
+    }
+
+    public CommentEntity createThreadComment(CommentEntity comment, long parentCommentId) {
+        if (!isCommentExists(parentCommentId)) {
+            throw new EntityNotFoundException("Комментария с таким идентификатором не существует");
+        }
+
+        var createdComment = createOrUpdate(comment);
+        commentRepository.createThreadComment(parentCommentId, createdComment.getId());
+
+        return createdComment;
     }
 
     public void deleteOld() {
@@ -66,7 +125,7 @@ public class CommentService {
         throw new EntityNotFoundException("Комментария с таким идентификатором не существует");
     }
 
-    private Comment setAnonymIfIsAnonymousComment(Comment comment) {
+    private CommentEntity setAnonymIfIsAnonymousComment(CommentEntity comment) {
         if (comment.isAnonymous()) {
             comment.setAuthorId(0L);
         }

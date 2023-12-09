@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CreateComment {
+public class CommentCreateDto {
     @NotBlank(message = "Идентификатор автора не должен быть пустой строкой")
     @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
             message = "Идентификатор автора должен быть положительным числом типа long")
@@ -21,11 +21,11 @@ public class CreateComment {
     @Size(max = 255, message = "Текст комментария не может быть длиннее 255 символов")
     private String text;
 
-    @NotBlank(message = "Идентификатор ресурса не должен быть пустой строкой")
+    @NotBlank(message = "Идентификатор источника не должен быть пустой строкой")
     @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
-            message = "Идентификатор ресурса должен быть положительным числом типа long")
-    @JsonProperty("resource_id")
-    private String resourceId;
+            message = "Идентификатор источника должен быть положительным числом типа long")
+    @JsonProperty("source_id")
+    private String sourceId;
 
     @JsonProperty("is_anonymous")
     private boolean isAnonymous;
