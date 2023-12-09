@@ -1,9 +1,6 @@
 package com.example.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
@@ -12,6 +9,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 @Table(name = "content_jn")
 public class ContentEntity {
 
@@ -26,5 +24,13 @@ public class ContentEntity {
     private String contentType;
 
     private long size;
+
+    public ContentEntity(ContentEntity entity){
+        this.id = entity.id;
+        this.filename = entity.filename;
+        this.bytes = entity.bytes;
+        this.contentType = entity.contentType;
+        this.size = entity.size;
+    }
 
 }

@@ -59,7 +59,7 @@ public class FeedNewsController {
         var feedNewsEntity = feedNewsMapper.mapToEntity(feedNews);
         var contents = contentMapper.mapToContentEntityList(files);
 
-        feedNewsEntity = feedNewsService.create(feedNewsEntity, contents);
+        feedNewsEntity = feedNewsService.createOrUpdate(feedNewsEntity, contents);
         var feedNewsResponse = feedNewsMapper.mapToResponseDto(feedNewsEntity);
         feedNewsResponse.setAuthor(userService.getById(feedNewsResponse.getAuthorId()).getLogin());
 

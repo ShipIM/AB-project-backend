@@ -30,7 +30,7 @@ public class SubjectServiceTests extends BaseTestClass {
     }
 
     @Test
-    public void createOnlyOneAutoDealerTest() {
+    public void createOnlyOneSubjectTest() {
         subjectService.createOrUpdate(defaultSubject);
 
         var subjectsCount = subjectRepository.count();
@@ -39,7 +39,7 @@ public class SubjectServiceTests extends BaseTestClass {
     }
 
     @Test
-    public void createCorrectAutoDealerTest() {
+    public void createCorrectSubjectTest() {
         var createSubject = subjectService.createOrUpdate(defaultSubject);
         var repositorySubject = subjectService.getById(createSubject.getId());
 
@@ -78,6 +78,7 @@ public class SubjectServiceTests extends BaseTestClass {
         subjectService.createOrUpdate(defaultSubject);
 
         var diffNameSubject = new Subject(defaultSubject);
+        diffNameSubject.setId(null);
         diffNameSubject.setName(diffNameSubject.getName() + "2");
 
         Assertions.assertDoesNotThrow(() -> subjectService.createOrUpdate(diffNameSubject));
@@ -88,6 +89,7 @@ public class SubjectServiceTests extends BaseTestClass {
         subjectService.createOrUpdate(defaultSubject);
 
         var diffNameSubject = new Subject(defaultSubject);
+        diffNameSubject.setId(null);
         diffNameSubject.setCourseId(diffNameSubject.getCourseId() + 1);
 
         Assertions.assertDoesNotThrow(() -> subjectService.createOrUpdate(diffNameSubject));

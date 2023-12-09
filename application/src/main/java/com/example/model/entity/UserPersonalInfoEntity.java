@@ -1,9 +1,6 @@
 package com.example.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
@@ -12,6 +9,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 @Table(name = "user_personal_info_jn")
 public class UserPersonalInfoEntity {
     @Id
@@ -49,5 +47,17 @@ public class UserPersonalInfoEntity {
         this.telephone = newEntity.getTelephone();
         this.course = newEntity.getCourse();
         this.university = newEntity.getUniversity();
+    }
+
+    public UserPersonalInfoEntity(UserPersonalInfoEntity entity) {
+        this.id = entity.getId();
+        this.realName = entity.getRealName();
+        this.gender = entity.getGender();
+        this.city = entity.getCity();
+        this.telephone = entity.getTelephone();
+        this.course = entity.getCourse();
+        this.university = entity.getUniversity();
+        this.avatarBytes = entity.getAvatarBytes();
+        this.avatarContentType = entity.getAvatarContentType();
     }
 }

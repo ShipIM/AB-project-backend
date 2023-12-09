@@ -1,9 +1,6 @@
 package com.example.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
@@ -15,6 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(exclude = "createdDate")
 @Table(name = "comment_jn")
 public class CommentEntity {
 
@@ -32,4 +30,12 @@ public class CommentEntity {
 
     @Column(value = "is_anonymous")
     private boolean isAnonymous;
+
+    public CommentEntity(CommentEntity entity){
+        this.id = entity.id;
+        this.authorId = entity.authorId;
+        this.createdDate = entity.createdDate;
+        this.text = entity.text;
+        this.isAnonymous = entity.isAnonymous;
+    }
 }

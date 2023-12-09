@@ -2,7 +2,7 @@ package com.example.service;
 
 import com.example.exception.EntityNotFoundException;
 import com.example.model.entity.ContentEntity;
-import com.example.model.entity.Resource;
+import com.example.model.entity.ResourceEntity;
 import com.example.model.enumeration.ResourceType;
 import com.example.repository.ResourceRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,11 +24,11 @@ public class ResourceService {
     private final SubjectService subjectService;
     private final UserService userService;
 
-    public Page<Resource> getResourcesBySubjectAndResourceType(long subjectId,
-                                                                          ResourceType resourceType,
-                                                                          Pageable pageable) {
+    public Page<ResourceEntity> getResourcesBySubjectAndResourceType(long subjectId,
+                                                                     ResourceType resourceType,
+                                                                     Pageable pageable) {
         long total = resourceRepository.countAllBySubjectIdAndResourceType(subjectId, resourceType);
-        List<Resource> resources = resourceRepository.findAllBySubjectIdAndResourceType(
+        List<ResourceEntity> resources = resourceRepository.findAllBySubjectIdAndResourceType(
                 subjectId,
                 resourceType,
                 pageable.getPageSize(),
@@ -38,13 +38,13 @@ public class ResourceService {
         return new PageImpl<>(resources, pageable, total);
     }
 
-    public Resource getResourceById(long id) {
+    public ResourceEntity getResourceById(long id) {
         return resourceRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Ресурса с таким идентификатором не существует"));
     }
 
     @Transactional
-    public Resource createResource(Resource resource, List<ContentEntity> contents) {
+    public ResourceEntity createResource(ResourceEntity resource, List<ContentEntity> contents) {
         if (!subjectService.isSubjectExists(resource.getSubjectId())) {
             throw new EntityNotFoundException("Предмета с таким идентификатором не существует");
         }
