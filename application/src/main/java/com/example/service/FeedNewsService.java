@@ -43,8 +43,6 @@ public class FeedNewsService {
             throw new EntityNotFoundException("Пользователя с таким идентификатором не существует");
         }
 
-        feedNews.setCreatedDate(LocalDateTime.now());
-
         feedNews = feedNewsRepository.save(feedNews);
         contentService.createFeedNewsContent(contents, feedNews.getId());
 
