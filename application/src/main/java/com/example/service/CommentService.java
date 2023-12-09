@@ -2,14 +2,17 @@ package com.example.service;
 
 import com.example.exception.EntityNotFoundException;
 import com.example.exception.IllegalAccessException;
+import com.example.model.entity.CommentAudit;
 import com.example.model.entity.CommentEntity;
 import com.example.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +23,7 @@ public class CommentService {
     private final ResourceService resourceService;
     private final FeedNewsService feedNewsService;
     private final UserService userService;
+    private final CommentAuditService commentAuditService;
 
     public CommentEntity getById(long id) {
         return commentRepository.findById(id).orElseThrow(() ->
@@ -68,7 +72,15 @@ public class CommentService {
             throw new EntityNotFoundException("Пользователя с таким идентификатором не существует");
         }
 
-        return commentRepository.save(comment);
+        CommentEntity commentEntity = commentRepository.save(comment);
+        commentAuditService.createAudit(new CommentAudit(
+                null,
+                commentEntity.getId(),
+                commentEntity.getLastModifiedDate(),
+                commentEntity.getText()
+        ));
+
+        return commentEntity;
     }
 
     @Transactional
@@ -125,7 +137,7 @@ public class CommentService {
 
     public void editComment(CommentEntity comment) {
         CommentEntity retrievedComment = commentRepository.findById(comment.getId())
-                .orElseThrow(() ->  new EntityNotFoundException("Комментария с таким идентификатором не существует"));
+                .orElseThrow(() -> new EntityNotFoundException("Комментария с таким идентификатором не существует"));
 
         if (!retrievedComment.getAuthorId().equals(comment.getAuthorId())) {
             throw new IllegalAccessException("Редактирование комментария другого пользователя невозможно");

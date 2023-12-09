@@ -3,9 +3,13 @@ package com.example.controller;
 import com.example.dto.comment.request.CommentCreateDto;
 import com.example.dto.comment.request.CommentEditRequestDto;
 import com.example.dto.comment.response.CommentResponseDto;
+import com.example.dto.commentaudit.CommentAuditResponseDto;
+import com.example.dto.mapper.CommentAuditMapper;
 import com.example.dto.mapper.CommentMapper;
 import com.example.dto.page.request.PagingDto;
+import com.example.model.entity.CommentAudit;
 import com.example.model.entity.CommentEntity;
+import com.example.service.CommentAuditService;
 import com.example.service.CommentService;
 import com.example.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,8 +31,10 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 public class CommentController {
     private final CommentService commentService;
-    private final CommentMapper commentMapper;
+    private final CommentAuditService commentAuditService;
     private final UserService userService;
+    private final CommentMapper commentMapper;
+    private final CommentAuditMapper commentAuditMapper;
 
     @GetMapping("/comments/{commentId}")
     @Operation(description = "Получить комментарий по id")
@@ -54,7 +60,8 @@ public class CommentController {
                     message = "Идентификатор ресурса должен быть положительным числом типа long")
             String resourceId,
             @Valid PagingDto pagingDto) {
-        Page<CommentEntity> comments = commentService.getCommentsByResource(Long.parseLong(resourceId), pagingDto.formPageRequest());
+        Page<CommentEntity> comments = commentService
+                .getCommentsByResource(Long.parseLong(resourceId), pagingDto.formPageRequest());
         var responseComments = comments.map(commentMapper::toResponseComment);
 
         for (var comment : responseComments) {
@@ -73,7 +80,8 @@ public class CommentController {
                     message = "Идентификатор новости должен быть положительным числом типа long")
             String feedNewsId,
             @Valid PagingDto pagingDto) {
-        Page<CommentEntity> comments = commentService.getCommentsByFeedNewsId(Long.parseLong(feedNewsId), pagingDto.formPageRequest());
+        Page<CommentEntity> comments = commentService
+                .getCommentsByFeedNewsId(Long.parseLong(feedNewsId), pagingDto.formPageRequest());
         var responseComments = comments.map(commentMapper::toResponseComment);
 
         for (var comment : responseComments) {
@@ -92,7 +100,8 @@ public class CommentController {
                     message = "Идентификатор комментария должен быть положительным числом типа long")
             String commentsId,
             @Valid PagingDto pagingDto) {
-        Page<CommentEntity> comments = commentService.getCommentsByCommentId(Long.parseLong(commentsId), pagingDto.formPageRequest());
+        Page<CommentEntity> comments = commentService
+                .getCommentsByCommentId(Long.parseLong(commentsId), pagingDto.formPageRequest());
         var responseComments = comments.map(commentMapper::toResponseComment);
 
         for (var comment : responseComments) {
@@ -165,12 +174,23 @@ public class CommentController {
     @PreAuthorize("hasRole('USER')")
     @PatchMapping("/comments")
     @Operation(description = "Редактировать текст комментария по id")
-    public void editComment(@RequestBody CommentEditRequestDto commentEditRequestDto) {
+    public void editComment(@RequestBody @Valid CommentEditRequestDto commentEditRequestDto) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         CommentEntity comment = commentMapper.toCommentEntity(commentEditRequestDto);
         comment.setAuthorId(userService.getByEmail(userDetails.getUsername()).getId());
 
         commentService.editComment(comment);
+    }
+
+    @PreAuthorize("hasRole('MODERATOR')")
+    @GetMapping("/comments/{commentId}/changes")
+    @Operation(description = "Получить историю изменения комментария по id")
+    public Page<CommentAuditResponseDto> getChangeHistory(@PathVariable("commentId") String commentId,
+                                                          @Valid PagingDto pagingDto) {
+        Page<CommentAudit> audits = commentAuditService
+                .getChangeHistory(Long.parseLong(commentId), pagingDto.formPageRequest());
+
+        return audits.map(commentAuditMapper::mapToDto);
     }
 }
