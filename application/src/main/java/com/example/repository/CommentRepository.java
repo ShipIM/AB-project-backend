@@ -28,11 +28,22 @@ public interface CommentRepository extends CrudRepository<CommentEntity, Long> {
                                             @Param("page_size") long pageSize,
                                             @Param("page_number") long pageNumber);
 
+    @Query("select * from comment_jn cj " +
+            "JOIN feed_news_comment fc on fc.comment_id = cj.id " +
+            "where fc.thread_parent_id = :thread_parent_id " +
+            "order by cj.created_date limit :page_size offset :page_number * :page_size")
+    List<CommentEntity> findAllByCommentId(@Param("thread_parent_id") long threadParentId,
+                                            @Param("page_size") long pageSize,
+                                            @Param("page_number") long pageNumber);
+
     @Query("select count(*) from comment_jn JOIN resource_comment rc on rc.comment_id = cj.id where rc.resource_id = :resource")
     long countAllByResourceId(@Param("resource") long resourceId);
 
     @Query("select count(*) from comment_jn JOIN feed_news_comment fc on fc.comment_id = cj.id where fc.feed_news_id = :feed_news_id")
     long countAllByFeedNewsId(@Param("feed_news_id") long feedNewsId);
+
+    @Query("select count(*) from comment_jn JOIN feed_news_comment fc on fc.comment_id = cj.id where fc.thread_parent_id = :thread_parent_id")
+    long countAllByCommentId(@Param("thread_parent_id") long threadParentId);
 
     @Modifying
     @Query("delete from comment_jn " +
@@ -46,4 +57,8 @@ public interface CommentRepository extends CrudRepository<CommentEntity, Long> {
     @Modifying
     @Query("INSERT INTO feed_news_comment (feed_news_id, comment_id) VALUES (:feed_news_id, :comment_id)")
     void createFeedNewsComment(@Param("feed_news_id") long feedNewsId, @Param("comment_id") long commentId);
+
+    @Modifying
+    @Query("INSERT INTO feed_news_comment (thread_parent_id, comment_id) VALUES (:thread_parent_id, :comment_id)")
+    void createThreadComment(@Param("thread_parent_id") long threadParentId, @Param("comment_id") long commentId);
 }

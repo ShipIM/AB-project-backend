@@ -46,7 +46,7 @@ public class CommentController {
         return responseComments;
     }
 
-    @GetMapping("/feed/{feedNewsId}/comments")
+    @GetMapping("/feeds/{feedNewsId}/comments")
     @Operation(description = "Получить все комментарии по id новости")
     public Page<CommentResponseDto> getFeedNewsComments(
             @PathVariable
@@ -65,10 +65,29 @@ public class CommentController {
         return responseComments;
     }
 
+    @GetMapping("/thread/{commentsId}")
+    @Operation(description = "Получить тред комменатриев по id комментария")
+    public Page<CommentResponseDto> getThreadComments(
+            @PathVariable
+            @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
+                    message = "Идентификатор комментария должен быть положительным числом типа long")
+            String commentsId,
+            @Valid PagingDto pagingDto) {
+        Page<CommentEntity> comments = commentService.getCommentsByCommentId(Long.parseLong(commentsId), pagingDto.formPageRequest());
+        var responseComments = comments.map(commentMapper::ToResponseComment);
+
+        for (var comment : responseComments) {
+            var login = userService.getById(Long.parseLong(comment.getAuthorId())).getLogin();
+            comment.setAuthor(login);
+        }
+
+        return responseComments;
+    }
+
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/resources/comments")
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(description = "Создать комментарий")
+    @Operation(description = "Создать комментарий к ресурсу")
     public CommentResponseDto createResourceComment(@RequestBody @Valid CommentCreateDto createComment) {
         var comment = commentMapper.ToCommentEntity(createComment);
 
@@ -82,9 +101,25 @@ public class CommentController {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @PostMapping("/feed/comments")
+    @PostMapping("/thread/comments")
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(description = "Создать комментарий")
+    @Operation(description = "Создать комментарий треда")
+    public CommentResponseDto createThreadComment(@RequestBody @Valid CommentCreateDto createComment) {
+        var comment = commentMapper.ToCommentEntity(createComment);
+
+        var feedNewsId = Long.parseLong(createComment.getSourceId());
+        comment = commentService.createThreadComment(comment, feedNewsId);
+
+        var responseComment = commentMapper.ToResponseComment(comment);
+        responseComment.setAuthor(userService.getById(comment.getAuthorId()).getLogin());
+
+        return responseComment;
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping("/feeds/comments")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(description = "Создать комментарий к новости")
     public CommentResponseDto createFeedComment(@RequestBody @Valid CommentCreateDto createComment) {
         var comment = commentMapper.ToCommentEntity(createComment);
 

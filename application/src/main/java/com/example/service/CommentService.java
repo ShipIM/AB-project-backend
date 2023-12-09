@@ -44,6 +44,18 @@ public class CommentService {
         return new PageImpl<>(comments, pageable, total);
     }
 
+    public Page<CommentEntity> getCommentsByCommentId(long commentId, PageRequest pageable) {
+        long total = commentRepository.countAllByCommentId(commentId);
+        List<CommentEntity> comments = commentRepository.findAllByCommentId(
+                commentId,
+                pageable.getPageSize(),
+                pageable.getPageNumber());
+
+        comments = comments.stream().map(this::setAnonymIfIsAnonymousComment).collect(Collectors.toList());
+
+        return new PageImpl<>(comments, pageable, total);
+    }
+
     @Transactional
     public CommentEntity createOrUpdate(CommentEntity comment) {
         if (!userService.isUserExists(comment.getAuthorId())) {
@@ -75,6 +87,17 @@ public class CommentService {
 
         var createdComment = createOrUpdate(comment);
         commentRepository.createFeedNewsComment(feedNewsId, createdComment.getId());
+
+        return createdComment;
+    }
+
+    public CommentEntity createThreadComment(CommentEntity comment, long parentCommentId) {
+        if (!isCommentExists(parentCommentId)) {
+            throw new EntityNotFoundException("Комментария с таким идентификатором не существует");
+        }
+
+        var createdComment = createOrUpdate(comment);
+        commentRepository.createThreadComment(parentCommentId, createdComment.getId());
 
         return createdComment;
     }

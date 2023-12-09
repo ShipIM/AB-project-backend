@@ -23,10 +23,8 @@ public class FeedNewsService {
     private final ContentService contentService;
 
     public Page<FeedNews> getFeedNewsPage(Pageable pageable) {
-        String sort = "created_date DESC";
         long total = feedNewsRepository.count();
         List<FeedNews> feedNewsList = feedNewsRepository.findAll(
-                sort,
                 pageable.getPageSize(),
                 pageable.getPageNumber()
         );

@@ -83,7 +83,7 @@ public class FeedNewsController {
     }
 
     @PreAuthorize("hasRole('MODERATOR')")
-    @DeleteMapping("/feed/{newsId}")
+    @DeleteMapping("/feeds/{newsId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(description = "Удалить новость по идентификатору")
     public void deleteFeedNews(@PathVariable
