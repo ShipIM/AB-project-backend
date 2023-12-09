@@ -22,6 +22,10 @@
                     nullable="false"/>
             </column>
         </createTable>
+        <addForeignKeyConstraint baseTableName="_aud" baseColumnNames="comment_id"
+                                 constraintName="_aud_comment_fkey"
+                                 referencedTableName="comment_jn"
+                                 referencedColumnNames="id" onDelete="CASCADE" onUpdate="CASCADE"/>
         <rollback>
             <dropTable tableName="_aud"/>
         </rollback>
