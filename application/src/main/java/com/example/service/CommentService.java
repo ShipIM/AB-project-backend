@@ -67,8 +67,6 @@ public class CommentService {
             throw new EntityNotFoundException("Пользователя с таким идентификатором не существует");
         }
 
-        comment.setCreatedDate(LocalDateTime.now());
-
         return commentRepository.save(comment);
     }
 

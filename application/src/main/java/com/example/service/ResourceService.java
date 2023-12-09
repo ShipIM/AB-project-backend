@@ -53,8 +53,6 @@ public class ResourceService {
             throw new EntityNotFoundException("Пользователя с таким идентификатором не существует");
         }
 
-        resource.setCreatedDate(LocalDateTime.now());
-
         resource = resourceRepository.save(resource);
         contentService.createResourceContent(contents, resource.getId());
 
