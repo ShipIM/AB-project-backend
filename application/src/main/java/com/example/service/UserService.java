@@ -20,9 +20,8 @@ public class UserService {
     private final UserRepository userRepository;
 
     public Page<User> getAllUsers(Pageable pageable) {
-        String sort = "id";
         long total = userRepository.countAll();
-        List<User> users = userRepository.findAll(sort, pageable.getPageSize(), pageable.getPageNumber());
+        List<User> users = userRepository.findAll(pageable.getPageSize(), pageable.getPageNumber());
         users.removeIf(user -> user.getId() == 0);
 
         return new PageImpl<>(users, pageable, total);
