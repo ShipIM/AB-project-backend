@@ -172,13 +172,19 @@ public class CommentController {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @PatchMapping("/comments")
+    @PatchMapping("/comments/{commentId}")
     @Operation(description = "Редактировать текст комментария по id")
-    public void editComment(@RequestBody @Valid CommentEditRequestDto commentEditRequestDto) {
+    public void editComment(
+            @PathVariable
+            @Pattern(regexp = "^(?!0+$)\\d{1,19}$",
+                    message = "Идентификатор комментария должен быть положительным числом типа long")
+            String commentId,
+            @RequestBody @Valid CommentEditRequestDto commentEditRequestDto) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         CommentEntity comment = commentMapper.toCommentEntity(commentEditRequestDto);
         comment.setAuthorId(userService.getByEmail(userDetails.getUsername()).getId());
+        comment.setId(Long.parseLong(commentId));
 
         commentService.editComment(comment);
     }

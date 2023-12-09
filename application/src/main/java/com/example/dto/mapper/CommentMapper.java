@@ -5,7 +5,6 @@ import com.example.dto.comment.request.CommentEditRequestDto;
 import com.example.dto.comment.response.CommentResponseDto;
 import com.example.model.entity.CommentEntity;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import java.util.List;
 
@@ -18,6 +17,5 @@ public interface CommentMapper {
 
     CommentEntity toCommentEntity(CommentCreateDto comment);
 
-    @Mapping(target = "id", source = "comment.commentId")
     CommentEntity toCommentEntity(CommentEditRequestDto comment);
 }
