@@ -1,7 +1,6 @@
 package com.example.application.service;
 
 import com.example.application.configuration.BaseTestClass;
-import com.example.exception.EntityNotFoundException;
 import com.example.model.entity.ContentEntity;
 import com.example.model.entity.FeedNewsEntity;
 import com.example.model.entity.ResourceEntity;

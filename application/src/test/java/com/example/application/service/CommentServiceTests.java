@@ -82,9 +82,9 @@ public class CommentServiceTests extends BaseTestClass {
     public void createOnlyOneAutoDealerTest() {
         commentService.createOrUpdate(defaultComment);
 
-        var subjectsCount = subjectRepository.count();
+        var commentsCount = commentRepository.count();
 
-        Assertions.assertEquals(1, subjectsCount);
+        Assertions.assertEquals(1, commentsCount);
     }
 
     @Test
@@ -97,13 +97,13 @@ public class CommentServiceTests extends BaseTestClass {
 
     @Test
     public void createCorrectAutoDealerTest() {
-        var createSubject = commentService.createOrUpdate(defaultComment);
-        var repositorySubject = commentService.getById(createSubject.getId());
+        var createComment = commentService.createOrUpdate(defaultComment);
+        var repositoryComment = commentService.getById(createComment.getId());
 
-        defaultComment.setId(createSubject.getId());
+        defaultComment.setId(createComment.getId());
 
-        Assertions.assertEquals(defaultComment, repositorySubject);
-        Assertions.assertEquals(defaultComment, createSubject);
+        Assertions.assertEquals(defaultComment, repositoryComment);
+        Assertions.assertEquals(defaultComment, createComment);
     }
 
     @Test
@@ -114,9 +114,9 @@ public class CommentServiceTests extends BaseTestClass {
 
     @Test
     public void createResourceCommentSuccessTest() {
-        var createSubject = commentService.createResourceComment(defaultComment, resourceId);
+        var createComment = commentService.createResourceComment(defaultComment, resourceId);
 
-        Assertions.assertEquals(defaultComment, createSubject);
+        Assertions.assertEquals(defaultComment, createComment);
         Assertions.assertEquals(1, commentRepository.count());
         Assertions.assertEquals(1, commentRepository.countResourceComments());
         Assertions.assertEquals(0, commentRepository.countFeedNewsComments());
@@ -133,9 +133,9 @@ public class CommentServiceTests extends BaseTestClass {
 
     @Test
     public void createFeedCommentSuccessTest() {
-        var createSubject = commentService.createFeedNewsComment(defaultComment, feedNewsId);
+        var createComment = commentService.createFeedNewsComment(defaultComment, feedNewsId);
 
-        Assertions.assertEquals(defaultComment, createSubject);
+        Assertions.assertEquals(defaultComment, createComment);
         Assertions.assertEquals(1, commentRepository.count());
         Assertions.assertEquals(0, commentRepository.countResourceComments());
         Assertions.assertEquals(1, commentRepository.countFeedNewsComments());
@@ -154,9 +154,9 @@ public class CommentServiceTests extends BaseTestClass {
     public void createThreadCommentSuccessTest() {
         var cid = commentService.createFeedNewsComment(defaultComment, feedNewsId).getId();
         defaultComment.setId(null);
-        var createSubject = commentService.createThreadComment(defaultComment, cid);
+        var createComment = commentService.createThreadComment(defaultComment, cid);
 
-        Assertions.assertEquals(defaultComment, createSubject);
+        Assertions.assertEquals(defaultComment, createComment);
         Assertions.assertEquals(2, commentRepository.count());
         Assertions.assertEquals(0, commentRepository.countResourceComments());
         Assertions.assertEquals(2, commentRepository.countFeedNewsComments());
@@ -175,9 +175,9 @@ public class CommentServiceTests extends BaseTestClass {
     public void getExistIdTest() {
         var id = commentService.createOrUpdate(defaultComment).getId();
 
-        var subject = commentService.getById(id);
+        var comment = commentService.getById(id);
 
-        Assertions.assertNotNull(subject);
+        Assertions.assertNotNull(comment);
     }
 
     @Test
@@ -190,11 +190,11 @@ public class CommentServiceTests extends BaseTestClass {
         commentService.createResourceComment(defaultComment, resourceId);
         var pageRequest = PageRequest.of(0, 1);
 
-        var subjects = commentService.getCommentsByResource(resourceId, pageRequest);
+        var comments = commentService.getCommentsByResource(resourceId, pageRequest);
 
-        Assertions.assertEquals(1, subjects.getTotalElements());
-        Assertions.assertEquals(1, subjects.getTotalPages());
-        Assertions.assertEquals(defaultComment, subjects.getContent().get(0));
+        Assertions.assertEquals(1, comments.getTotalElements());
+        Assertions.assertEquals(1, comments.getTotalPages());
+        Assertions.assertEquals(defaultComment, comments.getContent().get(0));
     }
 
     @Test
@@ -204,11 +204,11 @@ public class CommentServiceTests extends BaseTestClass {
         var pageRequest = PageRequest.of(0, 1);
         defaultComment.setAuthorId(0L);
 
-        var subjects = commentService.getCommentsByResource(resourceId, pageRequest);
+        var comments = commentService.getCommentsByResource(resourceId, pageRequest);
 
-        Assertions.assertEquals(1, subjects.getTotalElements());
-        Assertions.assertEquals(1, subjects.getTotalPages());
-        Assertions.assertEquals(defaultComment, subjects.getContent().get(0));
+        Assertions.assertEquals(1, comments.getTotalElements());
+        Assertions.assertEquals(1, comments.getTotalPages());
+        Assertions.assertEquals(defaultComment, comments.getContent().get(0));
     }
 
     @Test
@@ -216,11 +216,11 @@ public class CommentServiceTests extends BaseTestClass {
         commentService.createResourceComment(defaultComment, resourceId);
         var pageRequest = PageRequest.of(1, 1);
 
-        var subjects = commentService.getCommentsByResource(resourceId, pageRequest);
+        var comments = commentService.getCommentsByResource(resourceId, pageRequest);
 
-        Assertions.assertEquals(1, subjects.getTotalElements());
-        Assertions.assertEquals(1, subjects.getTotalPages());
-        Assertions.assertEquals(0, subjects.getContent().size());
+        Assertions.assertEquals(1, comments.getTotalElements());
+        Assertions.assertEquals(1, comments.getTotalPages());
+        Assertions.assertEquals(0, comments.getContent().size());
     }
 
     @Test
@@ -230,12 +230,12 @@ public class CommentServiceTests extends BaseTestClass {
         commentService.createResourceComment(defaultComment, resourceId);
         var pageRequest = PageRequest.of(0, 2);
 
-        var subjects = commentService.getCommentsByResource(resourceId, pageRequest);
+        var comments = commentService.getCommentsByResource(resourceId, pageRequest);
 
-        Assertions.assertEquals(2, subjects.getTotalElements());
-        Assertions.assertEquals(1, subjects.getTotalPages());
-        for (int i = 0; i < subjects.getSize() - 1; i++) {
-            Assertions.assertEquals(-1, subjects.getContent().get(i).getCreatedDate().compareTo(subjects.getContent().get(i + 1).getCreatedDate()));
+        Assertions.assertEquals(2, comments.getTotalElements());
+        Assertions.assertEquals(1, comments.getTotalPages());
+        for (int i = 0; i < comments.getSize() - 1; i++) {
+            Assertions.assertEquals(-1, comments.getContent().get(i).getCreatedDate().compareTo(comments.getContent().get(i + 1).getCreatedDate()));
         }
     }
 
@@ -244,11 +244,11 @@ public class CommentServiceTests extends BaseTestClass {
         commentService.createFeedNewsComment(defaultComment, feedNewsId);
         var pageRequest = PageRequest.of(0, 1);
 
-        var subjects = commentService.getCommentsByFeedNewsId(feedNewsId, pageRequest);
+        var comments = commentService.getCommentsByFeedNewsId(feedNewsId, pageRequest);
 
-        Assertions.assertEquals(1, subjects.getTotalElements());
-        Assertions.assertEquals(1, subjects.getTotalPages());
-        Assertions.assertEquals(defaultComment, subjects.getContent().get(0));
+        Assertions.assertEquals(1, comments.getTotalElements());
+        Assertions.assertEquals(1, comments.getTotalPages());
+        Assertions.assertEquals(defaultComment, comments.getContent().get(0));
     }
 
     @Test
@@ -258,11 +258,11 @@ public class CommentServiceTests extends BaseTestClass {
         var pageRequest = PageRequest.of(0, 1);
         defaultComment.setAuthorId(0L);
 
-        var subjects = commentService.getCommentsByFeedNewsId(feedNewsId, pageRequest);
+        var comments = commentService.getCommentsByFeedNewsId(feedNewsId, pageRequest);
 
-        Assertions.assertEquals(1, subjects.getTotalElements());
-        Assertions.assertEquals(1, subjects.getTotalPages());
-        Assertions.assertEquals(defaultComment, subjects.getContent().get(0));
+        Assertions.assertEquals(1, comments.getTotalElements());
+        Assertions.assertEquals(1, comments.getTotalPages());
+        Assertions.assertEquals(defaultComment, comments.getContent().get(0));
     }
 
     @Test
@@ -270,11 +270,11 @@ public class CommentServiceTests extends BaseTestClass {
         commentService.createFeedNewsComment(defaultComment, feedNewsId);
         var pageRequest = PageRequest.of(1, 1);
 
-        var subjects = commentService.getCommentsByFeedNewsId(feedNewsId, pageRequest);
+        var comments = commentService.getCommentsByFeedNewsId(feedNewsId, pageRequest);
 
-        Assertions.assertEquals(1, subjects.getTotalElements());
-        Assertions.assertEquals(1, subjects.getTotalPages());
-        Assertions.assertEquals(0, subjects.getContent().size());
+        Assertions.assertEquals(1, comments.getTotalElements());
+        Assertions.assertEquals(1, comments.getTotalPages());
+        Assertions.assertEquals(0, comments.getContent().size());
     }
 
     @Test
@@ -284,12 +284,12 @@ public class CommentServiceTests extends BaseTestClass {
         commentService.createFeedNewsComment(defaultComment, feedNewsId);
         var pageRequest = PageRequest.of(0, 2);
 
-        var subjects = commentService.getCommentsByFeedNewsId(feedNewsId, pageRequest);
+        var comments = commentService.getCommentsByFeedNewsId(feedNewsId, pageRequest);
 
-        Assertions.assertEquals(2, subjects.getTotalElements());
-        Assertions.assertEquals(1, subjects.getTotalPages());
-        for (int i = 0; i < subjects.getSize() - 1; i++) {
-            Assertions.assertEquals(-1, subjects.getContent().get(i).getCreatedDate().compareTo(subjects.getContent().get(i + 1).getCreatedDate()));
+        Assertions.assertEquals(2, comments.getTotalElements());
+        Assertions.assertEquals(1, comments.getTotalPages());
+        for (int i = 0; i < comments.getSize() - 1; i++) {
+            Assertions.assertEquals(-1, comments.getContent().get(i).getCreatedDate().compareTo(comments.getContent().get(i + 1).getCreatedDate()));
         }
     }
 
@@ -300,11 +300,11 @@ public class CommentServiceTests extends BaseTestClass {
         commentService.createThreadComment(defaultComment, cid);
         var pageRequest = PageRequest.of(0, 1);
 
-        var subjects = commentService.getCommentsByCommentId(cid, pageRequest);
+        var comments = commentService.getCommentsByCommentId(cid, pageRequest);
 
-        Assertions.assertEquals(1, subjects.getTotalElements());
-        Assertions.assertEquals(1, subjects.getTotalPages());
-        Assertions.assertEquals(defaultComment, subjects.getContent().get(0));
+        Assertions.assertEquals(1, comments.getTotalElements());
+        Assertions.assertEquals(1, comments.getTotalPages());
+        Assertions.assertEquals(defaultComment, comments.getContent().get(0));
     }
 
     @Test
@@ -316,11 +316,11 @@ public class CommentServiceTests extends BaseTestClass {
         var pageRequest = PageRequest.of(0, 1);
         defaultComment.setAuthorId(0L);
 
-        var subjects = commentService.getCommentsByCommentId(cid, pageRequest);
+        var comments = commentService.getCommentsByCommentId(cid, pageRequest);
 
-        Assertions.assertEquals(1, subjects.getTotalElements());
-        Assertions.assertEquals(1, subjects.getTotalPages());
-        Assertions.assertEquals(defaultComment, subjects.getContent().get(0));
+        Assertions.assertEquals(1, comments.getTotalElements());
+        Assertions.assertEquals(1, comments.getTotalPages());
+        Assertions.assertEquals(defaultComment, comments.getContent().get(0));
     }
 
     @Test
@@ -330,11 +330,11 @@ public class CommentServiceTests extends BaseTestClass {
         commentService.createThreadComment(defaultComment, cid);
         var pageRequest = PageRequest.of(1, 1);
 
-        var subjects = commentService.getCommentsByCommentId(cid, pageRequest);
+        var comments = commentService.getCommentsByCommentId(cid, pageRequest);
 
-        Assertions.assertEquals(1, subjects.getTotalElements());
-        Assertions.assertEquals(1, subjects.getTotalPages());
-        Assertions.assertEquals(0, subjects.getContent().size());
+        Assertions.assertEquals(1, comments.getTotalElements());
+        Assertions.assertEquals(1, comments.getTotalPages());
+        Assertions.assertEquals(0, comments.getContent().size());
     }
 
     @Test
@@ -346,12 +346,12 @@ public class CommentServiceTests extends BaseTestClass {
         commentService.createThreadComment(defaultComment, cid);
         var pageRequest = PageRequest.of(0, 2);
 
-        var subjects = commentService.getCommentsByCommentId(cid, pageRequest);
+        var comments = commentService.getCommentsByCommentId(cid, pageRequest);
 
-        Assertions.assertEquals(2, subjects.getTotalElements());
-        Assertions.assertEquals(1, subjects.getTotalPages());
-        for (int i = 0; i < subjects.getSize() - 1; i++) {
-            Assertions.assertEquals(-1, subjects.getContent().get(i).getCreatedDate().compareTo(subjects.getContent().get(i + 1).getCreatedDate()));
+        Assertions.assertEquals(2, comments.getTotalElements());
+        Assertions.assertEquals(1, comments.getTotalPages());
+        for (int i = 0; i < comments.getSize() - 1; i++) {
+            Assertions.assertEquals(-1, comments.getContent().get(i).getCreatedDate().compareTo(comments.getContent().get(i + 1).getCreatedDate()));
         }
     }
 
