@@ -1,7 +1,10 @@
 package com.example.service;
 
-import com.example.model.entity.Content;
+import com.example.exception.EntityNotFoundException;
+import com.example.model.entity.ContentEntity;
 import com.example.repository.ContentRepository;
+import com.example.repository.FeedNewsRepository;
+import com.example.repository.ResourceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,17 +17,41 @@ import java.util.List;
 public class ContentService {
     private final ContentRepository contentRepository;
 
-    public List<Content> getContentsByResource(long resourceId) {
+    public List<ContentEntity> getContentsByResource(long resourceId) {
         return contentRepository.findAllByResourceId(resourceId);
     }
 
-    @Transactional
-    public List<Content> createContent(List<Content> contents, long resourceId) {
-        contents.forEach(content -> content.setResourceId(resourceId));
+    public List<ContentEntity> getContentsByFeedNewsId(long feedNewsId) {
+        return contentRepository.findAllByFeedNewsId(feedNewsId);
+    }
 
-        Iterable<Content> iterableContents = contentRepository.saveAll(contents);
-        List<Content> result = new ArrayList<>();
+    @Transactional
+    public List<ContentEntity> createContentList(List<ContentEntity> contents) {
+        Iterable<ContentEntity> iterableContents = contentRepository.saveAll(contents);
+        List<ContentEntity> result = new ArrayList<>();
         iterableContents.forEach(result::add);
+
+        return result;
+    }
+
+    @Transactional
+    public List<ContentEntity> createResourceContent(List<ContentEntity> contents, Long resourceId) {
+        var result = createContentList(contents);
+
+        for (var content : result) {
+            contentRepository.createResourceContent(resourceId, content.getId());
+        }
+
+        return result;
+    }
+
+    @Transactional
+    public List<ContentEntity> createFeedNewsContent(List<ContentEntity> contents, Long feedNewsId) {
+        var result = createContentList(contents);
+
+        for (var content : result) {
+            contentRepository.createFeedNewsContent(feedNewsId, content.getId());
+        }
 
         return result;
     }

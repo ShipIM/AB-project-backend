@@ -14,7 +14,7 @@ public class UserPersonalInfoService {
     private final UserService userRepository;
 
     @Transactional
-    public UserPersonalInfoEntity getUserInfo(long id) {
+    public UserPersonalInfoEntity getById(long id) {
         if (!isUserExist(id) && userRepository.isUserExists(id)) {
             return createEmpty(id);
         }
@@ -29,7 +29,7 @@ public class UserPersonalInfoService {
             userPersonInfoRepository.createEmpty(id);
         }
 
-        return getUserInfo(id);
+        return getById(id);
     }
 
     public UserPersonalInfoEntity updateUserInfo(UserPersonalInfoEntity userInfo) {

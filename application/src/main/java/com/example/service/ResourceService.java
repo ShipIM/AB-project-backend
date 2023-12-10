@@ -1,15 +1,10 @@
 package com.example.service;
 
-import com.example.dto.comment.response.ResponseComment;
-import com.example.dto.mapper.ResourceMapper;
-import com.example.dto.resource.response.ResourceResponseDto;
 import com.example.exception.EntityNotFoundException;
-import com.example.model.entity.Comment;
-import com.example.model.entity.Content;
-import com.example.model.entity.Resource;
+import com.example.model.entity.ContentEntity;
+import com.example.model.entity.ResourceEntity;
 import com.example.model.enumeration.ResourceType;
 import com.example.repository.ResourceRepository;
-import com.example.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -19,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -29,13 +23,12 @@ public class ResourceService {
     private final ContentService contentService;
     private final SubjectService subjectService;
     private final UserService userService;
-    private final ResourceMapper resourceMapper;
 
-    public Page<Resource> getResourcesBySubjectAndResourceType(long subjectId,
-                                                                          ResourceType resourceType,
-                                                                          Pageable pageable) {
+    public Page<ResourceEntity> getResourcesBySubjectAndResourceType(long subjectId,
+                                                                     ResourceType resourceType,
+                                                                     Pageable pageable) {
         long total = resourceRepository.countAllBySubjectIdAndResourceType(subjectId, resourceType);
-        List<Resource> resources = resourceRepository.findAllBySubjectIdAndResourceType(
+        List<ResourceEntity> resources = resourceRepository.findAllBySubjectIdAndResourceType(
                 subjectId,
                 resourceType,
                 pageable.getPageSize(),
@@ -45,13 +38,13 @@ public class ResourceService {
         return new PageImpl<>(resources, pageable, total);
     }
 
-    public Resource getResourceById(long id) {
+    public ResourceEntity getResourceById(long id) {
         return resourceRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Ресурса с таким идентификатором не существует"));
     }
 
     @Transactional
-    public Resource createResource(Resource resource, List<Content> contents) {
+    public ResourceEntity createResource(ResourceEntity resource, List<ContentEntity> contents) {
         if (!subjectService.isSubjectExists(resource.getSubjectId())) {
             throw new EntityNotFoundException("Предмета с таким идентификатором не существует");
         }
@@ -60,10 +53,8 @@ public class ResourceService {
             throw new EntityNotFoundException("Пользователя с таким идентификатором не существует");
         }
 
-        resource.setCreatedDate(LocalDateTime.now());
-
         resource = resourceRepository.save(resource);
-        contentService.createContent(contents, resource.getId());
+        contentService.createResourceContent(contents, resource.getId());
 
         return resource;
     }

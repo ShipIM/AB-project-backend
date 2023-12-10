@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet author="Vadim" id="07-12-2023--5-create-resource-comment-table">
+        <createTable tableName="resource_comment">
+            <column name="comment_id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="resource_id" type="BIGINT"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="resource_comment" baseColumnNames="resource_id"
+                                 constraintName="resource_comment_resource_fkey"
+                                 referencedTableName="resource_jn"
+                                 referencedColumnNames="id" onDelete="CASCADE" onUpdate="CASCADE"/>
+        <addForeignKeyConstraint baseTableName="resource_comment" baseColumnNames="comment_id"
+                                 constraintName="resource_comment_comment_fkey"
+                                 referencedTableName="comment_jn"
+                                 referencedColumnNames="id" onDelete="CASCADE" onUpdate="CASCADE"/>
+        <rollback>
+            <dropTable tableName="resource_comment"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

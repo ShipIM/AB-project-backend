@@ -1,7 +1,6 @@
 package com.example.dto.comment.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class ResponseComment {
+public class CommentResponseDto {
     private Long id;
 
     private String author;
@@ -21,6 +20,9 @@ public class ResponseComment {
 
     @JsonProperty("created_date")
     private LocalDateTime createdDate;
+
+    @JsonProperty("last_modified_date")
+    private LocalDateTime lastModifiedDate;
 
     @JsonProperty("is_anonymous")
     private boolean isAnonymous;

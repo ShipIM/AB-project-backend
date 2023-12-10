@@ -1,10 +1,7 @@
 package com.example.model.entity;
 
-import com.example.model.enumeration.ResourceType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
@@ -15,24 +12,29 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "resource_jn")
-public class Resource {
-
+@EqualsAndHashCode(exclude = "createdDate")
+@Table(name = "feed_news_jn")
+public class FeedNewsEntity {
     @Id
     private Long id;
 
     private String name;
 
+    private String text;
+
+    @CreatedDate
     @Column(value = "created_date")
     private LocalDateTime createdDate;
 
     @Column(value = "author_id")
     private Long authorId;
 
-    @Column(value = "resource_type")
-    private ResourceType resourceType;
-
-    @Column(value = "subject_id")
-    private Long subjectId;
-
+    public FeedNewsEntity(FeedNewsEntity feedNews)
+    {
+        this.id = feedNews.id;
+        this.name = feedNews.name;
+        this.text = feedNews.text;
+        this.createdDate = feedNews.createdDate;
+        this.authorId = feedNews.authorId;
+    }
 }

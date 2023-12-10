@@ -12,22 +12,13 @@ import org.springframework.data.relational.core.mapping.Table;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "content_jn")
-public class Content {
+@Table(name = "feed_news_content")
+public class FeedNewsContent {
 
-    @Id
-    private Long id;
+    @Column(value = "content_id")
+    private Long contentId;
 
-    private String filename;
-
-    private byte[] bytes;
-
-    @Column(value = "content_type")
-    private String contentType;
-
-    private long size;
-
-    @Column(value = "resource_id")
-    private Long resourceId;
+    @Column(value = "feed_news_id")
+    private Long feedNewsId;
 
 }
