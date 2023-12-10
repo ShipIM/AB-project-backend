@@ -1,7 +1,10 @@
 package com.example.service;
 
+import com.example.exception.EntityNotFoundException;
 import com.example.model.entity.ContentEntity;
 import com.example.repository.ContentRepository;
+import com.example.repository.FeedNewsRepository;
+import com.example.repository.ResourceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +26,7 @@ public class ContentService {
     }
 
     @Transactional
-    public List<ContentEntity> createContent(List<ContentEntity> contents) {
+    public List<ContentEntity> createContentList(List<ContentEntity> contents) {
         Iterable<ContentEntity> iterableContents = contentRepository.saveAll(contents);
         List<ContentEntity> result = new ArrayList<>();
         iterableContents.forEach(result::add);
@@ -33,9 +36,9 @@ public class ContentService {
 
     @Transactional
     public List<ContentEntity> createResourceContent(List<ContentEntity> contents, Long resourceId) {
-        var result = createContent(contents);
+        var result = createContentList(contents);
 
-        for (var content: result){
+        for (var content : result) {
             contentRepository.createResourceContent(resourceId, content.getId());
         }
 
@@ -44,9 +47,9 @@ public class ContentService {
 
     @Transactional
     public List<ContentEntity> createFeedNewsContent(List<ContentEntity> contents, Long feedNewsId) {
-        var result = createContent(contents);
+        var result = createContentList(contents);
 
-        for (var content: result){
+        for (var content : result) {
             contentRepository.createFeedNewsContent(feedNewsId, content.getId());
         }
 

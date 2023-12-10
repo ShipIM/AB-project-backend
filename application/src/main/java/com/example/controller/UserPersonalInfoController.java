@@ -39,7 +39,7 @@ public class UserPersonalInfoController {
                     message = "Идентификатор пользователя должен быть положительным числом типа long")
             String userId) {
         var id = Long.parseLong(userId);
-        var userInfo = userPersonInfoService.getUserInfo(id);
+        var userInfo = userPersonInfoService.getById(id);
         var user = userService.getById(id);
 
         var responseUserInfo = userInfoMapper.mapToResponseUserInfo(userInfo);

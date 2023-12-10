@@ -61,4 +61,18 @@ public interface CommentRepository extends CrudRepository<CommentEntity, Long> {
     @Modifying
     @Query("INSERT INTO feed_news_comment (thread_parent_id, comment_id) VALUES (:thread_parent_id, :comment_id)")
     void createThreadComment(@Param("thread_parent_id") long threadParentId, @Param("comment_id") long commentId);
+
+    @Query("select count(*) from resource_comment")
+    long countResourceComments();
+
+    @Query("select count(*) from feed_news_comment")
+    long countFeedNewsComments();
+
+    @Modifying
+    @Query("delete from resource_comment")
+    void deleteAllResourceComments();
+
+    @Modifying
+    @Query("delete from feed_news_comment")
+    void deleteAllFeedComments();
 }

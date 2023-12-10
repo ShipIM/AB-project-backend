@@ -1,9 +1,6 @@
 package com.example.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
@@ -15,8 +12,9 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(exclude = "createdDate")
 @Table(name = "feed_news_jn")
-public class FeedNews {
+public class FeedNewsEntity {
     @Id
     private Long id;
 
@@ -30,4 +28,13 @@ public class FeedNews {
 
     @Column(value = "author_id")
     private Long authorId;
+
+    public FeedNewsEntity(FeedNewsEntity feedNews)
+    {
+        this.id = feedNews.id;
+        this.name = feedNews.name;
+        this.text = feedNews.text;
+        this.createdDate = feedNews.createdDate;
+        this.authorId = feedNews.authorId;
+    }
 }

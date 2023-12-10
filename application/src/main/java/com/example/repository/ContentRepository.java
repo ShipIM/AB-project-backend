@@ -25,4 +25,18 @@ public interface ContentRepository extends CrudRepository<ContentEntity, Long>, 
     @Modifying
     @Query("INSERT INTO feed_news_content (feed_news_id, content_id) VALUES (:feed_news_id, :content_id)")
     void createFeedNewsContent(@Param("feed_news_id") long feedNewsId, @Param("content_id") long contentId);
+
+    @Query("select count(*) from resource_content")
+    long countResourceContent();
+
+    @Query("select count(*) from feed_news_content")
+    long countFeedNewsContent();
+
+    @Modifying
+    @Query("delete from resource_content")
+    void deleteAllResourceContent();
+
+    @Modifying
+    @Query("delete from feed_news_content")
+    void deleteAllFeedContent();
 }
