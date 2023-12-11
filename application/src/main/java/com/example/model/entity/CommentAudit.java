@@ -9,6 +9,7 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -27,4 +28,17 @@ public class CommentAudit {
     private LocalDateTime lastModifiedDate;
 
     private String text;
+
+    @Override
+    public boolean equals(Object object) {
+        if (Objects.isNull(object) || object.getClass() != this.getClass()) {
+            return false;
+        }
+
+        CommentAudit commentAudit = (CommentAudit) object;
+
+        return commentId.equals(commentAudit.getCommentId())
+                && lastModifiedDate.equals(commentAudit.getLastModifiedDate())
+                && text.equals(commentAudit.getText());
+    }
 }

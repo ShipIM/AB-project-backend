@@ -16,8 +16,8 @@ public class CommentAuditService {
 
     private final CommentAuditRepository commentAuditRepository;
 
-    public void createAudit(CommentAudit commentAudit) {
-        commentAuditRepository.save(commentAudit);
+    public CommentAudit createAudit(CommentAudit commentAudit) {
+        return commentAuditRepository.save(commentAudit);
     }
 
     public Page<CommentAudit> getChangeHistory(long commentId, Pageable pageable) {

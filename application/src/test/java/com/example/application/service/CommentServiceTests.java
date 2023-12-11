@@ -79,7 +79,7 @@ public class CommentServiceTests extends BaseTestClass {
     }
 
     @Test
-    public void createOnlyOneAutoDealerTest() {
+    public void createOnlyOneCommentTest() {
         commentService.createOrUpdate(defaultComment);
 
         var commentsCount = commentRepository.count();
@@ -96,7 +96,7 @@ public class CommentServiceTests extends BaseTestClass {
 
 
     @Test
-    public void createCorrectAutoDealerTest() {
+    public void createCorrectCommentTest() {
         var createComment = commentService.createOrUpdate(defaultComment);
         var repositoryComment = commentService.getById(createComment.getId());
 
