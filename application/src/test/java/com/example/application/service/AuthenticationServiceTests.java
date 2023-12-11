@@ -58,6 +58,8 @@ public class AuthenticationServiceTests extends BaseTestClass {
                 () -> Assertions.assertEquals(Status.ACTIVE, user.getStatus()),
                 () -> Assertions.assertTrue(userPersonalInfoService.isUserExist(user.getId()))
         );
+
+        cleanup(user.getId());
     }
 
     @Test
@@ -69,6 +71,8 @@ public class AuthenticationServiceTests extends BaseTestClass {
         User retrievedUser = authenticationService.authenticate(user);
 
         Assertions.assertEquals(user, retrievedUser);
+
+        cleanup(user.getId());
     }
 
     @Test
@@ -94,6 +98,8 @@ public class AuthenticationServiceTests extends BaseTestClass {
 
         Assertions.assertThrows(DisabledException.class,
                 () -> authenticationService.authenticate(user));
+
+        cleanup(user.getId());
     }
 
     @Test
@@ -103,6 +109,8 @@ public class AuthenticationServiceTests extends BaseTestClass {
         User retrievedUser = authenticationService.verify(user.getEmail());
 
         Assertions.assertEquals(user, retrievedUser);
+
+        cleanup(user.getId());
     }
 
     @Test
@@ -124,10 +132,9 @@ public class AuthenticationServiceTests extends BaseTestClass {
         return userRepository.save(user);
     }
 
-    @AfterEach
-    private void cleanup() {
-        userRepository.deleteAll();
-        userPersonInfoRepository.deleteAll();
+    private void cleanup(long id) {
+        userRepository.deleteById(id);
+        userPersonInfoRepository.deleteById(id);
     }
 
 }
