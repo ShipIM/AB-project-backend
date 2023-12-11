@@ -2,10 +2,7 @@ package com.example.model.entity;
 
 import com.example.model.enumeration.Role;
 import com.example.model.enumeration.Status;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,6 +15,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(exclude = {"id", "password"})
 @Table(name = "user_jn")
 public class User implements UserDetails {
 

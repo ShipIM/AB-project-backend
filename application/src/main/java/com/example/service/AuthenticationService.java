@@ -1,8 +1,5 @@
 package com.example.service;
 
-import com.example.dto.authentication.response.AuthenticationResponseDto;
-import com.example.dto.authentication.response.VerificationResponseDto;
-import com.example.dto.mapper.UserMapper;
 import com.example.exception.EntityNotFoundException;
 import com.example.exception.InactiveAccountException;
 import com.example.model.entity.User;
@@ -23,13 +20,10 @@ public class AuthenticationService {
     private final UserRepository userRepository;
     private final UserPersonalInfoService userPersonalInfoService;
     private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
-    private final UserMapper userMapper;
-
     private final AuthenticationManager authenticationManager;
 
     @Transactional
-    public AuthenticationResponseDto register(User user) {
+    public User register(User user) {
         user.setRole(Role.USER);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setStatus(Status.ACTIVE);
@@ -37,15 +31,10 @@ public class AuthenticationService {
         user = userRepository.save(user);
         userPersonalInfoService.createEmpty(user.getId());
 
-        var jwtToken = jwtService.generateToken(user);
-
-        AuthenticationResponseDto authDto = userMapper.mapToAuth(user);
-        authDto.setToken(jwtToken);
-
-        return authDto;
+        return user;
     }
 
-    public AuthenticationResponseDto authenticate(User user) {
+    public User authenticate(User user) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
         );
@@ -56,18 +45,13 @@ public class AuthenticationService {
             throw new InactiveAccountException("Аккаунт заблокирован администратором");
         }
 
-        var jwtToken = jwtService.generateToken(retrievedUser);
-
-        AuthenticationResponseDto authDto = userMapper.mapToAuth(retrievedUser);
-        authDto.setToken(jwtToken);
-
-        return authDto;
+        return retrievedUser;
     }
 
-    public VerificationResponseDto verify(String email) {
+    public User verify(String email) {
         var retrievedUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("Пользователя с таким email не существует"));
 
-        return userMapper.mapToVerify(retrievedUser);
+        return retrievedUser;
     }
 }
