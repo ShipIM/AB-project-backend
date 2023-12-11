@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = "createdDate")
+@EqualsAndHashCode(exclude = {"createdDate", "lastModifiedDate"})
 @Table(name = "comment_jn")
 public class CommentEntity {
 
