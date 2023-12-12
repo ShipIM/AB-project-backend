@@ -1,10 +1,7 @@
 package com.example.model.entity;
 
 import com.example.model.enumeration.ResourceType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
@@ -16,6 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(exclude = {"id", "createdDate"})
 @Table(name = "resource_jn")
 public class ResourceEntity {
 
