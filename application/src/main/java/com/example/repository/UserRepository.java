@@ -32,10 +32,11 @@ public interface UserRepository extends CrudRepository<User, Long> {
                      @Param("role") Role role);
 
     @Query("select * from user_jn " +
+            "where id != 0 " +
             "order by id limit :page_size offset :page_number * :page_size")
     List<User> findAll(@Param("page_size") long pageSize,
                        @Param("page_number") long pageNumber);
 
-    @Query("select count(*) from user_jn")
+    @Query("select count(*) from user_jn where id != 0")
     long countAll();
 }

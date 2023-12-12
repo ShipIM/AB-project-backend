@@ -13,12 +13,12 @@ public class PostgresTestConfiguration {
     private static volatile PostgreSQLContainer<?> postgreSqlContainer = null;
 
     private static PostgreSQLContainer createContainer() {
-        var instence = postgreSqlContainer;
-        if (instence == null) {
+        var instance = postgreSqlContainer;
+        if (instance == null) {
             synchronized (PostgreSQLContainer.class) {
-                instence = postgreSqlContainer;
-                if (instence == null) {
-                    postgreSqlContainer = instence = new PostgreSQLContainer<>("postgres:15.2")
+                instance = postgreSqlContainer;
+                if (instance == null) {
+                    postgreSqlContainer = instance = new PostgreSQLContainer<>("postgres:15.2")
                             .withDatabaseName("ab-project")
                             .withUsername("postgres")
                             .withPassword("postgres")
@@ -29,7 +29,7 @@ public class PostgresTestConfiguration {
             }
         }
 
-        return instence;
+        return instance;
     }
 
     @Component("PostgresInitializer")
