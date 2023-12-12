@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {"id", "createdDate"})
+@EqualsAndHashCode(exclude = {"createdDate"})
 @Table(name = "resource_jn")
 public class ResourceEntity {
 

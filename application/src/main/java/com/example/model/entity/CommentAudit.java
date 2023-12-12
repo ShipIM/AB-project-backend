@@ -12,7 +12,7 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = "id")
+@EqualsAndHashCode
 @Table(name = "_aud")
 public class CommentAudit {
 

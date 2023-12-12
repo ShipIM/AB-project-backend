@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {"id", "password"})
+@EqualsAndHashCode(exclude = {"password"})
 @Table(name = "user_jn")
 public class User implements UserDetails {
 
