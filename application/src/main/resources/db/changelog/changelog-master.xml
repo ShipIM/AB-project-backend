@@ -26,4 +26,5 @@
     <include file="/db/changelog/changes/07-12-2023--6-drop-resource-id-comment-jn-content-jn-table.xml"/>
     <include file="/db/changelog/changes/09-12-2023--1-add-last-modified-date-column-to-comment-jn.xml"/>
     <include file="/db/changelog/changes/09-12-2023--2-create-_aud-table.xml"/>
+    <include file="/db/changelog/changes/16-12-2023--1-create-index-for-_aud-table.xml"/>
 </databaseChangeLog>
